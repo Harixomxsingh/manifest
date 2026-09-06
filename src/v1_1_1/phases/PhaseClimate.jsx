@@ -53,9 +53,9 @@ export default function PhaseClimate({ onAdvance }) {
   };
 
   return (
-    <div className="w-full max-w-[42rem] mx-auto flex flex-col items-center py-4 sm:py-8 animate-fadeIn">
+    <div className="w-full max-w-[42rem] mx-auto flex flex-col items-center py-2 sm:py-8 animate-fadeIn">
       {/* Top Phase Header Tracker */}
-      <div className="w-full mb-6 flex flex-col gap-2">
+      <div className="w-full mb-4 sm:mb-6 flex flex-col gap-2">
         <div className="flex items-center justify-between text-[#8C827A] text-[11px] font-mono tracking-widest uppercase">
           <span>Phase 03 of 04</span>
           <span className="text-[#B45309] font-semibold">The Outside World</span>
@@ -65,18 +65,18 @@ export default function PhaseClimate({ onAdvance }) {
         </div>
       </div>
 
-      <div className="w-full flex flex-col gap-6">
+      <div className="w-full flex flex-col gap-4 sm:gap-6">
         {/* Header Lockup: Title & Location Pill */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 text-left">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D97706]" />
-              <span className="text-[11px] font-mono text-[#8C827A] uppercase tracking-widest font-semibold">
+              <span className="text-[10px] sm:text-[11px] font-mono text-[#8C827A] uppercase tracking-widest font-semibold">
                 Climate & Atmospheric Tactics
               </span>
             </div>
             <h2
-              className="text-2xl sm:text-3xl text-[#1C1C17] tracking-tight font-normal"
+              className="text-xl sm:text-3xl text-[#1C1C17] tracking-tight font-normal"
               style={{ fontFamily: '"Playfair Display", "Bodoni Moda", Georgia, serif' }}
             >
               Today's Atmosphere
@@ -84,9 +84,9 @@ export default function PhaseClimate({ onAdvance }) {
           </div>
 
           {/* Minimal Location Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-[#EDE5D8] shadow-xs text-xs font-mono self-start sm:self-auto">
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 rounded-full bg-white border border-[#EDE5D8] shadow-xs text-xs font-mono self-start sm:self-auto max-w-full">
             <MapPin className="w-3.5 h-3.5 text-[#D97706] shrink-0" />
-            <span className="text-[#1C1C17] font-semibold max-w-[180px] sm:max-w-[200px] truncate" title={locationName}>
+            <span className="text-[#1C1C17] font-semibold max-w-[130px] sm:max-w-[200px] truncate" title={locationName}>
               {locationName}
             </span>
             {activeLocation?.source === 'gps' && (
@@ -99,13 +99,13 @@ export default function PhaseClimate({ onAdvance }) {
               onClick={handleGpsRefresh}
               disabled={isRefreshingGps}
               title="Refresh GPS location"
-              className="text-[#8C827A] hover:text-[#D97706] transition-colors p-0.5"
+              className="text-[#8C827A] hover:text-[#D97706] transition-colors p-0.5 touch-manipulation"
             >
               <RefreshCw className={`w-3 h-3 ${isRefreshingGps ? 'animate-spin text-[#D97706]' : ''}`} />
             </button>
             <button
               onClick={() => setIsLocationModalOpen(true)}
-              className="text-[#B45309] hover:underline text-[11px] font-semibold"
+              className="text-[#B45309] hover:underline text-[11px] font-semibold touch-manipulation"
             >
               Change
             </button>
@@ -123,7 +123,7 @@ export default function PhaseClimate({ onAdvance }) {
             </div>
             <button
               onClick={() => setIsLocationModalOpen(true)}
-              className="text-[#B45309] underline text-[11px] font-semibold shrink-0"
+              className="text-[#B45309] underline text-[11px] font-semibold shrink-0 touch-manipulation"
             >
               Choose City
             </button>
@@ -131,26 +131,26 @@ export default function PhaseClimate({ onAdvance }) {
         )}
 
         {/* Master Minimal Climate Card */}
-        <div className="rounded-3xl bg-white p-6 sm:p-8 border border-[#ECE8E0] shadow-[0_4px_24px_rgba(180,83,9,0.04)] flex flex-col gap-6 relative overflow-hidden">
+        <div className="rounded-2xl sm:rounded-3xl bg-white p-4 sm:p-8 border border-[#ECE8E0] shadow-[0_4px_24px_rgba(180,83,9,0.04)] flex flex-col gap-5 sm:gap-6 relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#D97706]/40 to-transparent" />
 
           {/* Hero Temperature Lockup */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#ECE8E0]">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-[#FEF3C7] border border-[#FDE68A] text-[#B45309] flex items-center justify-center shadow-xs shrink-0">
-                <Sun className="w-7 h-7 text-[#D97706]" />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 sm:pb-5 border-b border-[#ECE8E0]">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#FEF3C7] border border-[#FDE68A] text-[#B45309] flex items-center justify-center shadow-xs shrink-0">
+                <Sun className="w-6 h-6 sm:w-7 sm:h-7 text-[#D97706]" />
               </div>
               <div className="flex flex-col">
-                <div className="flex items-baseline gap-2.5">
+                <div className="flex items-baseline gap-2">
                   <span
-                    className="text-4xl sm:text-5xl text-[#1C1C17] tracking-tighter font-normal leading-none"
+                    className="text-3xl sm:text-5xl text-[#1C1C17] tracking-tighter font-normal leading-none"
                     style={{ fontFamily: '"Playfair Display", "Bodoni Moda", Georgia, serif' }}
                   >
                     {high}{unit}
                   </span>
-                  <span className="text-sm font-mono text-[#8C827A]">/ {low}{unit} low</span>
+                  <span className="text-xs sm:text-sm font-mono text-[#8C827A]">/ {low}{unit} low</span>
                 </div>
-                <div className="text-xs font-mono text-[#B45309] font-bold uppercase tracking-wider mt-1">
+                <div className="text-[11px] sm:text-xs font-mono text-[#B45309] font-bold uppercase tracking-wider mt-1">
                   {weatherLabel}
                 </div>
               </div>
@@ -158,7 +158,7 @@ export default function PhaseClimate({ onAdvance }) {
 
             {/* Precipitation Window Pill */}
             {rainProb > 15 ? (
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FEF3C7]/80 border border-[#FDE68A] text-[#903F00] text-xs font-mono font-semibold self-start sm:self-auto">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#FEF3C7]/80 border border-[#FDE68A] text-[#903F00] text-xs font-mono font-semibold self-start sm:self-auto">
                 <CloudRain className="w-4 h-4 text-[#D97706]" />
                 <span>{rainProb}% Rain Probability Expected</span>
               </div>
@@ -175,14 +175,14 @@ export default function PhaseClimate({ onAdvance }) {
             <div className="text-[10px] font-mono uppercase tracking-widest text-[#8C827A] font-bold">
               12-Hour Daylight Window (06:00 – 18:00)
             </div>
-            <div className="grid grid-cols-5 gap-2 pt-1">
+            <div className="grid grid-cols-5 gap-1.5 sm:gap-2 pt-1">
               {hourlyStrip.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl bg-[#F7F3EB]/70 border border-[#ECE8E0] flex flex-col items-center justify-center gap-1.5 text-center"
+                  className="p-2 sm:p-3 rounded-xl bg-[#F7F3EB]/70 border border-[#ECE8E0] flex flex-col items-center justify-center gap-1 sm:gap-1.5 text-center"
                 >
-                  <span className="text-[10px] font-mono text-[#8C827A]">{item.hour}</span>
-                  <span className="text-sm font-bold text-[#1C1C17]">{item.temp}°</span>
+                  <span className="text-[9px] sm:text-[10px] font-mono text-[#8C827A]">{item.hour}</span>
+                  <span className="text-xs sm:text-sm font-bold text-[#1C1C17]">{item.temp}°</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-[#D97706]/70" />
                 </div>
               ))}
@@ -190,13 +190,13 @@ export default function PhaseClimate({ onAdvance }) {
           </div>
 
           {/* Concise Tactical Guidance */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 pt-1">
             {/* Attire */}
-            <div className="p-4 rounded-2xl bg-[#F7F3EB] border border-[#ECE8E0] flex items-start gap-3">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F7F3EB] border border-[#ECE8E0] flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg bg-white border border-[#EDE5D8] flex items-center justify-center text-[#B45309] shrink-0 mt-0.5 shadow-xs">
                 <Shirt className="w-4 h-4 text-[#D97706]" />
               </div>
-              <div className="flex flex-col gap-0.5">
+              <div className="flex flex-col gap-0.5 min-w-0">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#8C827A]">
                   Attire Strategy
                 </span>
@@ -207,11 +207,11 @@ export default function PhaseClimate({ onAdvance }) {
             </div>
 
             {/* Commute / Transit */}
-            <div className="p-4 rounded-2xl bg-[#F7F3EB] border border-[#ECE8E0] flex items-start gap-3">
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-[#F7F3EB] border border-[#ECE8E0] flex items-start gap-3">
               <div className="w-8 h-8 rounded-lg bg-white border border-[#EDE5D8] flex items-center justify-center text-[#B45309] shrink-0 mt-0.5 shadow-xs">
                 <Umbrella className="w-4 h-4 text-[#D97706]" />
               </div>
-              <div className="flex flex-col gap-0.5">
+              <div className="flex flex-col gap-0.5 min-w-0">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#8C827A]">
                   Transit & Errands
                 </span>
@@ -224,15 +224,15 @@ export default function PhaseClimate({ onAdvance }) {
         </div>
 
         {/* Action Button */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#ECE8E0]">
+        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 border-t border-[#ECE8E0]">
           <div className="flex items-center gap-2 text-xs font-mono text-[#8C827A]">
             <span className="w-2 h-2 rounded-full bg-[#D97706]" />
-            <span>Open-Meteo • Zero-Latency Keyless Feed</span>
+            <span>Open-Meteo • Zero-Latency Feed</span>
           </div>
 
           <button
             onClick={handleAcknowledge}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-[#D97706] to-[#B45309] text-white font-medium text-xs shadow-md hover:brightness-105 transition-all active:scale-[0.98]"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full bg-gradient-to-r from-[#D97706] to-[#B45309] text-white font-medium text-xs shadow-md hover:brightness-105 transition-all active:scale-[0.98] touch-manipulation"
           >
             <span>{isAcknowledged ? 'Acknowledged' : "Acknowledge & Proceed"}</span>
             <ArrowRight className="w-4 h-4" />

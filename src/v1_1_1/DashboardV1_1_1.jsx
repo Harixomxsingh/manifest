@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import SidebarRitualPath, { RITUAL_PHASES } from './components/SidebarRitualPath';
+import MobileBottomDock from './components/MobileBottomDock';
 import FooterKeyboardBar from './components/FooterKeyboardBar';
 import PhaseWelcome from './phases/PhaseWelcome';
 import PhaseIdentity from './phases/PhaseIdentity';
@@ -70,7 +71,7 @@ export default function DashboardV1_1_1() {
       {/* Fixed Top Header */}
       <Header />
 
-      {/* Fixed Left Navigation Sidebar */}
+      {/* Fixed Left Navigation Sidebar (Desktop viewports) */}
       <SidebarRitualPath
         activePhase={activePhase}
         onSelectPhase={(phaseId) => {
@@ -79,10 +80,10 @@ export default function DashboardV1_1_1() {
         }}
       />
 
-      {/* Main Content Area */}
+      {/* Main Content Area with Mobile Safe Padding */}
       <div className="pl-0 lg:pl-64 flex flex-col min-h-screen">
-        <main className="flex-1 pt-16 pb-16 w-full">
-          <div className="max-w-[42rem] mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col justify-center min-h-[calc(100vh-8rem)]">
+        <main className="flex-1 pt-16 pb-24 lg:pb-16 w-full">
+          <div className="max-w-[42rem] mx-auto px-3.5 sm:px-6 py-4 sm:py-8 flex flex-col justify-center min-h-[calc(100vh-8rem)]">
             {activePhase === 'welcome' && <PhaseWelcome onAdvance={advanceToNextPhase} />}
             {activePhase === 'identity' && <PhaseIdentity onAdvance={advanceToNextPhase} />}
             {activePhase === 'reading' && <PhaseReading onAdvance={advanceToNextPhase} />}
@@ -93,9 +94,21 @@ export default function DashboardV1_1_1() {
           </div>
         </main>
 
-        {/* Fixed Footer Keyboard Shortcuts Helper */}
-        <FooterKeyboardBar />
+        {/* Fixed Desktop Keyboard Shortcuts Helper */}
+        <div className="hidden lg:block">
+          <FooterKeyboardBar />
+        </div>
       </div>
+
+      {/* Fixed Mobile Bottom Touch Navigation Dock */}
+      <MobileBottomDock
+        activePhase={activePhase}
+        onSelectPhase={(phaseId) => {
+          setActivePhase(phaseId);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onAdvance={advanceToNextPhase}
+      />
 
       {/* Modals & Manuals */}
       <LocationModal />

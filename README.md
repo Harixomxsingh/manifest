@@ -26,10 +26,11 @@ Welcome ➔ 1. Identity & Agency ➔ 2. Mindset Reading ➔ 3. Atmospheric Clima
 
 ## ✨ Key Features
 
+- **📱 100% Mobile Responsive & PWA Installable**: Glassmorphic bottom touch dock, safe-area padding for notch/dynamic island devices, and 1-tap "Add to Home Screen" PWA installation directly on iOS & Android.
 - **🎉 Motivational Party Poppers**: Celebratory multi-cannon confetti bursts and harmonic web synthesizer chimes on every step advancement button.
 - **📅 Automatic Daily Rotation & Midnight Rollover**: Background monitor auto-refreshes to a brand new article, identity manifesto, and forecast at midnight without any manual intervention.
 - **🔀 "Randomize Day" Shuffle**: Test any day's manifestation instantly with the 1-click navigation bar shuffle button.
-- **📱 Native Mobile Experience (Expo & React Native)**: Complete mobile application in `/mobile` with native haptics, TTS speech dispatch, and GPS detection.
+- **📲 Native Mobile App (Expo & React Native)**: Complete companion mobile codebase in `/mobile` with native haptics, TTS speech dispatch, and GPS detection.
 - **🔒 Sovereign & Zero-Cost**: 100% client-side execution running on zero-cost free-tier APIs.
 
 ---

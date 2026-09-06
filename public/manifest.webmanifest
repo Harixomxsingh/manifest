@@ -2,10 +2,10 @@
   "name": "Morning Manifestation — Executive Dispatch",
   "short_name": "Manifest",
   "description": "Executive morning dispatch eliminating decision fatigue, triaging inbox & calendar, and anchoring optimism.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#07090E",
-  "theme_color": "#07090E",
+  "background_color": "#FDF9F1",
+  "theme_color": "#FDF9F1",
   "orientation": "portrait",
   "icons": [
     {
