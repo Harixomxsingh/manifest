@@ -3,6 +3,11 @@
 > **Manifest your day in 2 minutes.**
 > A deliberate morning ritual to silence the noise, anchor daily agency, and conquer what matters most.
 
+[![Live Web App](https://img.shields.io/badge/Live_Web_App-Launch_Manifest-D97706?style=for-the-badge&logo=googlechrome&logoColor=white)](https://harixomxsingh.github.io/manifest/)
+[![GitHub Release](https://img.shields.io/badge/Release-v1.1.2-B45309?style=for-the-badge&logo=github)](https://github.com/Harixomxsingh/manifest/releases)
+
+👉 **[Click Here to Launch the Live Web App ➔](https://harixomxsingh.github.io/manifest/)**
+
 ---
 
 ## 🧭 The 4-Phase Core Ritual Path
