@@ -10,7 +10,7 @@ export const RITUAL_PHASES = [
 
 export default function SidebarRitualPath({ activePhase, onSelectPhase }) {
   return (
-    <aside className="hidden lg:flex fixed left-0 top-16 bottom-12 w-64 z-30 flex-col justify-between py-8 px-6 bg-[#FDF9F1]/80 backdrop-blur-sm border-r border-[#ECE8E0]/70">
+    <aside className="hidden lg:flex fixed left-0 top-16 bottom-12 w-64 z-30 flex-col justify-between py-6 px-6 bg-[#FDF9F1]/80 backdrop-blur-sm border-r border-[#ECE8E0]/70 overflow-y-auto">
       <div className="flex flex-col gap-4">
         <div className="text-[11px] font-semibold text-[#8C827A] uppercase tracking-widest pl-2">
           Ritual Path
@@ -43,7 +43,7 @@ export default function SidebarRitualPath({ activePhase, onSelectPhase }) {
       </div>
 
       {/* Gentle Pacing Tag */}
-      <div className="p-3 rounded-xl bg-[#FEF3C7]/70 border border-[#FDE68A]/70 text-[#B45309] flex items-center gap-2 shadow-xs">
+      <div className="p-3 rounded-xl bg-[#FEF3C7]/70 border border-[#FDE68A]/70 text-[#B45309] flex items-center gap-2 shadow-xs mt-4">
         <span className="material-symbols-outlined text-[16px] text-[#D97706]">wb_sunny</span>
         <span className="text-[10px] font-bold uppercase tracking-wider">Gentle Pacing</span>
       </div>

@@ -8,7 +8,7 @@ export default function MobileBottomDock({ activePhase, onSelectPhase, onAdvance
   const progressPercent = Math.round(((currentIndex + 1) / phaseOrder.length) * 100);
 
   const getPhaseIcon = (phaseId, isActive) => {
-    const iconClass = `w-4 h-4 transition-transform ${isActive ? 'scale-110 text-[#D97706]' : 'text-[#8C827A]'}`;
+    const iconClass = `w-4 h-4 sm:w-4.5 sm:h-4.5 transition-transform ${isActive ? 'scale-110 text-[#D97706]' : 'text-[#8C827A]'}`;
     switch (phaseId) {
       case 'welcome':
         return <Play className={iconClass} />;
@@ -35,8 +35,8 @@ export default function MobileBottomDock({ activePhase, onSelectPhase, onAdvance
 
   return (
     <nav
-      aria-label="Mobile Ritual Navigation"
-      className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#FDF9F1]/95 backdrop-blur-lg border-t border-[#ECE8E0] shadow-[0_-4px_24px_rgba(180,83,9,0.08)] px-2 pt-1.5 pb-[max(0.6rem,env(safe-area-inset-bottom))]"
+      aria-label="Mobile and Tablet Ritual Navigation"
+      className="lg:hidden fixed bottom-0 md:bottom-3 left-0 md:left-1/2 right-0 md:right-auto md:-translate-x-1/2 md:max-w-xl md:w-[92%] z-30 bg-[#FDF9F1]/95 md:bg-[#FDF9F1]/90 backdrop-blur-xl border-t md:border border-[#ECE8E0] md:rounded-2xl shadow-[0_-4px_24px_rgba(180,83,9,0.08)] md:shadow-[0_8px_32px_rgba(180,83,9,0.12)] px-2 sm:px-3 md:px-4 pt-1.5 md:pt-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] md:pb-2 transition-all"
     >
       {/* Dynamic Ambient Progress Bar */}
       <div className="w-full h-1 bg-[#ECE8E0] rounded-full overflow-hidden mb-1.5">
@@ -47,7 +47,7 @@ export default function MobileBottomDock({ activePhase, onSelectPhase, onAdvance
       </div>
 
       {/* Touch Phase Navigation Tabs */}
-      <div className="grid grid-cols-5 gap-1 items-center">
+      <div className="grid grid-cols-5 gap-1 sm:gap-1.5 items-center">
         {RITUAL_PHASES.map((phase) => {
           const isActive = activePhase === phase.id;
           const isPassed = phaseOrder.indexOf(phase.id) < currentIndex;
@@ -56,7 +56,7 @@ export default function MobileBottomDock({ activePhase, onSelectPhase, onAdvance
             <button
               key={phase.id}
               onClick={() => onSelectPhase(phase.id)}
-              className={`flex flex-col items-center justify-center py-1.5 px-1 rounded-xl transition-all select-none touch-manipulation relative ${
+              className={`flex flex-col items-center justify-center py-1.5 sm:py-2 px-1 rounded-xl transition-all select-none touch-manipulation relative ${
                 isActive
                   ? 'bg-white text-[#B45309] shadow-xs border border-[#FDE68A]'
                   : 'text-[#8C827A] hover:text-[#1C1C17] hover:bg-[#F7F3EB]'
@@ -72,7 +72,7 @@ export default function MobileBottomDock({ activePhase, onSelectPhase, onAdvance
               </div>
 
               <span
-                className={`text-[10px] font-mono tracking-tight leading-none ${
+                className={`text-[10px] sm:text-[11px] font-mono tracking-tight leading-none ${
                   isActive ? 'font-bold text-[#903F00]' : isPassed ? 'text-[#54524F]' : 'text-[#8C827A]'
                 }`}
               >

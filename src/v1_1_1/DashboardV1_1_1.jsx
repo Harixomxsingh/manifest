@@ -80,10 +80,10 @@ export default function DashboardV1_1_1() {
         }}
       />
 
-      {/* Main Content Area with Mobile Safe Padding */}
+      {/* Main Content Area with Mobile & Tablet Safe Padding */}
       <div className="pl-0 lg:pl-64 flex flex-col min-h-screen">
-        <main className="flex-1 pt-16 pb-24 lg:pb-16 w-full">
-          <div className="max-w-[42rem] mx-auto px-3.5 sm:px-6 py-4 sm:py-8 flex flex-col justify-center min-h-[calc(100vh-8rem)]">
+        <main className="flex-1 pt-16 sm:pt-20 lg:pt-16 pb-24 md:pb-28 lg:pb-16 w-full">
+          <div className="max-w-[42rem] md:max-w-[45rem] lg:max-w-[44rem] xl:max-w-[46rem] mx-auto px-3.5 sm:px-6 md:px-8 py-4 sm:py-8 flex flex-col justify-center min-h-[calc(100vh-8rem)]">
             {activePhase === 'welcome' && <PhaseWelcome onAdvance={advanceToNextPhase} />}
             {activePhase === 'identity' && <PhaseIdentity onAdvance={advanceToNextPhase} />}
             {activePhase === 'reading' && <PhaseReading onAdvance={advanceToNextPhase} />}
