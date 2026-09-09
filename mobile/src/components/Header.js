@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView, Platform, StatusBar } from 'react-native';
-import { Sun, Volume2, VolumeX, MapPin, Sparkles, Shuffle } from 'lucide-react-native';
+import { Sun, Volume2, VolumeX, MapPin, Shuffle, Mic, BookOpen } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
+import ManifestSunLogo from './ManifestSunLogo';
+import JournalVaultModal from './JournalVaultModal';
 
 export default function Header() {
   const {
@@ -10,10 +12,13 @@ export default function Header() {
     setIsLocationModalOpen,
     isSpeechPlaying,
     toggleSpeechSummary,
-    randomizeAllDailyContent
+    randomizeAllDailyContent,
+    jumpToPhase,
+    activePhase
   } = useApp();
 
   const [timeStr, setTimeStr] = useState('');
+  const [isVaultOpen, setIsVaultOpen] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -29,27 +34,52 @@ export default function Header() {
     <View style={styles.headerWrapper}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContent}>
-          {/* Brand Logo & Name */}
-          <View style={styles.brandRow}>
-            <View style={styles.sunBadge}>
-              <Sun size={18} color={colors.primary} />
-            </View>
+          {/* Brand Logo & Name: Manifest */}
+          <TouchableOpacity
+            onPress={() => jumpToPhase('welcome')}
+            activeOpacity={0.8}
+            style={styles.brandRow}
+          >
+            <ManifestSunLogo size={28} interactive={false} />
             <View>
-              <Text style={styles.brandTitle}>Morning Manifestation</Text>
-              <Text style={styles.brandSubtitle}>v1.1.2 Dawn • {timeStr}</Text>
+              <Text style={styles.brandTitle}>Manifest</Text>
+              <Text style={styles.brandSubtitle}>{timeStr}</Text>
             </View>
-          </View>
+          </TouchableOpacity>
 
-          {/* Action Buttons */}
+          {/* Minimal Action Icons */}
           <View style={styles.actionRow}>
+            {/* Quick Vault Button */}
+            <TouchableOpacity
+              onPress={() => setIsVaultOpen(true)}
+              activeOpacity={0.8}
+              style={styles.iconBtn}
+              accessibilityLabel="Journal Vault"
+            >
+              <BookOpen size={15} color={colors.primaryDark} />
+            </TouchableOpacity>
+
+            {/* Quick Voice Journal Button */}
+            <TouchableOpacity
+              onPress={() => jumpToPhase('voice')}
+              activeOpacity={0.8}
+              style={[
+                styles.iconBtn,
+                activePhase === 'voice' && styles.iconBtnActive
+              ]}
+              accessibilityLabel="Voice Clarity"
+            >
+              <Mic size={15} color={activePhase === 'voice' ? '#FFFFFF' : colors.primary} />
+            </TouchableOpacity>
+
             {/* Randomize Day Button */}
             <TouchableOpacity
               onPress={randomizeAllDailyContent}
               activeOpacity={0.8}
               style={styles.iconBtn}
-              accessibilityLabel="Randomize Day"
+              accessibilityLabel="Randomize Content"
             >
-              <Shuffle size={16} color={colors.primary} />
+              <Shuffle size={15} color={colors.primary} />
             </TouchableOpacity>
 
             {/* Audio Speech Readout Button */}
@@ -60,21 +90,22 @@ export default function Header() {
                 styles.iconBtn,
                 isSpeechPlaying && styles.iconBtnActive
               ]}
+              accessibilityLabel="Speech Summary"
             >
               {isSpeechPlaying ? (
-                <VolumeX size={17} color="#FFFFFF" />
+                <VolumeX size={15} color="#FFFFFF" />
               ) : (
-                <Volume2 size={17} color={colors.primaryDark} />
+                <Volume2 size={15} color={colors.primaryDark} />
               )}
             </TouchableOpacity>
 
-            {/* Location Button */}
+            {/* Location Pill */}
             <TouchableOpacity
               onPress={() => setIsLocationModalOpen(true)}
               activeOpacity={0.8}
               style={styles.locationBtn}
             >
-              <MapPin size={13} color={colors.primary} />
+              <MapPin size={12} color={colors.primary} />
               <Text style={styles.locationText} numberOfLines={1}>
                 {activeLocation?.name?.split(',')[0] || 'City'}
               </Text>
@@ -82,13 +113,19 @@ export default function Header() {
           </View>
         </View>
       </SafeAreaView>
+
+      {/* Header Journal Vault Modal */}
+      <JournalVaultModal
+        isOpen={isVaultOpen}
+        onClose={() => setIsVaultOpen(false)}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   headerWrapper: {
-    backgroundColor: 'rgba(253, 249, 241, 0.96)',
+    backgroundColor: 'rgba(253, 249, 241, 0.98)',
     borderBottomWidth: 1,
     borderBottomColor: colors.borderHairline,
     paddingTop: Platform.OS === 'android' ? (StatusBar.currentHeight || 24) : 0,
@@ -98,7 +135,7 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   headerContent: {
-    height: 58,
+    height: 54,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -107,12 +144,12 @@ const styles = StyleSheet.create({
   brandRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10
+    gap: 8
   },
   sunBadge: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: colors.bgHighlight,
     borderWidth: 1,
     borderColor: colors.borderHighlight,
@@ -120,27 +157,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   brandTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '700',
     color: colors.primaryDeep,
     letterSpacing: -0.3
   },
   brandSubtitle: {
-    fontSize: 10,
+    fontSize: 9,
     color: colors.textDim,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    textTransform: 'uppercase',
-    marginTop: 1
+    letterSpacing: 0.5
   },
   actionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8
+    gap: 6
   },
   iconBtn: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: colors.bgCardAlt,
     borderWidth: 1,
     borderColor: colors.borderCard,
@@ -155,13 +191,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    paddingHorizontal: 10,
-    height: 32,
-    borderRadius: 16,
+    paddingHorizontal: 8,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: colors.bgCard,
     borderWidth: 1,
     borderColor: colors.borderCard,
-    maxWidth: 120
+    maxWidth: 105
   },
   locationText: {
     fontSize: 11,

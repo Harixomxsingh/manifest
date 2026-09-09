@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import confetti from 'canvas-confetti';
 import { getTodayArticle, rerollArticle, markArticleAsRead as saveReadArticle, getReadHistory } from '../services/jamesClearService';
 import { getTodayIdentityAnchor, getRandomIdentityAnchor } from '../services/identityService';
+import { getTodayQuote, getRandomQuote } from '../services/quoteService';
 import { firePartyPopper } from '../utils/confettiHelper';
 import { fetchWeatherForecast, detectCoordinates } from '../services/weatherService';
 import {
@@ -23,6 +24,7 @@ const AppContext = createContext(null);
 
 const STORAGE_SETTINGS_KEY = 'manifest_settings_v1';
 const STORAGE_COMPLETED_TASKS_KEY = 'manifest_completed_tasks';
+const STORAGE_VOICE_JOURNAL_KEY = 'manifest_voice_journal_latest';
 
 export function AppProvider({ children }) {
   // 1. Settings State
@@ -49,13 +51,13 @@ export function AppProvider({ children }) {
     } catch (e) {}
   }, [settings]);
 
-  // 2. Version State ('v1.1.1' or 'v1.0')
+  // 2. Version State ('v1.1.2' default, 'v1.1.1' or 'v1.0')
   const [currentVersion, setCurrentVersion] = useState(() => {
     try {
       const saved = localStorage.getItem('manifest_active_version');
-      if (saved) return saved;
+      if (saved && saved !== 'v1.1.1' && saved !== 'v1.0') return saved;
     } catch (e) {}
-    return 'v1.1.1';
+    return 'v1.1.2';
   });
 
   useEffect(() => {
@@ -74,6 +76,44 @@ export function AppProvider({ children }) {
     }
     return d.toISOString().split('T')[0];
   }, [simulatedOffsetDays]);
+
+  // 4. Quotes & Voice State
+  const [todayQuote, setTodayQuote] = useState(() => getTodayQuote(getTodayKey()));
+  const [voiceJournal, setVoiceJournal] = useState(null);
+
+  useEffect(() => {
+    try {
+      if (voiceJournal) {
+        localStorage.setItem(STORAGE_VOICE_JOURNAL_KEY, JSON.stringify(voiceJournal));
+      } else {
+        localStorage.removeItem(STORAGE_VOICE_JOURNAL_KEY);
+      }
+    } catch (e) {}
+  }, [voiceJournal]);
+
+  // PWA Install State
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [isInstallable, setIsInstallable] = useState(false);
+
+  useEffect(() => {
+    const handleBeforeInstall = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setIsInstallable(true);
+    };
+    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+  }, []);
+
+  const installPwa = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setIsInstallable(false);
+    }
+    setDeferredPrompt(null);
+  };
 
   // 4. Core State
   const [todayArticle, setTodayArticle] = useState(null);
@@ -301,6 +341,7 @@ export function AppProvider({ children }) {
       if (lastTrackedDate && lastTrackedDate !== currentActualDate) {
         console.log('🌅 New calendar day arrived! Automatically updating Morning Manifestation to:', currentActualDate);
         localStorage.setItem('manifest_last_active_date', currentActualDate);
+        setTodayQuote(getTodayQuote(currentActualDate));
         loadMorningDispatch(true, false, null, currentActualDate);
       } else if (!lastTrackedDate) {
         localStorage.setItem('manifest_last_active_date', currentActualDate);
@@ -313,31 +354,9 @@ export function AppProvider({ children }) {
   const simulateDateOffset = (offsetDays) => {
     setSimulatedOffsetDays(offsetDays);
     const targetDate = getTodayKey(offsetDays);
+    setTodayQuote(getTodayQuote(targetDate));
     loadMorningDispatch(true, false, null, targetDate);
   };
-
-  // Initial Load on mount
-  useEffect(() => {
-    loadMorningDispatch();
-
-    // If cityMode is 'auto', attempt a live GPS update in background
-    if (settings.cityMode === 'auto' && typeof navigator !== 'undefined' && navigator.geolocation) {
-      detectCoordinates(true)
-        .then(async (coords) => {
-          if (coords && coords.source === 'gps') {
-            setActiveLocation(coords);
-            setLocationStatus('gps');
-            const w = await fetchWeatherForecast(coords.lat, coords.lon, settings.isFahrenheit);
-            if (w) {
-              w.locationName = coords.name;
-              w.locationSource = 'gps';
-              setWeatherData(w);
-            }
-          }
-        })
-        .catch(() => {});
-    }
-  }, []);
 
   /**
    * Toggle task completion with celebratory confetti
@@ -351,14 +370,15 @@ export function AppProvider({ children }) {
       } catch (e) {}
 
       if (!isDone) {
-        // Trigger subtle haptic celebration via Confetti
-        confetti({
-          particleCount: 40,
-          spread: 50,
-          origin: { y: 0.8 },
-          colors: ['#F59E0B', '#10B981', '#6366F1', '#FDE68A'],
-          disableForReducedMotion: true
-        });
+        try {
+          confetti({
+            particleCount: 40,
+            spread: 50,
+            origin: { y: 0.8 },
+            colors: ['#F59E0B', '#10B981', '#6366F1', '#FDE68A'],
+            disableForReducedMotion: true
+          });
+        } catch (e) {}
       }
       return next;
     });
@@ -370,12 +390,14 @@ export function AppProvider({ children }) {
   const handleMarkArticleRead = (articleId) => {
     const updated = saveReadArticle(articleId);
     setReadHistory(updated);
-    confetti({
-      particleCount: 30,
-      spread: 40,
-      origin: { y: 0.75 },
-      colors: ['#6366F1', '#A855F7', '#F59E0B']
-    });
+    try {
+      confetti({
+        particleCount: 30,
+        spread: 40,
+        origin: { y: 0.75 },
+        colors: ['#6366F1', '#A855F7', '#F59E0B']
+      });
+    } catch (e) {}
   };
 
   /**
@@ -386,28 +408,40 @@ export function AppProvider({ children }) {
   };
 
   /**
-   * Randomize ALL Daily Content: Fresh Article + Fresh Identity Manifesto + Confetti burst
+   * Shuffle daily quote independently
+   */
+  const shuffleDailyQuote = () => {
+    const { quote: randomQ } = getRandomQuote();
+    setTodayQuote(randomQ);
+  };
+
+  /**
+   * Randomize ALL Daily Content: Fresh Quote + Fresh Article + Fresh Identity Manifesto + Confetti burst
    */
   const randomizeAllDailyContent = (e) => {
     if (e) {
       firePartyPopper(e, { particleCount: 60, spread: 80, pitch: 1.15 });
     }
     
-    // 1. Pick a brand new random article
+    // 1. Pick a fresh quote
+    const { quote: randomQ } = getRandomQuote();
+    setTodayQuote(randomQ);
+
+    // 2. Pick a brand new random article
     const newArticle = rerollArticle(todayArticle?.id);
     setTodayArticle(newArticle);
 
-    // 2. Pick a brand new random identity anchor
+    // 3. Pick a brand new random identity anchor
     const newIdentityAnchor = getRandomIdentityAnchor(briefing?.optimismAnchor?.id);
 
-    // 3. Update briefing
+    // 4. Update briefing
     setBriefing((prev) => {
       const updated = prev ? { ...prev } : {};
       updated.optimismAnchor = newIdentityAnchor;
       return updated;
     });
 
-    // 4. Update session cache
+    // 5. Update session cache
     const todayStr = getTodayKey();
     const cacheKey = `manifest_cached_dispatch_${todayStr}`;
     try {
@@ -525,6 +559,14 @@ export function AppProvider({ children }) {
         setCurrentVersion,
         settings,
         setSettings,
+        geminiApiKey: settings.geminiApiKey,
+        todayQuote,
+        setTodayQuote,
+        shuffleDailyQuote,
+        voiceJournal,
+        setVoiceJournal,
+        isInstallable,
+        installPwa,
         todayArticle,
         weatherData,
         briefing,

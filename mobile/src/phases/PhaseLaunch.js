@@ -1,8 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
-import { Compass, CheckCheck, Shield, Volume2, VolumeX, RotateCcw } from 'lucide-react-native';
+import { Compass, CheckCheck, Shield, Mic, Volume2, VolumeX, RotateCcw, BookOpen } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
+import ManifestSunLogo from '../components/ManifestSunLogo';
+import JournalVaultModal from '../components/JournalVaultModal';
 
 export default function PhaseLaunch() {
   const {
@@ -10,13 +12,15 @@ export default function PhaseLaunch() {
     briefing,
     todayArticle,
     weatherData,
+    voiceJournal,
     isSpeechPlaying,
     toggleSpeechSummary,
     triggerPartyCelebration
   } = useApp();
 
+  const [isVaultOpen, setIsVaultOpen] = useState(false);
+
   useEffect(() => {
-    // Fire celebratory confetti on launch landing
     triggerPartyCelebration();
   }, []);
 
@@ -26,59 +30,63 @@ export default function PhaseLaunch() {
 
   return (
     <View style={styles.container}>
-      {/* Top Phase Header */}
+      {/* Top Phase Header Tracker */}
       <View style={styles.progressHeader}>
         <View style={styles.progressTextRow}>
-          <Text style={styles.progressLabel}>PHASE 04 OF 04</Text>
-          <Text style={styles.progressPhaseName}>Launchpad Activated</Text>
+          <Text style={styles.progressLabel}>PHASE 05 OF 05</Text>
+          <Text style={styles.progressPhaseName}>Launchpad Ready</Text>
         </View>
         <View style={styles.progressBarTrack}>
           <View style={[styles.progressBarFill, { width: '100%' }]} />
         </View>
       </View>
 
-      {/* Emblem */}
-      <View style={styles.emblemBadge}>
-        <Compass size={32} color={colors.primary} />
+      {/* Triumphant Glowing Emblem */}
+      <View style={styles.logoWrapper}>
+        <ManifestSunLogo size={64} interactive={true} />
       </View>
 
-      {/* Success Badge */}
-      <View style={styles.badge}>
-        <CheckCheck size={14} color={colors.emeraldDark} />
-        <Text style={styles.badgeText}>RITUAL COMPLETE • ZERO FRICTION</Text>
-      </View>
-
-      {/* Title */}
-      <Text style={styles.title}>Go Forth With Unshakeable Focus</Text>
-
-      {/* Subtitle */}
+      {/* Title & Subtitle */}
+      <Text style={styles.title}>Ritual Complete</Text>
       <Text style={styles.subtitle}>
-        You have anchored your identity, absorbed today’s mindset reading, and mapped your atmospheric climate. You are primed to conquer today.
+        Anchored in identity, nourished in mindset, and crystalline in intention. Conquer your day.
       </Text>
 
-      {/* Summary Slate */}
+      {/* Unified Summary Slate */}
       <View style={styles.card}>
-        {/* Anchor row */}
-        <View style={styles.anchorBox}>
-          <Shield size={16} color={colors.primaryDark} style={{ marginTop: 2 }} />
+        {/* 1. Identity Anchor */}
+        <View style={styles.anchorRow}>
+          <Shield size={14} color={colors.primaryDark} style={{ marginTop: 2 }} />
           <View style={styles.anchorTextCol}>
-            <Text style={styles.summaryLabel}>TODAY'S IDENTITY ANCHOR</Text>
+            <Text style={styles.summaryLabel}>IDENTITY ANCHOR</Text>
             <Text style={styles.anchorQuote}>"{anchor.identityReminder}"</Text>
           </View>
         </View>
 
-        {/* 2-Col Grid for Reading & Climate */}
-        <View style={styles.summaryGrid}>
-          <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>MINDSET READING</Text>
-            <Text style={styles.summaryValue} numberOfLines={2}>
-              {todayArticle?.title || 'James Clear Atomic Habits'}
+        {/* 2. Voice Anchor (if spoken) */}
+        {voiceJournal?.synthesis?.manifestationAnchor && (
+          <View style={[styles.anchorRow, styles.voiceAnchorRow]}>
+            <Mic size={14} color="#B45309" style={{ marginTop: 2 }} />
+            <View style={styles.anchorTextCol}>
+              <Text style={[styles.summaryLabel, { color: '#B45309' }]}>SPOKEN VOICE ANCHOR</Text>
+              <Text style={[styles.anchorQuote, { color: '#92400E' }]}>
+                "{voiceJournal.synthesis.manifestationAnchor}"
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* 3. Mindset & Atmosphere 2-Col Strip */}
+        <View style={styles.metaRow}>
+          <View style={styles.metaItem}>
+            <Text style={styles.metaLabel}>MINDSET</Text>
+            <Text style={styles.metaValue} numberOfLines={1}>
+              {todayArticle?.title || 'Atomic Habits'}
             </Text>
           </View>
-
-          <View style={styles.summaryItem}>
-            <Text style={styles.summaryLabel}>CLIMATE HORIZON</Text>
-            <Text style={styles.summaryValue} numberOfLines={2}>
+          <View style={styles.metaItem}>
+            <Text style={styles.metaLabel}>ATMOSPHERE</Text>
+            <Text style={styles.metaValue} numberOfLines={1}>
               {weatherData ? `${weatherData.highTemp}°C • ${weatherData.weatherLabel}` : 'Optimal Day'}
             </Text>
           </View>
@@ -87,35 +95,51 @@ export default function PhaseLaunch() {
 
       {/* Action Buttons */}
       <View style={styles.actionRow}>
-        {/* Audio Summary Dispatch */}
+        {/* Audio Dispatch Button */}
         <TouchableOpacity
           onPress={toggleSpeechSummary}
           activeOpacity={0.85}
-          style={[
-            styles.audioBtn,
-            isSpeechPlaying && styles.audioBtnActive
-          ]}
+          style={[styles.audioBtn, isSpeechPlaying && styles.audioBtnActive]}
         >
           {isSpeechPlaying ? (
-            <VolumeX size={16} color="#FFFFFF" />
+            <VolumeX size={15} color="#FFFFFF" />
           ) : (
-            <Volume2 size={16} color={colors.primaryDark} />
+            <Volume2 size={15} color={colors.primaryDark} />
           )}
           <Text style={[styles.audioBtnText, isSpeechPlaying && styles.audioBtnTextActive]}>
             {isSpeechPlaying ? 'Mute Dispatch' : 'Listen to Audio Summary'}
           </Text>
         </TouchableOpacity>
 
-        {/* Reset Ritual */}
-        <TouchableOpacity
-          onPress={resetRitual}
-          activeOpacity={0.8}
-          style={styles.resetBtn}
-        >
-          <RotateCcw size={15} color={colors.textMuted} />
-          <Text style={styles.resetBtnText}>Restart Ritual</Text>
-        </TouchableOpacity>
+        {/* Secondary Actions Row */}
+        <View style={styles.secondaryActionsRow}>
+          {/* Browse Vault */}
+          <TouchableOpacity
+            onPress={() => setIsVaultOpen(true)}
+            activeOpacity={0.8}
+            style={styles.vaultBtn}
+          >
+            <BookOpen size={13} color={colors.primaryDark} />
+            <Text style={styles.vaultBtnText}>Browse Journal Vault</Text>
+          </TouchableOpacity>
+
+          {/* Restart Ritual Button */}
+          <TouchableOpacity
+            onPress={resetRitual}
+            activeOpacity={0.8}
+            style={styles.resetBtn}
+          >
+            <RotateCcw size={13} color={colors.textDim} />
+            <Text style={styles.resetBtnText}>Restart Ritual</Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
+      {/* Journal Vault Modal */}
+      <JournalVaultModal
+        isOpen={isVaultOpen}
+        onClose={() => setIsVaultOpen(false)}
+      />
     </View>
   );
 }
@@ -127,7 +151,7 @@ const styles = StyleSheet.create({
   },
   progressHeader: {
     width: '100%',
-    marginBottom: 16
+    marginBottom: 20
   },
   progressTextRow: {
     flexDirection: 'row',
@@ -139,135 +163,120 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.emeraldDark
+    color: colors.primaryDark
   },
   progressBarTrack: {
     width: '100%',
-    height: 4,
+    height: 3,
     backgroundColor: colors.borderHairline,
     borderRadius: 2,
     overflow: 'hidden'
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: colors.emerald,
+    backgroundColor: colors.primary,
     borderRadius: 2
   },
-  emblemBadge: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
+  logoWrapper: {
+    marginBottom: 16,
     alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 14
-  },
-  badge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 12,
-    backgroundColor: colors.emeraldLight,
-    borderWidth: 1,
-    borderColor: 'rgba(16, 185, 129, 0.3)',
-    marginBottom: 10
-  },
-  badgeText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.emeraldDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 0.5
+    justifyContent: 'center'
   },
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: colors.textMain,
+    color: colors.textPrimary,
     textAlign: 'center',
-    marginBottom: 8,
-    letterSpacing: -0.4
+    marginBottom: 6,
+    letterSpacing: -0.3
   },
   subtitle: {
-    fontSize: 13,
+    fontSize: 12,
     color: colors.textMuted,
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 18,
     marginBottom: 20,
-    paddingHorizontal: 10
+    paddingHorizontal: 16
   },
   card: {
     width: '100%',
-    backgroundColor: colors.bgCard,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: colors.borderCard,
+    borderColor: colors.borderHairline,
     borderRadius: 20,
     padding: 16,
-    gap: 12,
+    gap: 10,
     marginBottom: 20,
     shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
-    shadowRadius: 10,
+    shadowRadius: 12,
     elevation: 2
   },
-  anchorBox: {
+  anchorRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 10,
+    gap: 8,
     backgroundColor: colors.bgHighlight,
     borderWidth: 1,
     borderColor: colors.borderHighlight,
-    borderRadius: 14,
-    padding: 12
+    borderRadius: 12,
+    padding: 10
+  },
+  voiceAnchorRow: {
+    backgroundColor: '#FFFBEB',
+    borderColor: '#FDE68A'
   },
   anchorTextCol: {
     flex: 1
   },
   summaryLabel: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: colors.textDim,
+    fontSize: 8.5,
+    fontWeight: '800',
+    color: colors.primaryDark,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 0.5,
-    marginBottom: 3
+    letterSpacing: 0.6,
+    marginBottom: 2
   },
   anchorQuote: {
     fontSize: 12,
     fontWeight: '600',
     color: colors.primaryDeep,
     fontStyle: 'italic',
-    lineHeight: 18
+    lineHeight: 16
   },
-  summaryGrid: {
+  metaRow: {
     flexDirection: 'row',
     gap: 8
   },
-  summaryItem: {
+  metaItem: {
     flex: 1,
-    backgroundColor: colors.bgCardAlt,
-    borderWidth: 1,
-    borderColor: colors.borderCard,
-    borderRadius: 14,
-    padding: 12
+    backgroundColor: colors.bgSecondary,
+    borderRadius: 10,
+    padding: 10
   },
-  summaryValue: {
-    fontSize: 12,
+  metaLabel: {
+    fontSize: 8.5,
     fontWeight: '700',
-    color: colors.textMain,
-    lineHeight: 16
+    color: colors.textDim,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 0.5,
+    marginBottom: 2
+  },
+  metaValue: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.textPrimary
   },
   actionRow: {
     width: '100%',
-    gap: 10
+    gap: 8
   },
   audioBtn: {
     flexDirection: 'row',
@@ -277,7 +286,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgHighlight,
     borderWidth: 1,
     borderColor: colors.borderHighlight,
-    paddingVertical: 14,
+    paddingVertical: 13,
     borderRadius: 24
   },
   audioBtnActive: {
@@ -292,20 +301,43 @@ const styles = StyleSheet.create({
   audioBtnTextActive: {
     color: '#FFFFFF'
   },
-  resetBtn: {
+  secondaryActionsRow: {
+    flexDirection: 'row',
+    gap: 8,
+    width: '100%'
+  },
+  vaultBtn: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    backgroundColor: colors.bgCardAlt,
+    backgroundColor: colors.bgHighlight,
     borderWidth: 1,
-    borderColor: colors.borderCard,
-    paddingVertical: 13,
+    borderColor: colors.borderHighlight,
+    paddingVertical: 11,
+    borderRadius: 24
+  },
+  vaultBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.primaryDark
+  },
+  resetBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: colors.bgSecondary,
+    borderWidth: 1,
+    borderColor: colors.borderHairline,
+    paddingVertical: 11,
     borderRadius: 24
   },
   resetBtnText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
-    color: colors.textMuted
+    color: colors.textDim
   }
 });

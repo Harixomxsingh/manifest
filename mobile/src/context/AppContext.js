@@ -4,6 +4,8 @@ import { speakDispatch, stopSpeech } from '../services/speechService';
 import { triggerHaptic } from '../services/hapticsService';
 import { getTodayArticle } from '../services/jamesClearService';
 import { getTodayIdentityAnchor } from '../services/identityService';
+import { getTodayQuote, getRandomQuote } from '../services/quoteService';
+import { checkForAppUpdatesSilently } from '../services/updateService';
 
 const AppContext = createContext();
 
@@ -12,6 +14,7 @@ export const AppProvider = ({ children }) => {
 
   const [activePhase, setActivePhase] = useState('welcome');
   const [activeDateStr, setActiveDateStr] = useState(getTodayStr());
+  const [todayQuote, setTodayQuote] = useState(() => getTodayQuote(getTodayStr()));
   const [briefing, setBriefing] = useState(() => ({ optimismAnchor: getTodayIdentityAnchor(getTodayStr()) }));
   const [todayArticle, setTodayArticle] = useState(() => getTodayArticle(getTodayStr()));
   const [activeLocation, setActiveLocation] = useState({
@@ -23,17 +26,23 @@ export const AppProvider = ({ children }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isSpeechPlaying, setIsSpeechPlaying] = useState(false);
+  const [voiceJournal, setVoiceJournal] = useState(null);
   const [confettiTrigger, setConfettiTrigger] = useState(0);
 
-  const phaseOrder = ['welcome', 'identity', 'reading', 'climate', 'launch'];
+  const phaseOrder = ['welcome', 'identity', 'reading', 'voice', 'climate', 'launch'];
 
-  // Initial load: GPS detection + weather fetch + daily content sync
+  // Initial load: GPS detection + weather fetch + daily content sync + silent OTA update check
   useEffect(() => {
     const today = getTodayStr();
+    setTodayQuote(getTodayQuote(today));
     setTodayArticle(getTodayArticle(today));
     setBriefing({ optimismAnchor: getTodayIdentityAnchor(today) });
 
     (async () => {
+      // 1. Silent Background OTA Update Check (zero impact on startup speed)
+      checkForAppUpdatesSilently();
+
+      // 2. Fetch location & weather
       const loc = await detectGpsCoordinates();
       setActiveLocation(loc);
       const w = await fetchOpenMeteoWeather(loc.lat, loc.lon, loc.name);
@@ -41,15 +50,20 @@ export const AppProvider = ({ children }) => {
     })();
   }, []);
 
-  // Midnight Date Change Checker
+  // Midnight Date Change Checker - automatically refreshes quotes, mindset reading & anchor every new day
   useEffect(() => {
     const checkMidnight = () => {
       const current = getTodayStr();
       if (current !== activeDateStr) {
         setActiveDateStr(current);
+        setTodayQuote(getTodayQuote(current));
         setTodayArticle(getTodayArticle(current));
         setBriefing({ optimismAnchor: getTodayIdentityAnchor(current) });
+        setVoiceJournal(null);
         setActivePhase('welcome');
+
+        // Check for updates on new day
+        checkForAppUpdatesSilently();
       }
     };
     const interval = setInterval(checkMidnight, 10000);
@@ -109,7 +123,10 @@ export const AppProvider = ({ children }) => {
       await stopSpeech();
       setIsSpeechPlaying(false);
     } else {
-      const summaryText = `Good morning. Here is your executive morning dispatch. Identity anchor: ${briefing.optimismAnchor.identityReminder}. Mindset reading from James Clear: ${todayArticle.coreIdea}. Today's climate: ${weatherData?.highTemp || 24} degrees Celsius, ${weatherData?.weatherLabel || 'Clear Sky'}. Go forth with unshakeable focus and conquer your day.`;
+      const voiceAnchorText = voiceJournal?.synthesis?.manifestationAnchor
+        ? `Your personal voice manifestation: ${voiceJournal.synthesis.manifestationAnchor}. `
+        : '';
+      const summaryText = `Good morning. Here is your executive morning dispatch. Identity anchor: ${briefing.optimismAnchor.identityReminder}. Mindset reading from James Clear: ${todayArticle.coreIdea}. ${voiceAnchorText}Today's climate: ${weatherData?.highTemp || 24} degrees Celsius, ${weatherData?.weatherLabel || 'Clear Sky'}. Go forth with unshakeable focus and conquer your day.`;
       const started = await speakDispatch(
         summaryText,
         () => setIsSpeechPlaying(true),
@@ -121,10 +138,18 @@ export const AppProvider = ({ children }) => {
 
   const randomizeAllDailyContent = () => {
     triggerPartyCelebration();
+    const { quote: randomQ } = getRandomQuote();
     const newArticle = getTodayArticle(String(Math.random()));
     const newAnchor = getTodayIdentityAnchor(String(Math.random()));
+    setTodayQuote(randomQ);
     setTodayArticle(newArticle);
     setBriefing({ optimismAnchor: newAnchor });
+  };
+
+  const shuffleDailyQuote = () => {
+    triggerHaptic('light');
+    const { quote: randomQ } = getRandomQuote();
+    setTodayQuote(randomQ);
   };
 
   return (
@@ -135,10 +160,15 @@ export const AppProvider = ({ children }) => {
         advancePhase,
         jumpToPhase,
         resetRitual,
+        todayQuote,
+        setTodayQuote,
+        shuffleDailyQuote,
         briefing,
         todayArticle,
         activeLocation,
         weatherData,
+        voiceJournal,
+        setVoiceJournal,
         isLocationModalOpen,
         setIsLocationModalOpen,
         updateLocationManually,

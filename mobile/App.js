@@ -9,6 +9,7 @@ import PartyPopper from './src/components/PartyPopper';
 import PhaseWelcome from './src/phases/PhaseWelcome';
 import PhaseIdentity from './src/phases/PhaseIdentity';
 import PhaseReading from './src/phases/PhaseReading';
+import PhaseVoiceClarity from './src/phases/PhaseVoiceClarity';
 import PhaseClimate from './src/phases/PhaseClimate';
 import PhaseLaunch from './src/phases/PhaseLaunch';
 import { colors } from './src/theme/colors';
@@ -33,6 +34,7 @@ function MainApp() {
         {activePhase === 'welcome' && <PhaseWelcome />}
         {activePhase === 'identity' && <PhaseIdentity />}
         {activePhase === 'reading' && <PhaseReading />}
+        {activePhase === 'voice' && <PhaseVoiceClarity />}
         {activePhase === 'climate' && <PhaseClimate />}
         {activePhase === 'launch' && <PhaseLaunch />}
       </ScrollView>

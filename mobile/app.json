@@ -1,13 +1,21 @@
 {
   "expo": {
-    "name": "Morning Manifestation",
-    "slug": "morning-manifestation",
+    "name": "Manifest",
+    "slug": "manifest",
     "version": "1.1.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "backgroundColor": "#FDF9F1"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
     },
     "ios": {
       "supportsTablet": true
@@ -26,6 +34,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-audio",
+      "expo-updates"
+    ]
   }
 }

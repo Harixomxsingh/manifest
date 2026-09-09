@@ -1,103 +1,80 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
-import { ArrowRight, Sparkles, BookOpen, Sun, Shield } from 'lucide-react-native';
+import { ArrowRight, Sun, Sparkles, Shuffle } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
 
+import ManifestSunLogo from '../components/ManifestSunLogo';
+
 export default function PhaseWelcome() {
-  const { advancePhase, briefing, todayArticle, weatherData } = useApp();
+  const { advancePhase, todayQuote, shuffleDailyQuote } = useApp();
   const [liveDate, setLiveDate] = useState('');
 
   useEffect(() => {
-    const update = () => {
-      const now = new Date();
-      const dayName = now.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-      const monthName = now.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
-      const dayNum = now.getDate();
-      setLiveDate(`${dayName}, ${monthName} ${dayNum}`);
-    };
-    update();
+    const now = new Date();
+    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase();
+    const monthName = now.toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    const dayNum = now.getDate();
+    setLiveDate(`${dayName}, ${monthName} ${dayNum}`);
   }, []);
+
+  const quote = todayQuote || {
+    quote: "You have power over your mind — not outside events. Realize this, and you will find immense strength.",
+    author: "Marcus Aurelius",
+    role: "Roman Emperor & Stoic Philosopher"
+  };
 
   return (
     <View style={styles.container}>
-      {/* Date Pill Capsule */}
+      {/* Top Date Pill */}
       <View style={styles.datePill}>
-        <View style={styles.dateDot} />
+        <Sparkles size={11} color={colors.primary} />
         <Text style={styles.dateText}>{liveDate || 'TODAY'}</Text>
       </View>
 
-      {/* Radiant Luminous Sun Icon */}
-      <View style={styles.sunburstWrapper}>
-        <View style={styles.sunburstOuter}>
-          <View style={styles.sunburstInner}>
-            <Sun size={40} color={colors.primary} strokeWidth={2} />
-          </View>
-        </View>
+      {/* Animated Solar Dawn Logo */}
+      <View style={styles.logoWrapper}>
+        <ManifestSunLogo size={86} interactive={true} />
       </View>
 
-      {/* Badge */}
-      <View style={styles.badge}>
-        <Text style={styles.badgeText}>EXECUTIVE DAWN DISPATCH</Text>
-      </View>
-
-      {/* Section Title */}
-      <Text style={styles.title}>Win the Morning, Win the Day</Text>
-
-      {/* Subtitle */}
+      {/* Main Bold Inspiring Title */}
+      <Text style={styles.title}>Manifest Within</Text>
       <Text style={styles.subtitle}>
-        Two minutes of deliberate clarity to silence the noise, ignite your momentum, and conquer what matters most.
+        A two-minute ritual to command your mind and master your day.
       </Text>
 
-      {/* 3-Pillar Preview Cards */}
-      <View style={styles.previewGrid}>
-        {/* 1. Identity */}
-        <View style={styles.previewCard}>
-          <View style={styles.previewIcon}>
-            <Sparkles size={16} color={colors.primary} />
-          </View>
-          <View style={styles.previewTextContainer}>
-            <Text style={styles.previewLabel}>1. IDENTITY</Text>
-            <Text style={styles.previewTitle} numberOfLines={1}>
-              {briefing?.optimismAnchor?.title || 'The Arena, Not The Barrier'}
-            </Text>
-          </View>
-        </View>
+      {/* Daily Ambitious Quote Card (Automatically rotates daily + shuffle button) */}
+      <View style={styles.quoteCard}>
+        <Text style={styles.quoteText}>
+          "{quote.quote}"
+        </Text>
 
-        {/* 2. Reading */}
-        <View style={styles.previewCard}>
-          <View style={styles.previewIcon}>
-            <BookOpen size={16} color={colors.primary} />
+        <View style={styles.authorRow}>
+          <View style={styles.authorCol}>
+            <Text style={styles.authorName}>{quote.author}</Text>
+            {quote.role ? (
+              <Text style={styles.authorRole}>{quote.role}</Text>
+            ) : null}
           </View>
-          <View style={styles.previewTextContainer}>
-            <Text style={styles.previewLabel}>2. READING</Text>
-            <Text style={styles.previewTitle} numberOfLines={1}>
-              {todayArticle?.title || 'James Clear Mindset'}
-            </Text>
-          </View>
-        </View>
 
-        {/* 3. Climate */}
-        <View style={styles.previewCard}>
-          <View style={styles.previewIcon}>
-            <Sun size={16} color={colors.primary} />
-          </View>
-          <View style={styles.previewTextContainer}>
-            <Text style={styles.previewLabel}>3. CLIMATE</Text>
-            <Text style={styles.previewTitle} numberOfLines={1}>
-              {weatherData ? `${weatherData.highTemp}°C • ${weatherData.weatherLabel}` : 'Live Atmosphere'}
-            </Text>
-          </View>
+          <TouchableOpacity
+            onPress={shuffleDailyQuote}
+            activeOpacity={0.7}
+            style={styles.shuffleBtn}
+            accessibilityLabel="Shuffle Quote"
+          >
+            <Shuffle size={12} color={colors.primaryDark} />
+          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Big Action Button */}
+      {/* Begin Ritual Button */}
       <TouchableOpacity
         onPress={advancePhase}
         activeOpacity={0.85}
         style={styles.actionBtn}
       >
-        <Text style={styles.actionBtnText}>Begin Morning Ritual</Text>
+        <Text style={styles.actionBtnText}>Begin Ritual</Text>
         <ArrowRight size={18} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
@@ -107,130 +84,105 @@ export default function PhaseWelcome() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingVertical: 16
+    justifyContent: 'center',
+    paddingVertical: 18,
+    paddingHorizontal: 8
   },
   datePill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: colors.bgCard,
-    borderWidth: 1,
-    borderColor: colors.borderCard,
-    marginBottom: 20,
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2
-  },
-  dateDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.primary
-  },
-  dateText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: colors.textMuted,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 1
-  },
-  sunburstWrapper: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16
-  },
-  sunburstOuter: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: 'rgba(254, 243, 199, 0.45)',
-    borderWidth: 1,
-    borderColor: 'rgba(253, 230, 138, 0.6)',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  sunburstInner: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
-    backgroundColor: colors.bgHighlight,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  badge: {
+    gap: 6,
     paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
+    paddingVertical: 5,
+    borderRadius: 16,
     backgroundColor: colors.bgHighlight,
     borderWidth: 1,
     borderColor: colors.borderHighlight,
-    marginBottom: 10
+    marginBottom: 20
   },
-  badgeText: {
+  dateText: {
     fontSize: 10,
     fontWeight: '700',
     color: colors.primaryDark,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     letterSpacing: 1
   },
-  title: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: colors.textMain,
-    textAlign: 'center',
-    marginBottom: 10,
-    letterSpacing: -0.5
-  },
-  subtitle: {
-    fontSize: 13,
-    color: colors.textMuted,
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 22,
-    paddingHorizontal: 10
-  },
-  previewGrid: {
-    width: '100%',
-    gap: 8,
-    marginBottom: 24
-  },
-  previewCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 12,
-    borderRadius: 16,
-    backgroundColor: colors.bgCard,
-    borderWidth: 1,
-    borderColor: colors.borderCard
-  },
-  previewIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.bgHighlight,
+  logoWrapper: {
+    marginBottom: 20,
     alignItems: 'center',
     justifyContent: 'center'
   },
-  previewTextContainer: {
+  title: {
+    fontSize: 26,
+    fontWeight: '400',
+    color: colors.textPrimary,
+    textAlign: 'center',
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    marginBottom: 6,
+    letterSpacing: -0.4
+  },
+  subtitle: {
+    fontSize: 12,
+    color: colors.textMuted,
+    textAlign: 'center',
+    lineHeight: 18,
+    maxWidth: 280,
+    marginBottom: 20
+  },
+  quoteCard: {
+    width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: colors.borderGold,
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 24,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
+    elevation: 2
+  },
+  quoteText: {
+    fontSize: 15,
+    fontStyle: 'italic',
+    color: colors.primaryDark,
+    textAlign: 'center',
+    lineHeight: 22,
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    marginBottom: 14
+  },
+  authorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderTopWidth: 1,
+    borderTopColor: colors.borderHairline,
+    paddingTop: 10
+  },
+  authorCol: {
     flex: 1
   },
-  previewLabel: {
-    fontSize: 9,
+  authorName: {
+    fontSize: 11,
     fontWeight: '700',
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    marginBottom: 2
+    color: colors.textPrimary,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
   },
-  previewTitle: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.textMain
+  authorRole: {
+    fontSize: 9.5,
+    color: colors.textDim,
+    marginTop: 1
+  },
+  shuffleBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.bgHighlight,
+    borderWidth: 1,
+    borderColor: colors.borderHighlight,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   actionBtn: {
     width: '100%',
@@ -239,17 +191,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     backgroundColor: colors.primaryDark,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: 28,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.22,
     shadowRadius: 10,
     elevation: 4
   },
   actionBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    letterSpacing: 0.3
   }
 });

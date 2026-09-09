@@ -1,0 +1,602 @@
+[
+  {
+    "id": "p_001",
+    "category": "Focus",
+    "prompt": "What is the single highest-impact domino you will knock down today?"
+  },
+  {
+    "id": "p_002",
+    "category": "Focus",
+    "prompt": "If you could only accomplish one meaningful task today and nothing else, which one leaves you proudest?"
+  },
+  {
+    "id": "p_003",
+    "category": "Focus",
+    "prompt": "What low-value distraction is most likely to tempt you today, and how will you shut it down early?"
+  },
+  {
+    "id": "p_004",
+    "category": "Focus",
+    "prompt": "What is the essential 20% of your work today that will generate 80% of your progress?"
+  },
+  {
+    "id": "p_005",
+    "category": "Focus",
+    "prompt": "What will you deliberately choose NOT to do today to protect your peak focus hours?"
+  },
+  {
+    "id": "p_006",
+    "category": "Focus",
+    "prompt": "What task on your list feels urgent to others but actually doesn't move your main needle?"
+  },
+  {
+    "id": "p_007",
+    "category": "Focus",
+    "prompt": "Where will you carve out your first 60-minute uninterrupted deep work block today?"
+  },
+  {
+    "id": "p_008",
+    "category": "Focus",
+    "prompt": "What is the single bottleneck currently slowing your progress, and how do you unlock it today?"
+  },
+  {
+    "id": "p_009",
+    "category": "Focus",
+    "prompt": "What does total single-tasking look like for your most critical project this morning?"
+  },
+  {
+    "id": "p_010",
+    "category": "Focus",
+    "prompt": "If today were an absolute masterclass in prioritization, what is your top priority right now?"
+  },
+  {
+    "id": "p_011",
+    "category": "Release",
+    "prompt": "What lingering frustration or disappointment from yesterday are you consciously leaving behind?"
+  },
+  {
+    "id": "p_012",
+    "category": "Release",
+    "prompt": "What anxious thought or self-doubt is trying to occupy your mind, and why can you let it go?"
+  },
+  {
+    "id": "p_013",
+    "category": "Release",
+    "prompt": "What unrealistic expectation or perfectionism are you releasing so you can take fluid action?"
+  },
+  {
+    "id": "p_014",
+    "category": "Release",
+    "prompt": "What mental clutter can you speak out loud right now to free up brain RAM?"
+  },
+  {
+    "id": "p_015",
+    "category": "Release",
+    "prompt": "Where are you trying to control things outside your power, and how can you surrender that resistance?"
+  },
+  {
+    "id": "p_016",
+    "category": "Release",
+    "prompt": "What belief about being 'behind schedule' or 'not ready' is simply untrue?"
+  },
+  {
+    "id": "p_017",
+    "category": "Release",
+    "prompt": "What fear of judgment or rejection is holding you back from speaking your truth today?"
+  },
+  {
+    "id": "p_018",
+    "category": "Release",
+    "prompt": "What past mistake or awkward moment is completely irrelevant to the success of today?"
+  },
+  {
+    "id": "p_019",
+    "category": "Release",
+    "prompt": "How can you breathe out tension and give yourself permission to start with an uncluttered clean slate?"
+  },
+  {
+    "id": "p_020",
+    "category": "Release",
+    "prompt": "What resentment, grudge, or irritation are you choosing not to carry into your morning?"
+  },
+  {
+    "id": "p_021",
+    "category": "Momentum",
+    "prompt": "What is one simple 2-minute action you can execute immediately after this ritual to build instant momentum?"
+  },
+  {
+    "id": "p_022",
+    "category": "Momentum",
+    "prompt": "How can you make the very first step of your hardest task so frictionless that starting is effortless?"
+  },
+  {
+    "id": "p_023",
+    "category": "Momentum",
+    "prompt": "What small, quick win can you log in the first 30 minutes of your workday?"
+  },
+  {
+    "id": "p_024",
+    "category": "Momentum",
+    "prompt": "What micro-habit will ignite your kinetic energy as soon as you sit at your desk?"
+  },
+  {
+    "id": "p_025",
+    "category": "Momentum",
+    "prompt": "When you feel the urge to procrastinate today, what 5-second countdown rule will you use to jump in?"
+  },
+  {
+    "id": "p_026",
+    "category": "Momentum",
+    "prompt": "What is one unfinished open loop that you can close in under 5 minutes this morning?"
+  },
+  {
+    "id": "p_027",
+    "category": "Momentum",
+    "prompt": "How will you turn early morning inertia into unstoppable forward motion?"
+  },
+  {
+    "id": "p_028",
+    "category": "Momentum",
+    "prompt": "What physical posture or music track gets your blood pumping and ready to conquer?"
+  },
+  {
+    "id": "p_029",
+    "category": "Momentum",
+    "prompt": "What is the simplest possible draft or outline you can create today without judging the quality?"
+  },
+  {
+    "id": "p_030",
+    "category": "Momentum",
+    "prompt": "How will completing your first task early create a positive cascade for the rest of the day?"
+  },
+  {
+    "id": "p_031",
+    "category": "Stoic",
+    "prompt": "What is within your total control today, and what must you accept with complete serenity?"
+  },
+  {
+    "id": "p_032",
+    "category": "Stoic",
+    "prompt": "If everything goes sideways or unexpected chaos arrives today, how will you maintain steady composure?"
+  },
+  {
+    "id": "p_033",
+    "category": "Stoic",
+    "prompt": "How can you view today's toughest obstacle as an essential opportunity to practice virtue and patience?"
+  },
+  {
+    "id": "p_034",
+    "category": "Stoic",
+    "prompt": "What does responding with unhurried dignity look like when someone triggers or tests you?"
+  },
+  {
+    "id": "p_035",
+    "category": "Stoic",
+    "prompt": "Remind yourself: This day is finite and unrepeatable. How will you honor the gift of these waking hours?"
+  },
+  {
+    "id": "p_036",
+    "category": "Stoic",
+    "prompt": "What external opinion or validation are you realizing you don't actually need to do great work?"
+  },
+  {
+    "id": "p_037",
+    "category": "Stoic",
+    "prompt": "How can you remain centered and calm even when the world around you is hurried and reactive?"
+  },
+  {
+    "id": "p_038",
+    "category": "Stoic",
+    "prompt": "What timeless principle will serve as your unshakeable compass throughout this day?"
+  },
+  {
+    "id": "p_039",
+    "category": "Stoic",
+    "prompt": "If today tests your patience, how will you choose to be the calm eye of the storm?"
+  },
+  {
+    "id": "p_040",
+    "category": "Stoic",
+    "prompt": "What is the worst that can realistically happen today, and how capable are you of handling it?"
+  },
+  {
+    "id": "p_041",
+    "category": "Courage",
+    "prompt": "What uncomfortable conversation or decision have you been postponing that you will face with courage today?"
+  },
+  {
+    "id": "p_042",
+    "category": "Courage",
+    "prompt": "What bold proposal, ask, or outreach could dramatically accelerate your path if you just send it?"
+  },
+  {
+    "id": "p_043",
+    "category": "Courage",
+    "prompt": "Where do you need to speak up and set a firm, healthy boundary today?"
+  },
+  {
+    "id": "p_044",
+    "category": "Courage",
+    "prompt": "What would you do today if you were 10% bolder and completely unattached to the outcome?"
+  },
+  {
+    "id": "p_045",
+    "category": "Courage",
+    "prompt": "What truth are you ready to admit to yourself regarding your work, habits, or ambitions?"
+  },
+  {
+    "id": "p_046",
+    "category": "Courage",
+    "prompt": "Where can you choose short-term discomfort in exchange for massive long-term self-respect?"
+  },
+  {
+    "id": "p_047",
+    "category": "Courage",
+    "prompt": "What is a calculated risk worth taking today that moves you closer to your dream?"
+  },
+  {
+    "id": "p_048",
+    "category": "Courage",
+    "prompt": "How will you stand by your standards even if it feels lonely or inconvenient in the moment?"
+  },
+  {
+    "id": "p_049",
+    "category": "Courage",
+    "prompt": "What fear will you look directly in the eye today and take action anyway?"
+  },
+  {
+    "id": "p_050",
+    "category": "Courage",
+    "prompt": "What is the brave, honest answer you've been hesitant to give someone?"
+  },
+  {
+    "id": "p_051",
+    "category": "Gratitude",
+    "prompt": "What is an ordinary, overlooked blessing in your everyday life that you are truly grateful for this morning?"
+  },
+  {
+    "id": "p_052",
+    "category": "Gratitude",
+    "prompt": "Who is someone whose presence, mentorship, or kindness has quietly shaped where you are today?"
+  },
+  {
+    "id": "p_053",
+    "category": "Gratitude",
+    "prompt": "What past hardship or trial are you now grateful for because of the strength it forged in you?"
+  },
+  {
+    "id": "p_054",
+    "category": "Gratitude",
+    "prompt": "What tool, technology, or space are you privileged to use today that makes your work possible?"
+  },
+  {
+    "id": "p_055",
+    "category": "Gratitude",
+    "prompt": "What is one thing about your physical health or body that you appreciate right in this breath?"
+  },
+  {
+    "id": "p_056",
+    "category": "Gratitude",
+    "prompt": "What is a recent win or milestone you achieved that you forgot to celebrate properly?"
+  },
+  {
+    "id": "p_057",
+    "category": "Gratitude",
+    "prompt": "How can you express unexpected appreciation to someone in your circle today?"
+  },
+  {
+    "id": "p_058",
+    "category": "Gratitude",
+    "prompt": "What freedom or opportunity do you have today that billions of people would cherish?"
+  },
+  {
+    "id": "p_059",
+    "category": "Gratitude",
+    "prompt": "What simple sensory pleasure (warm coffee, fresh air, morning light) can you deeply savor right now?"
+  },
+  {
+    "id": "p_060",
+    "category": "Gratitude",
+    "prompt": "What about your current journey—even the messy parts—makes this season of life meaningful?"
+  },
+  {
+    "id": "p_061",
+    "category": "Vision",
+    "prompt": "Imagine your day is over and you are resting with deep fulfillment. What happened today to make that real?"
+  },
+  {
+    "id": "p_062",
+    "category": "Vision",
+    "prompt": "Where do you want to be 6 months from now, and how does today's focus directly serve that future?"
+  },
+  {
+    "id": "p_063",
+    "category": "Vision",
+    "prompt": "What does your highest future self look like, and how would they approach your morning tasks?"
+  },
+  {
+    "id": "p_064",
+    "category": "Vision",
+    "prompt": "What long-term foundation or asset are you building today that will compound over years?"
+  },
+  {
+    "id": "p_065",
+    "category": "Vision",
+    "prompt": "If you looked back at this specific week 5 years from now, what will you remember most?"
+  },
+  {
+    "id": "p_066",
+    "category": "Vision",
+    "prompt": "What grand aspiration are you nurturing, and what tiny brick will you lay for it today?"
+  },
+  {
+    "id": "p_067",
+    "category": "Vision",
+    "prompt": "How can you protect your time today from urgent distractions that don't fit your long-term vision?"
+  },
+  {
+    "id": "p_068",
+    "category": "Vision",
+    "prompt": "What does mastery in your craft look like, and how will you practice that standard today?"
+  },
+  {
+    "id": "p_069",
+    "category": "Vision",
+    "prompt": "What is the ultimate breakthrough you are striving toward this quarter?"
+  },
+  {
+    "id": "p_070",
+    "category": "Vision",
+    "prompt": "If today were the opening chapter of your greatest success story, what tone do you set right now?"
+  },
+  {
+    "id": "p_071",
+    "category": "Identity",
+    "prompt": "Who do you choose to be today when no one is watching?"
+  },
+  {
+    "id": "p_072",
+    "category": "Identity",
+    "prompt": "What core personal value or code of honor will guide your toughest interactions today?"
+  },
+  {
+    "id": "p_073",
+    "category": "Identity",
+    "prompt": "How does a master of your discipline act, communicate, and think during morning hours?"
+  },
+  {
+    "id": "p_074",
+    "category": "Identity",
+    "prompt": "What is a promise you made to yourself that you will uphold today without negotiation?"
+  },
+  {
+    "id": "p_075",
+    "category": "Identity",
+    "prompt": "What limiting label or old identity are you shedding as you step into your full capability?"
+  },
+  {
+    "id": "p_076",
+    "category": "Identity",
+    "prompt": "How can you demonstrate self-respect through how you treat your time and energy today?"
+  },
+  {
+    "id": "p_077",
+    "category": "Identity",
+    "prompt": "What does genuine self-trust feel like in your chest when facing challenging decisions?"
+  },
+  {
+    "id": "p_078",
+    "category": "Identity",
+    "prompt": "What reputation do you want to have with yourself by the end of today?"
+  },
+  {
+    "id": "p_079",
+    "category": "Identity",
+    "prompt": "How can you act from abundance and power rather than fear or scarcity today?"
+  },
+  {
+    "id": "p_080",
+    "category": "Identity",
+    "prompt": "What is one adjective that best captures your intended spirit today (e.g. Relentless, Serene, Bold)?"
+  },
+  {
+    "id": "p_081",
+    "category": "Energy",
+    "prompt": "How will you intentionally manage and protect your physical and mental energy throughout the day?"
+  },
+  {
+    "id": "p_082",
+    "category": "Energy",
+    "prompt": "What physical ritual (deep breaths, sunlight, stretching, cold water) will re-energize you right now?"
+  },
+  {
+    "id": "p_083",
+    "category": "Energy",
+    "prompt": "What energy vampire (senseless scrolling, gossip, multitasking) will you avoid today?"
+  },
+  {
+    "id": "p_084",
+    "category": "Energy",
+    "prompt": "When in the day will you schedule a real rest pause to recharge before afternoon tasks?"
+  },
+  {
+    "id": "p_085",
+    "category": "Energy",
+    "prompt": "How can you bring lightness, humor, and enthusiasm into your first meeting or task?"
+  },
+  {
+    "id": "p_086",
+    "category": "Energy",
+    "prompt": "What kind of nourishment and hydration does your brain need to perform at its peak today?"
+  },
+  {
+    "id": "p_087",
+    "category": "Energy",
+    "prompt": "How will you release physical tension in your shoulders, neck, and jaw as you begin?"
+  },
+  {
+    "id": "p_088",
+    "category": "Energy",
+    "prompt": "What environment adjustments (tidy desk, lighting, fresh air) can maximize your vitality?"
+  },
+  {
+    "id": "p_089",
+    "category": "Energy",
+    "prompt": "What is your go-to reset strategy if your energy dips at midday?"
+  },
+  {
+    "id": "p_090",
+    "category": "Energy",
+    "prompt": "How can you move your body today in a way that feels invigorating rather than a chore?"
+  },
+  {
+    "id": "p_091",
+    "category": "Impact",
+    "prompt": "Who is one person you can genuinely support, encourage, or elevate today?"
+  },
+  {
+    "id": "p_092",
+    "category": "Impact",
+    "prompt": "How can you bring more active listening and total presence to your conversations today?"
+  },
+  {
+    "id": "p_093",
+    "category": "Impact",
+    "prompt": "What value can you create today that solves a real problem for someone else?"
+  },
+  {
+    "id": "p_094",
+    "category": "Impact",
+    "prompt": "How can you show leadership by setting a positive, disciplined example for your team or family?"
+  },
+  {
+    "id": "p_095",
+    "category": "Impact",
+    "prompt": "What small gesture of generosity can you offer today without expecting anything in return?"
+  },
+  {
+    "id": "p_096",
+    "category": "Impact",
+    "prompt": "How can you communicate with maximum clarity, kindness, and brevity in your messages today?"
+  },
+  {
+    "id": "p_097",
+    "category": "Impact",
+    "prompt": "Whose day can you make 10x better with a genuine word of recognition?"
+  },
+  {
+    "id": "p_098",
+    "category": "Impact",
+    "prompt": "How will your work today contribute to a larger mission greater than yourself?"
+  },
+  {
+    "id": "p_099",
+    "category": "Impact",
+    "prompt": "Where can you choose collaboration and empathy over ego and competition today?"
+  },
+  {
+    "id": "p_100",
+    "category": "Impact",
+    "prompt": "What legacy of kindness and competence do you want to leave behind today?"
+  },
+  {
+    "id": "p_101",
+    "category": "Reframe",
+    "prompt": "What situation that felt like a setback can you reframe as a valuable lesson or hidden advantage?"
+  },
+  {
+    "id": "p_102",
+    "category": "Reframe",
+    "prompt": "How can you turn a daunting chore into an engaging game or personal challenge today?"
+  },
+  {
+    "id": "p_103",
+    "category": "Reframe",
+    "prompt": "What if the difficulty you are facing is the exact crucible required for your next evolution?"
+  },
+  {
+    "id": "p_104",
+    "category": "Reframe",
+    "prompt": "Instead of asking 'Why is this happening to me?', what happens if you ask 'What is this teaching me?'"
+  },
+  {
+    "id": "p_105",
+    "category": "Reframe",
+    "prompt": "How can you transform nervous anxiety into focused, electric excitement?"
+  },
+  {
+    "id": "p_106",
+    "category": "Reframe",
+    "prompt": "What if you already have all the resources and resilience you need to succeed today?"
+  },
+  {
+    "id": "p_107",
+    "category": "Reframe",
+    "prompt": "How can you view constructive criticism today as a free shortcut to mastery?"
+  },
+  {
+    "id": "p_108",
+    "category": "Reframe",
+    "prompt": "What if this quiet, ordinary morning is secretly the most pivotal turning point of your week?"
+  },
+  {
+    "id": "p_109",
+    "category": "Reframe",
+    "prompt": "How can you see a delay or disruption today as protection or redirection toward something better?"
+  },
+  {
+    "id": "p_110",
+    "category": "Reframe",
+    "prompt": "What positive story will you choose to tell yourself about the opportunities waiting today?"
+  },
+  {
+    "id": "p_111",
+    "category": "Creativity",
+    "prompt": "What wild, unconventional solution haven't you tried yet for your main challenge?"
+  },
+  {
+    "id": "p_112",
+    "category": "Creativity",
+    "prompt": "How would a curious child or beginner view your current project with fresh wonder?"
+  },
+  {
+    "id": "p_113",
+    "category": "Creativity",
+    "prompt": "What two unrelated ideas or industries can you combine today to create something unique?"
+  },
+  {
+    "id": "p_114",
+    "category": "Creativity",
+    "prompt": "What would it look like to bring pure playfulness and experimentation into your work today?"
+  },
+  {
+    "id": "p_115",
+    "category": "Creativity",
+    "prompt": "If you had zero constraints or rules, what exciting concept would you build?"
+  },
+  {
+    "id": "p_116",
+    "category": "Creativity",
+    "prompt": "What inspiration can you borrow from art, music, architecture, or nature today?"
+  },
+  {
+    "id": "p_117",
+    "category": "Creativity",
+    "prompt": "What question should you be asking that no one in your space is asking?"
+  },
+  {
+    "id": "p_118",
+    "category": "Creativity",
+    "prompt": "How can you simplify your current design or strategy by cutting away 50% of the complexity?"
+  },
+  {
+    "id": "p_119",
+    "category": "Creativity",
+    "prompt": "What spark of creative intuition have you been ignoring that deserves attention?"
+  },
+  {
+    "id": "p_120",
+    "category": "Creativity",
+    "prompt": "How will you make your creative output today distinctly, unapologetically yours?"
+  }
+]

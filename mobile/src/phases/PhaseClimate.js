@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Platform } from 'react-native';
-import { ArrowRight, Sun, CloudRain, Shirt, Umbrella, MapPin, RefreshCw } from 'lucide-react-native';
+import { ArrowRight, Sun, CloudRain, Cloud, Shirt, Footprints, MapPin, RefreshCw } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
 
@@ -19,7 +19,6 @@ export default function PhaseClimate() {
   const low = weatherData?.lowTemp ?? 16;
   const unit = weatherData?.unit ?? '°C';
   const label = weatherData?.weatherLabel ?? 'Clear Sky';
-  const rainProb = weatherData?.maxRainProb ?? 0;
   const locationName = weatherData?.locationName || activeLocation?.name || 'San Francisco, USA';
   const hourlyStrip = weatherData?.hourlyStrip || [
     { hour: '07:00', temp: low },
@@ -42,113 +41,85 @@ export default function PhaseClimate() {
 
   return (
     <View style={styles.container}>
-      {/* Top Phase Header */}
+      {/* Top Phase Header Tracker */}
       <View style={styles.progressHeader}>
         <View style={styles.progressTextRow}>
-          <Text style={styles.progressLabel}>PHASE 03 OF 04</Text>
-          <Text style={styles.progressPhaseName}>The Outside World</Text>
+          <Text style={styles.progressLabel}>PHASE 04 OF 05</Text>
+          <Text style={styles.progressPhaseName}>Atmospheric Climate</Text>
         </View>
         <View style={styles.progressBarTrack}>
-          <View style={[styles.progressBarFill, { width: '75%' }]} />
+          <View style={[styles.progressBarFill, { width: '80%' }]} />
         </View>
       </View>
 
-      {/* Header & Location Pill */}
-      <View style={styles.headerRow}>
-        <View>
-          <Text style={styles.subtitle}>ATMOSPHERIC CLIMATE</Text>
-          <Text style={styles.title}>Today's Atmosphere</Text>
-        </View>
-
-        <TouchableOpacity
-          onPress={() => setIsLocationModalOpen(true)}
-          activeOpacity={0.8}
-          style={styles.locationPill}
-        >
-          <MapPin size={12} color={colors.primary} />
-          <Text style={styles.locationText} numberOfLines={1}>
-            {locationName.split(',')[0]}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Master Climate Card */}
+      {/* Main Minimalist Climate Card */}
       <View style={styles.card}>
-        {/* Temperature Lockup */}
-        <View style={styles.tempRow}>
-          <View style={styles.sunIconWrapper}>
-            <Sun size={28} color={colors.primary} />
-          </View>
-          <View style={styles.tempTextCol}>
-            <View style={styles.tempNumbersRow}>
-              <Text style={styles.tempMain}>{high}{unit}</Text>
-              <Text style={styles.tempLow}>/ {low}{unit} low</Text>
-            </View>
-            <Text style={styles.weatherStatus}>{label}</Text>
-          </View>
+        {/* Location & Refresh Header */}
+        <View style={styles.locationHeaderRow}>
+          <TouchableOpacity
+            onPress={() => setIsLocationModalOpen(true)}
+            activeOpacity={0.7}
+            style={styles.locationPill}
+          >
+            <MapPin size={11} color={colors.primary} />
+            <Text style={styles.locationText} numberOfLines={1}>{locationName.split(',')[0]}</Text>
+          </TouchableOpacity>
 
-          {/* Rain badge */}
-          {rainProb > 15 ? (
-            <View style={styles.rainBadge}>
-              <CloudRain size={13} color={colors.primaryDeep} />
-              <Text style={styles.rainBadgeText}>{rainProb}% Rain</Text>
-            </View>
-          ) : (
-            <View style={styles.dryBadge}>
-              <Sun size={12} color={colors.textDim} />
-              <Text style={styles.dryBadgeText}>Dry Skies</Text>
-            </View>
-          )}
+          <TouchableOpacity
+            onPress={handleRefresh}
+            activeOpacity={0.7}
+            style={styles.refreshBtn}
+          >
+            <RefreshCw size={12} color={colors.textDim} />
+          </TouchableOpacity>
         </View>
 
-        {/* 12-Hour Daylight Window Strip */}
-        <View style={styles.hourlyContainer}>
-          <Text style={styles.hourlyLabel}>12-HOUR DAYLIGHT HORIZON</Text>
-          <View style={styles.hourlyGrid}>
-            {hourlyStrip.map((item, idx) => (
-              <View key={idx} style={styles.hourlyBox}>
-                <Text style={styles.hourlyTime}>{item.hour}</Text>
-                <Text style={styles.hourlyTemp}>{item.temp}°</Text>
-                <View style={styles.hourlyDot} />
-              </View>
-            ))}
+        {/* Temperature & Weather Symbol */}
+        <View style={styles.tempCenter}>
+          <View style={styles.weatherIconCircle}>
+            <Sun size={32} color={colors.primary} strokeWidth={1.8} />
           </View>
+          <Text style={styles.tempValue}>{high}{unit}</Text>
+          <Text style={styles.conditionText}>{label} • Low {low}{unit}</Text>
         </View>
 
-        {/* Tactical Guidance Box */}
-        <View style={styles.tacticsGrid}>
-          {/* Attire */}
-          <View style={styles.tacticCard}>
-            <View style={styles.tacticIcon}>
-              <Shirt size={14} color={colors.primary} />
+        {/* Hourly Forecast Strip */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.hourlyList}
+        >
+          {hourlyStrip.map((item, idx) => (
+            <View key={idx} style={styles.hourlyItem}>
+              <Text style={styles.hourlyTime}>{item.hour}</Text>
+              <Sun size={14} color={colors.primary} />
+              <Text style={styles.hourlyTemp}>{item.temp}°</Text>
             </View>
-            <View style={styles.tacticTextCol}>
-              <Text style={styles.tacticTitle}>ATTIRE STRATEGY</Text>
-              <Text style={styles.tacticDesc}>{tactics.clothingAdvice}</Text>
-            </View>
+          ))}
+        </ScrollView>
+
+        {/* Minimal Tactics Pillars */}
+        <View style={styles.tacticsRow}>
+          <View style={styles.tacticItem}>
+            <Shirt size={14} color={colors.primaryDark} />
+            <Text style={styles.tacticText} numberOfLines={2}>{tactics.clothingAdvice}</Text>
           </View>
 
-          {/* Commute */}
-          <View style={styles.tacticCard}>
-            <View style={styles.tacticIcon}>
-              <Umbrella size={14} color={colors.primary} />
-            </View>
-            <View style={styles.tacticTextCol}>
-              <Text style={styles.tacticTitle}>TRANSIT & COMMUTE</Text>
-              <Text style={styles.tacticDesc}>{tactics.commuteOrOutdoorGuidance}</Text>
-            </View>
+          <View style={styles.tacticItem}>
+            <Footprints size={14} color="#D97706" />
+            <Text style={styles.tacticText} numberOfLines={2}>{tactics.commuteOrOutdoorGuidance}</Text>
           </View>
         </View>
       </View>
 
-      {/* Big Action Button */}
+      {/* Proceed Button */}
       <TouchableOpacity
         onPress={advancePhase}
         activeOpacity={0.85}
         style={styles.actionBtn}
       >
-        <Text style={styles.actionBtnText}>Acknowledge & Proceed</Text>
-        <ArrowRight size={18} color="#FFFFFF" />
+        <Text style={styles.actionBtnText}>Proceed to Summary</Text>
+        <ArrowRight size={16} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );
@@ -161,7 +132,7 @@ const styles = StyleSheet.create({
   },
   progressHeader: {
     width: '100%',
-    marginBottom: 16
+    marginBottom: 20
   },
   progressTextRow: {
     flexDirection: 'row',
@@ -173,7 +144,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
@@ -182,7 +154,7 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     width: '100%',
-    height: 4,
+    height: 3,
     backgroundColor: colors.borderHairline,
     borderRadius: 2,
     overflow: 'hidden'
@@ -192,159 +164,84 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 2
   },
-  headerRow: {
+  card: {
     width: '100%',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: colors.borderHairline,
+    borderRadius: 20,
+    padding: 18,
+    marginBottom: 20,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    elevation: 2
+  },
+  locationHeaderRow: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
     justifyContent: 'space-between',
-    marginBottom: 16
-  },
-  subtitle: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 1,
-    marginBottom: 2
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.textMain,
-    letterSpacing: -0.4
+    alignItems: 'center',
+    marginBottom: 12
   },
   locationPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 5,
+    backgroundColor: colors.bgHighlight,
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 14,
-    backgroundColor: colors.bgCard,
-    borderWidth: 1,
-    borderColor: colors.borderCard,
-    maxWidth: 130
-  },
-  locationText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: colors.textMain
-  },
-  card: {
-    width: '100%',
-    backgroundColor: colors.bgCard,
-    borderWidth: 1,
-    borderColor: colors.borderCard,
-    borderRadius: 20,
-    padding: 16,
-    gap: 16,
-    marginBottom: 20,
-    shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 10,
-    elevation: 2
-  },
-  tempRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingBottom: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.borderHairline
-  },
-  sunIconWrapper: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  tempTextCol: {
-    flex: 1,
-    marginLeft: 12
-  },
-  tempNumbersRow: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: 6
-  },
-  tempMain: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: colors.textMain
-  },
-  tempLow: {
-    fontSize: 12,
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
-  },
-  weatherStatus: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: colors.primaryDark,
-    textTransform: 'uppercase',
-    marginTop: 2
-  },
-  rainBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 10,
-    backgroundColor: colors.bgHighlight,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.borderHighlight
   },
-  rainBadgeText: {
-    fontSize: 10,
+  locationText: {
+    fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDeep
+    color: colors.primaryDark
   },
-  dryBadge: {
-    flexDirection: 'row',
+  refreshBtn: {
+    padding: 4
+  },
+  tempCenter: {
     alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10,
-    backgroundColor: colors.bgCardAlt,
+    marginVertical: 8
+  },
+  weatherIconCircle: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.bgHighlight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 6,
     borderWidth: 1,
-    borderColor: colors.borderCard
+    borderColor: colors.borderHighlight
   },
-  dryBadgeText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: colors.textDim
+  tempValue: {
+    fontSize: 36,
+    fontWeight: '300',
+    color: colors.textPrimary,
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif'
   },
-  hourlyContainer: {
-    gap: 8
+  conditionText: {
+    fontSize: 12,
+    color: colors.textMuted,
+    marginTop: 2
   },
-  hourlyLabel: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 1
-  },
-  hourlyGrid: {
+  hourlyList: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 6
+    gap: 8,
+    paddingVertical: 14
   },
-  hourlyBox: {
-    flex: 1,
+  hourlyItem: {
     alignItems: 'center',
-    paddingVertical: 8,
+    backgroundColor: colors.bgSecondary,
     borderRadius: 12,
-    backgroundColor: colors.bgCardAlt,
-    borderWidth: 1,
-    borderColor: colors.borderCard,
-    gap: 3
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    gap: 4,
+    minWidth: 54
   },
   hourlyTime: {
     fontSize: 9,
@@ -352,53 +249,31 @@ const styles = StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
   },
   hourlyTemp: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: colors.textMain
-  },
-  hourlyDot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: colors.primary,
-    marginTop: 2
-  },
-  tacticsGrid: {
-    gap: 8
-  },
-  tacticCard: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 10,
-    padding: 12,
-    borderRadius: 14,
-    backgroundColor: colors.bgCardAlt,
-    borderWidth: 1,
-    borderColor: colors.borderCard
-  },
-  tacticIcon: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    backgroundColor: colors.bgCard,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 1
-  },
-  tacticTextCol: {
-    flex: 1
-  },
-  tacticTitle: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    marginBottom: 2
-  },
-  tacticDesc: {
     fontSize: 11,
-    color: colors.textMain,
-    lineHeight: 16
+    fontWeight: '700',
+    color: colors.textPrimary
+  },
+  tacticsRow: {
+    gap: 8,
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderHairline,
+    paddingTop: 12
+  },
+  tacticItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: colors.bgSecondary,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 10
+  },
+  tacticText: {
+    flex: 1,
+    fontSize: 11,
+    color: colors.textPrimary,
+    lineHeight: 15
   },
   actionBtn: {
     width: '100%',
@@ -407,17 +282,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     backgroundColor: colors.primaryDark,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: 28,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.22,
     shadowRadius: 10,
     elevation: 4
   },
   actionBtnText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    letterSpacing: 0.3
   }
 });

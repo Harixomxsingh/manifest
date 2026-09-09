@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Linking, Platform } from 'react-native';
-import { ArrowRight, BookOpen, Clock, ExternalLink, Lightbulb, Zap, Check } from 'lucide-react-native';
+import { ArrowRight, BookOpen, ExternalLink } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
 
 export default function PhaseReading() {
   const { advancePhase, todayArticle } = useApp();
-  const [isFinished, setIsFinished] = useState(false);
 
   const article = todayArticle || {
     id: 'essentialism-focus',
-    title: "The Power of Less: How Saying No Protects Your Life's Work",
+    title: "The Power of Less",
     category: 'Minimalism',
-    readTime: '5 min read',
+    readTime: '3 min read',
     hook: "Every time you say 'yes' to something minor, you are implicitly saying 'no' to the singular thing that truly moves the needle.",
     url: 'https://jamesclear.com/saying-no',
     coreIdea: 'Say no to almost everything so you can say an ecstatic, focused yes to what matters most.'
@@ -23,89 +22,54 @@ export default function PhaseReading() {
     Linking.openURL(url).catch(() => {});
   };
 
-  const handleProceed = () => {
-    setIsFinished(true);
-    advancePhase();
-  };
-
   return (
     <View style={styles.container}>
-      {/* Top Phase Header */}
+      {/* Top Phase Header Tracker */}
       <View style={styles.progressHeader}>
         <View style={styles.progressTextRow}>
-          <Text style={styles.progressLabel}>PHASE 02 OF 04</Text>
-          <Text style={styles.progressPhaseName}>Mindset Nutrition</Text>
+          <Text style={styles.progressLabel}>PHASE 02 OF 05</Text>
+          <Text style={styles.progressPhaseName}>Mindset Reading</Text>
         </View>
         <View style={styles.progressBarTrack}>
-          <View style={[styles.progressBarFill, { width: '50%' }]} />
+          <View style={[styles.progressBarFill, { width: '40%' }]} />
         </View>
       </View>
 
-      {/* Meta Bar */}
-      <View style={styles.metaRow}>
-        <View style={styles.categoryPill}>
-          <Text style={styles.categoryText}>{article.category.toUpperCase()}</Text>
-        </View>
-        <View style={styles.timePill}>
-          <Clock size={12} color={colors.primary} />
-          <Text style={styles.timeText}>{article.readTime}</Text>
-        </View>
-      </View>
-
-      {/* Title */}
-      <Text style={styles.title}>{article.title}</Text>
-      <Text style={styles.author}>By James Clear • Daily Leverage</Text>
-
-      {/* Main Content Card */}
+      {/* Main Minimalist Reading Card */}
       <View style={styles.card}>
-        {/* Hook */}
-        <Text style={styles.hookText}>
-          {article.hook}
-        </Text>
+        <View style={styles.authorRow}>
+          <BookOpen size={13} color={colors.primary} />
+          <Text style={styles.authorText}>JAMES CLEAR • {article.category?.toUpperCase() || 'MINDSET'}</Text>
+        </View>
 
-        {/* Big Direct-to-Article Action Card */}
+        <Text style={styles.articleTitle}>{article.title}</Text>
+
+        {/* The Core Idea Quote */}
+        <View style={styles.quoteBox}>
+          <Text style={styles.coreQuote}>
+            “{article.coreIdea || article.hook}”
+          </Text>
+        </View>
+
+        {/* Minimal Link */}
         <TouchableOpacity
           onPress={handleOpenLink}
-          activeOpacity={0.85}
-          style={styles.articleLinkCard}
+          activeOpacity={0.7}
+          style={styles.linkRow}
         >
-          <View style={styles.articleLinkLeft}>
-            <View style={styles.articleLinkIcon}>
-              <BookOpen size={18} color={colors.primary} />
-            </View>
-            <View style={styles.articleLinkTextWrapper}>
-              <Text style={styles.articleLinkMeta}>FULL DEEP-DIVE • JAMESCLEAR.COM</Text>
-              <Text style={styles.articleLinkTitle} numberOfLines={1}>
-                Read Full Article Online
-              </Text>
-            </View>
-          </View>
-          <ExternalLink size={16} color={colors.primaryDark} />
+          <Text style={styles.linkText}>Read full essay online</Text>
+          <ExternalLink size={12} color={colors.textDim} />
         </TouchableOpacity>
-
-        {/* Foundational Axiom Box */}
-        <View style={styles.axiomBox}>
-          <View style={styles.axiomHeader}>
-            <Lightbulb size={16} color={colors.primary} />
-            <Text style={styles.axiomLabel}>FOUNDATIONAL AXIOM</Text>
-          </View>
-          <Text style={styles.axiomQuote}>
-            “{article.coreIdea}”
-          </Text>
-          <Text style={styles.axiomAuthor}>— Atomic Habits Principles</Text>
-        </View>
       </View>
 
-      {/* Big Action Button */}
+      {/* Proceed Button */}
       <TouchableOpacity
-        onPress={handleProceed}
+        onPress={advancePhase}
         activeOpacity={0.85}
         style={styles.actionBtn}
       >
-        <Text style={styles.actionBtnText}>
-          {isFinished ? 'Completed' : 'Finished Reading & Advance'}
-        </Text>
-        <ArrowRight size={18} color="#FFFFFF" />
+        <Text style={styles.actionBtnText}>Internalize & Proceed to Voice</Text>
+        <ArrowRight size={16} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );
@@ -118,7 +82,7 @@ const styles = StyleSheet.create({
   },
   progressHeader: {
     width: '100%',
-    marginBottom: 16
+    marginBottom: 20
   },
   progressTextRow: {
     flexDirection: 'row',
@@ -130,7 +94,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
@@ -139,7 +104,7 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     width: '100%',
-    height: 4,
+    height: 3,
     backgroundColor: colors.borderHairline,
     borderRadius: 2,
     overflow: 'hidden'
@@ -149,149 +114,66 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 2
   },
-  metaRow: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10
-  },
-  categoryPill: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight
-  },
-  categoryText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
-  },
-  timePill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    backgroundColor: colors.bgCardAlt,
-    borderWidth: 1,
-    borderColor: colors.borderCard
-  },
-  timeText: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
-  },
-  title: {
-    fontSize: 21,
-    fontWeight: '700',
-    color: colors.textMain,
-    textAlign: 'left',
-    width: '100%',
-    marginBottom: 4,
-    letterSpacing: -0.3
-  },
-  author: {
-    fontSize: 11,
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    width: '100%',
-    marginBottom: 16
-  },
   card: {
     width: '100%',
-    backgroundColor: colors.bgCard,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: colors.borderCard,
+    borderColor: colors.borderHairline,
     borderRadius: 20,
-    padding: 16,
-    gap: 14,
+    padding: 20,
     marginBottom: 20,
     shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
-    shadowRadius: 10,
+    shadowRadius: 12,
     elevation: 2
   },
-  hookText: {
-    fontSize: 14,
-    color: colors.textMuted,
-    lineHeight: 22
-  },
-  articleLinkCard: {
+  authorRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1.5,
-    borderColor: colors.borderHighlight,
-    borderRadius: 14,
-    padding: 12
+    gap: 6,
+    marginBottom: 10
   },
-  articleLinkLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-    flex: 1
-  },
-  articleLinkIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: colors.bgCard,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  articleLinkTextWrapper: {
-    flex: 1
-  },
-  articleLinkMeta: {
+  authorText: {
     fontSize: 9,
-    fontWeight: '700',
+    fontWeight: '800',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 0.8
   },
-  articleLinkTitle: {
-    fontSize: 13,
+  articleTitle: {
+    fontSize: 18,
     fontWeight: '700',
-    color: colors.textMain
+    color: colors.textPrimary,
+    marginBottom: 16,
+    letterSpacing: -0.3
   },
-  axiomBox: {
-    backgroundColor: colors.bgCardAlt,
+  quoteBox: {
+    backgroundColor: colors.bgHighlight,
     borderWidth: 1,
-    borderColor: colors.borderCard,
+    borderColor: colors.borderGold,
     borderRadius: 14,
     padding: 14,
-    gap: 6
+    marginBottom: 16
   },
-  axiomHeader: {
+  coreQuote: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: colors.primaryDark,
+    lineHeight: 20,
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif'
+  },
+  linkRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6
+    justifyContent: 'center',
+    gap: 4,
+    paddingTop: 8
   },
-  axiomLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
-  },
-  axiomQuote: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: colors.textMain,
-    fontStyle: 'italic',
-    lineHeight: 19
-  },
-  axiomAuthor: {
-    fontSize: 10,
+  linkText: {
+    fontSize: 11,
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    marginTop: 2
+    fontWeight: '600'
   },
   actionBtn: {
     width: '100%',
@@ -300,17 +182,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     backgroundColor: colors.primaryDark,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: 28,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.22,
     shadowRadius: 10,
     elevation: 4
   },
   actionBtnText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    letterSpacing: 0.3
   }
 });

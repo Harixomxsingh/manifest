@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform, Image } from 'react-native';
-import { ArrowRight, Check, ShieldCheck, Sparkles } from 'lucide-react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
+import { ArrowRight, Check } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { triggerHaptic } from '../services/hapticsService';
 import { colors } from '../theme/colors';
@@ -11,7 +11,7 @@ export default function PhaseIdentity() {
 
   const anchor = briefing?.optimismAnchor || {
     title: 'The Arena, Not The Barrier',
-    content: 'Whatever circumstance arrives today—friction in communication, unexpected delays, or chaotic demands—look immediately for the leverage point. Difficulties are not personal roadblocks; they are the exact raw material from which your resilience and character are forged.',
+    content: 'Difficulties are not personal roadblocks; they are the exact raw material from which your resilience and sovereign character are forged.',
     identityReminder: 'I view every challenge today through an opportunistic and constructive lens.'
   };
 
@@ -22,70 +22,54 @@ export default function PhaseIdentity() {
 
   return (
     <View style={styles.container}>
-      {/* Top Phase Header */}
+      {/* Top Phase Header Tracker */}
       <View style={styles.progressHeader}>
         <View style={styles.progressTextRow}>
-          <Text style={styles.progressLabel}>PHASE 01 OF 04</Text>
-          <Text style={styles.progressPhaseName}>Identity & Agency</Text>
+          <Text style={styles.progressLabel}>PHASE 01 OF 05</Text>
+          <Text style={styles.progressPhaseName}>Identity Anchor</Text>
         </View>
         <View style={styles.progressBarTrack}>
-          <View style={[styles.progressBarFill, { width: '25%' }]} />
+          <View style={[styles.progressBarFill, { width: '20%' }]} />
         </View>
       </View>
 
-      {/* Emblem */}
-      <View style={styles.emblemBadge}>
-        <Sparkles size={24} color={colors.primary} />
-      </View>
-
-      {/* Badge */}
-      <View style={styles.badge}>
-        <Text style={styles.badgeText}>IDENTITY LENS • UNSHAKEABLE AGENCY</Text>
-      </View>
-
-      {/* Title */}
-      <Text style={styles.title}>{anchor.title || 'The Arena, Not The Barrier'}</Text>
-
-      {/* Main Card */}
+      {/* Main Minimalist Quote Card */}
       <View style={styles.card}>
-        <Text style={styles.cardParagraph}>
+        <Text style={styles.quotePillLabel}>MINDSET ANCHOR</Text>
+        
+        {/* The Core Quote */}
+        <Text style={styles.quoteText}>
+          "{anchor.identityReminder}"
+        </Text>
+
+        {/* Precise Supporting Essence */}
+        <Text style={styles.supportText}>
           {anchor.content}
         </Text>
 
-        {/* Core Affirmation Callout */}
-        <View style={styles.affirmationBox}>
-          <View style={styles.affirmationHeader}>
-            <ShieldCheck size={16} color={colors.primaryDark} />
-            <Text style={styles.affirmationLabel}>CORE AFFIRMATION</Text>
-          </View>
-          <Text style={styles.affirmationQuote}>
-            "{anchor.identityReminder}"
-          </Text>
-        </View>
-
-        {/* Checkmark Habit Toggle */}
+        {/* Minimal Checkbox Affirmation */}
         <TouchableOpacity
           onPress={handleToggleAffirm}
           activeOpacity={0.8}
           style={styles.toggleRow}
         >
           <View style={[styles.checkbox, isAffirmed && styles.checkboxActive]}>
-            {isAffirmed && <Check size={13} color="#FFFFFF" strokeWidth={3} />}
+            {isAffirmed && <Check size={12} color="#FFFFFF" strokeWidth={3} />}
           </View>
           <Text style={styles.toggleText}>
-            Internalized into today’s presence
+            I choose to embody this today
           </Text>
         </TouchableOpacity>
       </View>
 
-      {/* Big Proceed Button */}
+      {/* Proceed Button */}
       <TouchableOpacity
         onPress={advancePhase}
         activeOpacity={0.85}
         style={styles.actionBtn}
       >
-        <Text style={styles.actionBtnText}>Anchor Mindset & Proceed to Reading</Text>
-        <ArrowRight size={18} color="#FFFFFF" />
+        <Text style={styles.actionBtnText}>Anchor Focus & Next</Text>
+        <ArrowRight size={16} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
   );
@@ -110,7 +94,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
@@ -119,7 +104,7 @@ const styles = StyleSheet.create({
   },
   progressBarTrack: {
     width: '100%',
-    height: 4,
+    height: 3,
     backgroundColor: colors.borderHairline,
     borderRadius: 2,
     overflow: 'hidden'
@@ -129,99 +114,60 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 2
   },
-  emblemBadge: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 12
-  },
-  badge: {
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    marginBottom: 10
-  },
-  badgeText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 1
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.textMain,
-    textAlign: 'center',
-    marginBottom: 16,
-    letterSpacing: -0.4
-  },
   card: {
     width: '100%',
-    backgroundColor: colors.bgCard,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: colors.borderCard,
+    borderColor: colors.borderGold,
     borderRadius: 20,
-    padding: 16,
-    gap: 14,
+    padding: 20,
     marginBottom: 20,
+    alignItems: 'center',
     shadowColor: colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04,
-    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
     elevation: 2
   },
-  cardParagraph: {
-    fontSize: 13,
-    color: colors.textMuted,
-    lineHeight: 20
-  },
-  affirmationBox: {
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    borderRadius: 14,
-    padding: 14,
-    gap: 6
-  },
-  affirmationHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6
-  },
-  affirmationLabel: {
-    fontSize: 10,
-    fontWeight: '700',
+  quotePillLabel: {
+    fontSize: 9,
+    fontWeight: '800',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    letterSpacing: 1,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    marginBottom: 14
   },
-  affirmationQuote: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.primaryDeep,
+  quoteText: {
+    fontSize: 18,
     fontStyle: 'italic',
-    lineHeight: 20
+    color: colors.primaryDark,
+    textAlign: 'center',
+    lineHeight: 25,
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    marginBottom: 16
+  },
+  supportText: {
+    fontSize: 12,
+    color: colors.textMuted,
+    textAlign: 'center',
+    lineHeight: 18,
+    paddingHorizontal: 8,
+    marginBottom: 18
   },
   toggleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    paddingTop: 8,
+    gap: 8,
+    paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: colors.borderHairline
+    borderTopColor: colors.borderHairline,
+    width: '100%',
+    justifyContent: 'center'
   },
   checkbox: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     borderWidth: 1.5,
     borderColor: colors.borderHighlight,
     backgroundColor: colors.bgCardAlt,
@@ -233,9 +179,9 @@ const styles = StyleSheet.create({
     borderColor: colors.primary
   },
   toggleText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '500',
-    color: colors.textMuted
+    color: colors.textDim
   },
   actionBtn: {
     width: '100%',
@@ -244,17 +190,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 8,
     backgroundColor: colors.primaryDark,
-    paddingVertical: 15,
+    paddingVertical: 14,
     borderRadius: 28,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.22,
     shadowRadius: 10,
     elevation: 4
   },
   actionBtnText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    letterSpacing: 0.3
   }
 });
