@@ -16,16 +16,19 @@ import {
   Shuffle,
   Mic,
   BookOpen,
-  Flame
+  Flame,
+  Settings
 } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 import { triggerHaptic } from '../services/hapticsService';
 import { getStreakData } from '../services/streakService';
 import ManifestSunLogo from './ManifestSunLogo';
 import JournalVaultModal from './JournalVaultModal';
 import MomentumHeatmapModal from './MomentumHeatmapModal';
 import FocusTimerModal from './FocusTimerModal';
+import SettingsModal from './SettingsModal';
 
 export default function Header() {
   const {
@@ -42,6 +45,7 @@ export default function Header() {
   const [isVaultOpen, setIsVaultOpen] = useState(false);
   const [isHeatmapOpen, setIsHeatmapOpen] = useState(false);
   const [isFocusTimerOpen, setIsFocusTimerOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [streakData, setStreakData] = useState({ currentStreak: 1 });
 
   useEffect(() => {
@@ -71,33 +75,32 @@ export default function Header() {
     <View style={styles.headerWrapper}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContent}>
-          {/* Brand Logo & Name: Manifest */}
-          <TouchableOpacity
-            onPress={() => jumpToPhase('welcome')}
-            activeOpacity={0.8}
-            style={styles.brandRow}
-          >
-            <ManifestSunLogo size={28} interactive={false} />
-            <View>
+          {/* Left Brand Cluster: Logo + Name + Streak Badge */}
+          <View style={styles.leftBrandCluster}>
+            <TouchableOpacity
+              onPress={() => jumpToPhase('welcome')}
+              activeOpacity={0.8}
+              style={styles.brandRow}
+            >
+              <ManifestSunLogo size={26} interactive={false} />
               <Text style={styles.brandTitle}>Manifest</Text>
-              <Text style={styles.brandSubtitle}>{timeStr}</Text>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
 
-          {/* First Priority Hero Streak Badge */}
-          <TouchableOpacity
-            onPress={handleOpenHeatmap}
-            activeOpacity={0.8}
-            style={styles.streakBadgeBtn}
-            accessibilityLabel="Streak & Focus Heatmap"
-          >
-            <View style={styles.flameIconWrap}>
-              <Flame size={13} color="#D97706" />
-            </View>
-            <Text style={styles.streakBadgeText}>
-              {streakData.currentStreak}
-            </Text>
-          </TouchableOpacity>
+            {/* Streak Badge right after the App Name */}
+            <TouchableOpacity
+              onPress={handleOpenHeatmap}
+              activeOpacity={0.8}
+              style={styles.streakBadgeBtn}
+              accessibilityLabel="Streak & Focus Heatmap"
+            >
+              <View style={styles.flameIconWrap}>
+                <Flame size={12} color="#D97706" />
+              </View>
+              <Text style={styles.streakBadgeText}>
+                {streakData.currentStreak}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
           {/* Action Icons (Clean & Spacious for Mobile) */}
           <View style={styles.actionRow}>
@@ -108,7 +111,20 @@ export default function Header() {
               style={styles.iconBtn}
               accessibilityLabel="Randomize Content"
             >
-              <Shuffle size={14} color={colors.primary} />
+              <Shuffle size={13} color={colors.primary} />
+            </TouchableOpacity>
+
+            {/* Settings Option Button */}
+            <TouchableOpacity
+              onPress={() => {
+                triggerHaptic('light');
+                setIsSettingsOpen(true);
+              }}
+              activeOpacity={0.8}
+              style={styles.iconBtn}
+              accessibilityLabel="Settings"
+            >
+              <Settings size={13} color={colors.primary} />
             </TouchableOpacity>
 
             {/* Location Pill */}
@@ -147,6 +163,10 @@ export default function Header() {
         }}
         initialMinutes={25}
       />
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+      />
     </View>
   );
 }
@@ -163,11 +183,16 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   headerContent: {
-    height: 54,
+    height: 52,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14
+    paddingHorizontal: 12
+  },
+  leftBrandCluster: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7
   },
   brandRow: {
     flexDirection: 'row',
@@ -176,29 +201,25 @@ const styles = StyleSheet.create({
   },
   brandTitle: {
     fontSize: 15,
-    fontWeight: '700',
+    fontWeight: '800',
     color: colors.primaryDeep,
-    letterSpacing: -0.3
-  },
-  brandSubtitle: {
-    fontSize: 8.5,
-    color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    letterSpacing: -0.3,
+    fontFamily: fonts.bold
   },
   streakBadgeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 3.5,
     backgroundColor: '#FEF3C7',
-    borderWidth: 1.5,
+    borderWidth: 1.2,
     borderColor: '#FCD34D',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 14,
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    borderRadius: 12,
     shadowColor: '#F59E0B',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowRadius: 3,
     elevation: 2
   },
   flameIconWrap: {
@@ -206,17 +227,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   streakBadgeText: {
-    fontSize: 10,
-    fontWeight: '900',
+    fontSize: 10.5,
+    fontWeight: '800',
     color: '#92400E',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.2
-  },
-  activeDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: '#10B981'
   },
   actionRow: {
     flexDirection: 'row',
@@ -233,10 +248,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  iconBtnActive: {
-    backgroundColor: colors.primaryDark,
-    borderColor: colors.primaryDark
-  },
   locationBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -252,6 +263,8 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 10,
     fontWeight: '600',
-    color: colors.textMain
+    color: colors.textMain,
+    fontFamily: fonts.medium
   }
 });
+

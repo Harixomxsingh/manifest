@@ -37,8 +37,9 @@ import {
   stopVoiceAudio
 } from '../services/voiceRecorderService';
 import { triggerHaptic } from '../services/hapticsService';
-import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
+import { useApp } from '../context/AppContext';
 
 const TIME_FILTERS = [
   { id: 'all', label: 'All Time' },
@@ -441,7 +442,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '800',
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif'
+    fontFamily: fonts.bold
   },
   countBadge: {
     backgroundColor: colors.bgHighlight,
@@ -455,11 +456,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   subtitle: {
     fontSize: 11,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     marginTop: 1
   },
   closeBtn: {
@@ -492,6 +494,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 12,
     color: colors.textPrimary,
+    fontFamily: fonts.regular,
     paddingVertical: 7
   },
   clearBtn: {
@@ -511,7 +514,8 @@ const styles = StyleSheet.create({
   sortText: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   timeFilterRow: {
     flexDirection: 'row',
@@ -539,10 +543,12 @@ const styles = StyleSheet.create({
   timePillText: {
     fontSize: 11,
     fontWeight: '600',
-    color: colors.textSecondary
+    color: colors.textSecondary,
+    fontFamily: fonts.medium
   },
   timePillTextSelected: {
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    fontFamily: fonts.bold
   },
   listContent: {
     padding: 16,
@@ -570,7 +576,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   modeBadge: {
     flexDirection: 'row',
@@ -586,7 +592,8 @@ const styles = StyleSheet.create({
   modeText: {
     fontSize: 9,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   deleteBtn: {
     padding: 4
@@ -602,7 +609,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'italic',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    fontFamily: fonts.medium,
     lineHeight: 16
   },
   audioStrip: {
@@ -637,7 +644,7 @@ const styles = StyleSheet.create({
   },
   audioTimeText: {
     fontSize: 10,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.mono,
     color: colors.textDim
   },
   textBox: {
@@ -648,6 +655,7 @@ const styles = StyleSheet.create({
   textContent: {
     fontSize: 12,
     color: colors.textSecondary,
+    fontFamily: fonts.regular,
     lineHeight: 17
   },
   synthesisBox: {
@@ -674,13 +682,14 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: '800',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.5
   },
   anchorText: {
     fontSize: 11,
     fontStyle: 'italic',
     fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.primaryDark,
     lineHeight: 15
   },
@@ -702,13 +711,14 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: '800',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.5
   },
   actionText: {
     fontSize: 11,
     fontWeight: '600',
     color: colors.textPrimary,
+    fontFamily: fonts.medium,
     lineHeight: 15
   },
   loadBtn: {
@@ -725,7 +735,8 @@ const styles = StyleSheet.create({
   loadBtnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   emptyState: {
     alignItems: 'center',
@@ -736,11 +747,13 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: colors.textSecondary
+    color: colors.textSecondary,
+    fontFamily: fonts.bold
   },
   emptySub: {
     fontSize: 12,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     textAlign: 'center',
     paddingHorizontal: 20
   }

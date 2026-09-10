@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native
 import { ArrowRight, Sun, Sparkles, Shuffle } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
-
+import { fonts } from '../theme/fonts';
 import ManifestSunLogo from '../components/ManifestSunLogo';
 
 export default function PhaseWelcome() {
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 1
   },
   logoWrapper: {
@@ -113,20 +113,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   title: {
-    fontSize: 26,
-    fontWeight: '400',
+    fontSize: 27,
+    fontWeight: '800',
     color: colors.textPrimary,
     textAlign: 'center',
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    fontFamily: fonts.extraBold,
     marginBottom: 6,
-    letterSpacing: -0.4
+    letterSpacing: -0.5
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: 12.5,
     color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 18,
     maxWidth: 280,
+    fontFamily: fonts.regular,
     marginBottom: 20
   },
   quoteCard: {
@@ -148,8 +149,8 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: colors.primaryDark,
     textAlign: 'center',
-    lineHeight: 22,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    lineHeight: 23,
+    fontFamily: fonts.medium,
     marginBottom: 14
   },
   authorRow: {
@@ -167,11 +168,12 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.bold
   },
   authorRole: {
     fontSize: 9.5,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     marginTop: 1
   },
   shuffleBtn: {
@@ -203,6 +205,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: '#FFFFFF',
+    fontFamily: fonts.bold,
     letterSpacing: 0.3
   }
 });
+

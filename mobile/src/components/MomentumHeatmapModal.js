@@ -22,6 +22,7 @@ import {
   CheckCircle2
 } from 'lucide-react-native';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 import { triggerHaptic } from '../services/hapticsService';
 import {
   getStreakData,
@@ -426,11 +427,12 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '800',
     color: '#92400E',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   modalSubtitle: {
     fontSize: 10.5,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     marginTop: 1
   },
   closeBtn: {
@@ -465,18 +467,19 @@ const styles = StyleSheet.create({
     fontSize: 7.5,
     fontWeight: '800',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   metricValue: {
     fontSize: 14,
     fontWeight: '800',
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   metricUnit: {
     fontSize: 9,
     fontWeight: '500',
-    color: colors.textDim
+    color: colors.textDim,
+    fontFamily: fonts.regular
   },
   heatmapCard: {
     backgroundColor: '#FFFFFF',
@@ -494,7 +497,8 @@ const styles = StyleSheet.create({
   heatmapTitle: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontFamily: fonts.bold
   },
   themeToggleRow: {
     flexDirection: 'row',
@@ -518,11 +522,13 @@ const styles = StyleSheet.create({
   themeTabText: {
     fontSize: 9,
     fontWeight: '600',
-    color: colors.textDim
+    color: colors.textDim,
+    fontFamily: fonts.medium
   },
   themeTabTextActive: {
     color: colors.primaryDark,
-    fontWeight: '700'
+    fontWeight: '700',
+    fontFamily: fonts.bold
   },
   gridScrollContainer: {
     paddingVertical: 4
@@ -568,12 +574,13 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   inspectorDetail: {
     fontSize: 10,
     color: colors.textMain,
-    fontWeight: '600'
+    fontWeight: '600',
+    fontFamily: fonts.medium
   },
   inspectorPlaceholderRow: {
     flexDirection: 'row',
@@ -582,7 +589,8 @@ const styles = StyleSheet.create({
   },
   inspectorPlaceholder: {
     fontSize: 10,
-    color: colors.textDim
+    color: colors.textDim,
+    fontFamily: fonts.regular
   },
   legendRow: {
     flexDirection: 'row',
@@ -592,7 +600,7 @@ const styles = StyleSheet.create({
   legendLabel: {
     fontSize: 8,
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.mono
   },
   legendSquare: {
     width: 7,
@@ -627,11 +635,13 @@ const styles = StyleSheet.create({
   primaryBtnTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    fontFamily: fonts.bold
   },
   primaryBtnSub: {
     fontSize: 9.5,
     color: 'rgba(253, 230, 138, 0.85)',
+    fontFamily: fonts.regular,
     marginTop: 1
   },
   quickLogBtn: {
@@ -655,17 +665,19 @@ const styles = StyleSheet.create({
   quickLogTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontFamily: fonts.bold
   },
   quickLogSub: {
     fontSize: 9.5,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     marginTop: 1
   },
   quickLogBadge: {
     fontSize: 11,
     fontWeight: '800',
     color: '#059669',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   }
 });

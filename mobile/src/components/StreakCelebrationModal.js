@@ -16,6 +16,7 @@ import {
 } from 'lucide-react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 import { triggerHaptic } from '../services/hapticsService';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 9.5,
     fontWeight: '800',
     color: '#92400E',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.8
   },
   titleText: {
@@ -185,14 +186,16 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.textPrimary,
     textAlign: 'center',
+    fontFamily: fonts.extraBold,
     marginBottom: 8,
     letterSpacing: -0.5
   },
   subtitleText: {
-    fontSize: 12,
+    fontSize: 12.5,
     color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 18,
+    fontFamily: fonts.regular,
     marginBottom: 20
   },
   greenFeedbackTile: {
@@ -223,16 +226,19 @@ const styles = StyleSheet.create({
   feedbackTitle: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontFamily: fonts.bold
   },
   feedbackSub: {
     fontSize: 9.5,
-    color: colors.textDim
+    color: colors.textDim,
+    fontFamily: fonts.regular
   },
   viewCalendarText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#059669'
+    color: '#059669',
+    fontFamily: fonts.bold
   },
   actionBtn: {
     width: '100%',
@@ -252,6 +258,8 @@ const styles = StyleSheet.create({
   actionBtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    fontFamily: fonts.bold
   }
 });
+

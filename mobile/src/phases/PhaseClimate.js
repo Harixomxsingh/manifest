@@ -18,6 +18,7 @@ import {
 } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 function categorizeWeather(code, label = '') {
   const lbl = (label || '').toLowerCase();
@@ -335,13 +336,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   progressBarTrack: {
     width: '100%',
@@ -389,7 +391,8 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   refreshBtn: {
     padding: 4
@@ -411,8 +414,9 @@ const styles = StyleSheet.create({
   },
   tempValue: {
     fontSize: 38,
-    fontWeight: '700',
+    fontWeight: '800',
     color: colors.textPrimary,
+    fontFamily: fonts.extraBold,
     letterSpacing: -0.5
   },
   conditionRow: {
@@ -422,9 +426,10 @@ const styles = StyleSheet.create({
     marginTop: 2
   },
   conditionText: {
-    fontSize: 12,
+    fontSize: 12.5,
     fontWeight: '600',
-    color: colors.textMuted
+    color: colors.textMuted,
+    fontFamily: fonts.medium
   },
   nowBadge: {
     backgroundColor: colors.primaryDark,
@@ -436,11 +441,11 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: '800',
     color: '#FFFFFF',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   hourBadgeText: {
     fontSize: 11,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.mono,
     color: colors.textDim
   },
   hourlyList: {
@@ -478,31 +483,35 @@ const styles = StyleSheet.create({
   miniNowBadgeText: {
     fontSize: 7,
     fontWeight: '800',
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    fontFamily: fonts.monoBold
   },
   hourlyTime: {
     fontSize: 9,
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.mono
   },
   hourlyTimeActive: {
     color: colors.primaryDark,
-    fontWeight: '700'
+    fontWeight: '700',
+    fontFamily: fonts.bold
   },
   hourlyTemp: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontFamily: fonts.bold
   },
   hourlyTempActive: {
     color: colors.primaryDark,
-    fontWeight: '800'
+    fontWeight: '800',
+    fontFamily: fonts.extraBold
   },
   rainProbText: {
     fontSize: 8,
     fontWeight: '700',
     color: '#0284C7',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   tacticsRow: {
     gap: 8,
@@ -536,16 +545,18 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.primaryDark,
     letterSpacing: 0.5,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   tacticTitle: {
-    fontSize: 11,
+    fontSize: 11.5,
     fontWeight: '700',
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontFamily: fonts.bold
   },
   tacticSub: {
     fontSize: 10,
-    color: colors.textDim
+    color: colors.textDim,
+    fontFamily: fonts.regular
   },
   actionBtn: {
     width: '100%',
@@ -566,6 +577,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#FFFFFF',
+    fontFamily: fonts.bold,
     letterSpacing: 0.3
   }
 });

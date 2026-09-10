@@ -4,6 +4,7 @@ import { ArrowRight, Check } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { triggerHaptic } from '../services/hapticsService';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 export default function PhaseIdentity() {
   const { advancePhase, briefing } = useApp();
@@ -94,13 +95,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   progressBarTrack: {
     width: '100%',
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.primaryDark,
     letterSpacing: 1,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     marginBottom: 14
   },
   quoteText: {
@@ -142,15 +144,16 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: colors.primaryDark,
     textAlign: 'center',
-    lineHeight: 25,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    lineHeight: 26,
+    fontFamily: fonts.bold,
     marginBottom: 16
   },
   supportText: {
-    fontSize: 12,
+    fontSize: 12.5,
     color: colors.textMuted,
     textAlign: 'center',
-    lineHeight: 18,
+    lineHeight: 19,
+    fontFamily: fonts.regular,
     paddingHorizontal: 8,
     marginBottom: 18
   },
@@ -180,8 +183,9 @@ const styles = StyleSheet.create({
   },
   toggleText: {
     fontSize: 11,
-    fontWeight: '500',
-    color: colors.textDim
+    fontWeight: '600',
+    color: colors.textDim,
+    fontFamily: fonts.medium
   },
   actionBtn: {
     width: '100%',
@@ -202,6 +206,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#FFFFFF',
+    fontFamily: fonts.bold,
     letterSpacing: 0.3
   }
 });
+

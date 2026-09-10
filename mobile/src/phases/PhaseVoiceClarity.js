@@ -44,6 +44,7 @@ import {
 import { synthesizeVoiceWithGemini } from '../services/voiceSynthesisService';
 import { triggerHaptic } from '../services/hapticsService';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 import voicePrompts from '../data/voicePrompts.json';
 import PromptBrowserModal from '../components/PromptBrowserModal';
 import JournalVaultModal from '../components/JournalVaultModal';
@@ -631,7 +632,7 @@ const styles = StyleSheet.create({
   },
   phaseStepText: {
     fontSize: 10,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     color: colors.textDim,
     letterSpacing: 1
   },
@@ -654,7 +655,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   progressBarBg: {
     width: '100%',
@@ -674,9 +675,10 @@ const styles = StyleSheet.create({
   },
   mainHeading: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: '800',
     color: colors.textPrimary,
     textAlign: 'center',
+    fontFamily: fonts.bold,
     marginBottom: 4,
     letterSpacing: -0.3
   },
@@ -685,6 +687,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 17,
+    fontFamily: fonts.regular,
     paddingHorizontal: 12
   },
   card: {
@@ -728,13 +731,13 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '800',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.5
   },
   promptCountText: {
     fontSize: 10,
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.mono
   },
   promptTextRow: {
     marginBottom: 8
@@ -745,7 +748,7 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
     textAlign: 'center',
     lineHeight: 18,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif'
+    fontFamily: fonts.medium
   },
   promptActionsRow: {
     flexDirection: 'row',
@@ -821,11 +824,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   recordingSubtext: {
     fontSize: 11,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     marginTop: 4,
     textAlign: 'center'
   },
@@ -845,7 +849,8 @@ const styles = StyleSheet.create({
   notesToggleText: {
     fontSize: 11,
     color: colors.textDim,
-    fontWeight: '600'
+    fontWeight: '600',
+    fontFamily: fonts.medium
   },
   manualWrapper: {
     marginTop: 8
@@ -858,6 +863,7 @@ const styles = StyleSheet.create({
     borderColor: colors.borderHairline,
     fontSize: 12,
     color: colors.textPrimary,
+    fontFamily: fonts.regular,
     minHeight: 44,
     textAlignVertical: 'top'
   },
@@ -874,7 +880,8 @@ const styles = StyleSheet.create({
   synthesizeButtonText: {
     color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
+    fontFamily: fonts.bold
   },
   slateCard: {
     backgroundColor: '#FFFFFF',
@@ -931,7 +938,7 @@ const styles = StyleSheet.create({
   },
   timeLabelText: {
     fontSize: 9,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.mono,
     color: colors.textDim
   },
   reRecordIconBtn: {
@@ -951,7 +958,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.primaryDark,
     letterSpacing: 0.8,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     marginBottom: 6
   },
   anchorQuote: {
@@ -960,7 +967,7 @@ const styles = StyleSheet.create({
     color: colors.primaryDark,
     textAlign: 'center',
     lineHeight: 21,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif'
+    fontFamily: fonts.medium
   },
   pillarsBox: {
     backgroundColor: colors.bgSecondary,
@@ -987,12 +994,13 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: colors.textDim,
     letterSpacing: 0.6,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     marginBottom: 2
   },
   pillarBody: {
     fontSize: 12,
     color: colors.textPrimary,
+    fontFamily: fonts.regular,
     lineHeight: 16
   },
   pillarDivider: {
@@ -1010,7 +1018,8 @@ const styles = StyleSheet.create({
   reRecordText: {
     fontSize: 11,
     color: colors.textDim,
-    fontWeight: '600'
+    fontWeight: '600',
+    fontFamily: fonts.medium
   },
   advanceContainer: {
     alignItems: 'center'
@@ -1035,6 +1044,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 13,
     fontWeight: '700',
+    fontFamily: fonts.bold,
     letterSpacing: 0.3
   },
   modalOverlay: {
@@ -1062,11 +1072,13 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontFamily: fonts.bold
   },
   modalSub: {
     fontSize: 11,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     marginTop: 2
   },
   closeBtn: {
@@ -1083,11 +1095,13 @@ const styles = StyleSheet.create({
   emptyHistoryTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: colors.textPrimary
+    color: colors.textPrimary,
+    fontFamily: fonts.bold
   },
   emptyHistorySub: {
     fontSize: 12,
     color: colors.textMuted,
+    fontFamily: fonts.regular,
     textAlign: 'center'
   },
   historyItemCard: {
@@ -1108,7 +1122,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   deleteBtn: {
     padding: 4
@@ -1117,6 +1131,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontStyle: 'italic',
     color: colors.textMuted,
+    fontFamily: fonts.regular,
     marginBottom: 6
   },
   historyPlaybackStrip: {
@@ -1154,14 +1169,14 @@ const styles = StyleSheet.create({
   historyTimeLabel: {
     fontSize: 8.5,
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.mono
   },
   historyAnchor: {
     fontSize: 13,
     fontStyle: 'italic',
     color: colors.primaryDark,
     lineHeight: 18,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    fontFamily: fonts.medium,
     marginBottom: 6
   },
   historyStepBox: {
@@ -1177,11 +1192,12 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: '800',
     color: '#B45309',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   historyStepText: {
     flex: 1,
     fontSize: 11,
+    fontFamily: fonts.medium,
     color: '#92400E'
   },
   useEntryBtn: {
@@ -1198,6 +1214,7 @@ const styles = StyleSheet.create({
   useEntryBtnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   }
 });

@@ -1,6 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
+import {
+  useFonts,
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  PlusJakartaSans_800ExtraBold
+} from '@expo-google-fonts/plus-jakarta-sans';
+import {
+  JetBrainsMono_400Regular,
+  JetBrainsMono_700Bold
+} from '@expo-google-fonts/jetbrains-mono';
 import { AppProvider, useApp } from './src/context/AppContext';
 import Header from './src/components/Header';
 import BottomRitualBar from './src/components/BottomRitualBar';
@@ -50,6 +62,24 @@ function MainApp() {
 }
 
 export default function App() {
+  const [fontsLoaded] = useFonts({
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+    PlusJakartaSans_800ExtraBold,
+    JetBrainsMono_400Regular,
+    JetBrainsMono_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="small" color={colors.primary} />
+      </View>
+    );
+  }
+
   return (
     <AppProvider>
       <MainApp />
@@ -62,6 +92,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.bgPrimary
   },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   scrollView: {
     flex: 1
   },
@@ -71,3 +105,4 @@ const styles = StyleSheet.create({
     paddingBottom: 28
   }
 });
+

@@ -30,6 +30,7 @@ import {
 } from 'lucide-react-native';
 import { triggerHaptic } from '../services/hapticsService';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 import voicePrompts from '../data/voicePrompts.json';
 
 const CATEGORY_ICONS = {
@@ -335,7 +336,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '800',
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif'
+    fontFamily: fonts.bold
   },
   countBadge: {
     backgroundColor: colors.bgHighlight,
@@ -349,11 +350,12 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   subtitle: {
     fontSize: 11,
     color: colors.textDim,
+    fontFamily: fonts.regular,
     marginTop: 1
   },
   headerRight: {
@@ -375,7 +377,8 @@ const styles = StyleSheet.create({
   surpriseText: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   closeBtn: {
     padding: 6,
@@ -401,6 +404,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 13,
     color: colors.textPrimary,
+    fontFamily: fonts.regular,
     paddingVertical: 8
   },
   clearSearchBtn: {
@@ -433,10 +437,12 @@ const styles = StyleSheet.create({
   categoryPillText: {
     fontSize: 11,
     fontWeight: '600',
-    color: colors.textSecondary
+    color: colors.textSecondary,
+    fontFamily: fonts.medium
   },
   categoryPillTextSelected: {
-    color: '#FFFFFF'
+    color: '#FFFFFF',
+    fontFamily: fonts.bold
   },
   categoryCountBadge: {
     backgroundColor: '#F5F5F4',
@@ -451,7 +457,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   categoryCountTextSelected: {
     color: '#FFFFFF'
@@ -489,7 +495,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '800',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.5
   },
   activeTag: {
@@ -500,12 +506,13 @@ const styles = StyleSheet.create({
   activeTagText: {
     fontSize: 10,
     fontWeight: '700',
-    color: colors.primary
+    color: colors.primary,
+    fontFamily: fonts.bold
   },
   itemPromptText: {
     fontSize: 13,
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    fontFamily: fonts.medium,
     fontStyle: 'italic',
     lineHeight: 19
   },
@@ -517,7 +524,8 @@ const styles = StyleSheet.create({
   usePromptAction: {
     fontSize: 10,
     fontWeight: '700',
-    color: colors.primary
+    color: colors.primary,
+    fontFamily: fonts.bold
   },
   emptyState: {
     alignItems: 'center',

@@ -17,6 +17,7 @@ import {
   CheckCircle2
 } from 'lucide-react-native';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 import { triggerHaptic } from '../services/hapticsService';
 import { recordFocusSession } from '../services/streakService';
 
@@ -251,7 +252,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: '800',
     color: colors.textPrimary,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: -1
   },
   progressBarTrack: {

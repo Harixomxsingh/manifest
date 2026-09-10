@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, Linking, Platform } from 'rea
 import { ArrowRight, BookOpen, ExternalLink } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 export default function PhaseReading() {
   const { advancePhase, todayArticle } = useApp();
@@ -94,13 +95,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   progressBarTrack: {
     width: '100%',
@@ -138,13 +140,14 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '800',
     color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.8
   },
   articleTitle: {
-    fontSize: 18,
-    fontWeight: '700',
+    fontSize: 19,
+    fontWeight: '800',
     color: colors.textPrimary,
+    fontFamily: fonts.bold,
     marginBottom: 16,
     letterSpacing: -0.3
   },
@@ -160,8 +163,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontStyle: 'italic',
     color: colors.primaryDark,
-    lineHeight: 20,
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif'
+    lineHeight: 21,
+    fontFamily: fonts.medium
   },
   linkRow: {
     flexDirection: 'row',
@@ -173,7 +176,8 @@ const styles = StyleSheet.create({
   linkText: {
     fontSize: 11,
     color: colors.textDim,
-    fontWeight: '600'
+    fontWeight: '600',
+    fontFamily: fonts.medium
   },
   actionBtn: {
     width: '100%',
@@ -194,6 +198,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '700',
     color: '#FFFFFF',
+    fontFamily: fonts.bold,
     letterSpacing: 0.3
   }
 });
+

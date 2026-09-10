@@ -4,6 +4,7 @@ import { X, Navigation, MapPin, Check } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { GLOBAL_CITIES } from '../services/weatherService';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 
 export default function LocationPickerModal() {
   const {
@@ -140,8 +141,9 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 17,
-    fontWeight: '700',
-    color: colors.textMain
+    fontWeight: '800',
+    color: colors.textMain,
+    fontFamily: fonts.bold
   },
   closeBtn: {
     width: 32,
@@ -166,7 +168,8 @@ const styles = StyleSheet.create({
   gpsBtnText: {
     fontSize: 13,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   searchInput: {
     backgroundColor: colors.bgCard,
@@ -177,6 +180,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 13,
     color: colors.textMain,
+    fontFamily: fonts.regular,
     marginBottom: 14
   },
   cityList: {
@@ -189,6 +193,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
+    fontFamily: fonts.monoBold,
     letterSpacing: 1,
     marginBottom: 10
   },
@@ -215,10 +220,12 @@ const styles = StyleSheet.create({
   cityChipText: {
     fontSize: 12,
     color: colors.textMuted,
-    fontWeight: '500'
+    fontWeight: '500',
+    fontFamily: fonts.medium
   },
   cityChipTextSelected: {
     color: colors.primaryDark,
-    fontWeight: '700'
+    fontWeight: '700',
+    fontFamily: fonts.bold
   }
 });

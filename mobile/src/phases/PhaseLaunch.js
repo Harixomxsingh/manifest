@@ -5,7 +5,8 @@ import {
   Text,
   TouchableOpacity,
   Platform,
-  Clipboard
+  Clipboard,
+  Linking
 } from 'react-native';
 import {
   Flame,
@@ -23,6 +24,7 @@ import {
 } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
+import { fonts } from '../theme/fonts';
 import { triggerHaptic } from '../services/hapticsService';
 import {
   getStreakData,
@@ -258,6 +260,17 @@ Ready to make today count! 🚀`;
             <Text style={styles.bottomLinkText}>Restart Ritual</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Footer Portfolio Link */}
+        <TouchableOpacity
+          onPress={() => Linking.openURL('https://harixomxsingh.github.io/portfolio/')}
+          activeOpacity={0.7}
+          style={styles.portfolioFooterRow}
+        >
+          <Text style={styles.portfolioFooterText}>
+            made with ❤️ by <Text style={styles.portfolioLinkText}>hari</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Modals */}
@@ -308,13 +321,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '700',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 1
   },
   progressPhaseName: {
     fontSize: 11,
     fontWeight: '700',
-    color: colors.primaryDark
+    color: colors.primaryDark,
+    fontFamily: fonts.bold
   },
   progressBarTrack: {
     width: '100%',
@@ -334,12 +348,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   title: {
-    fontSize: 22,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '800',
     color: colors.textPrimary,
     textAlign: 'center',
+    fontFamily: fonts.extraBold,
     marginBottom: 6,
-    letterSpacing: -0.3
+    letterSpacing: -0.4
   },
   streakCapsule: {
     flexDirection: 'row',
@@ -357,7 +372,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: '800',
     color: '#92400E',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   dotSep: {
     fontSize: 10,
@@ -366,7 +381,8 @@ const styles = StyleSheet.create({
   viewCalendarLink: {
     fontSize: 10.5,
     fontWeight: '700',
-    color: '#059669'
+    color: '#059669',
+    fontFamily: fonts.bold
   },
   card: {
     width: '100%',
@@ -395,7 +411,7 @@ const styles = StyleSheet.create({
     fontSize: 9,
     fontWeight: '800',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     letterSpacing: 0.8
   },
   copyButton: {
@@ -406,17 +422,20 @@ const styles = StyleSheet.create({
   copyButtonText: {
     fontSize: 10,
     fontWeight: '600',
-    color: colors.textDim
+    color: colors.textDim,
+    fontFamily: fonts.medium
   },
   copyButtonTextActive: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#059669'
+    color: '#059669',
+    fontFamily: fonts.bold
   },
   anchorQuote: {
     fontSize: 14,
     fontWeight: '700',
     color: colors.primaryDeep,
+    fontFamily: fonts.bold,
     lineHeight: 20,
     marginBottom: 8
   },
@@ -432,10 +451,12 @@ const styles = StyleSheet.create({
   goalText: {
     fontSize: 11,
     color: colors.textPrimary,
+    fontFamily: fonts.regular,
     flex: 1
   },
   goalBold: {
     fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.textPrimary
   },
   metaRow: {
@@ -453,12 +474,13 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: '800',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    fontFamily: fonts.monoBold,
     marginBottom: 2
   },
   metaColValue: {
     fontSize: 11,
     fontWeight: '700',
+    fontFamily: fonts.bold,
     color: colors.textPrimary
   },
   miniHeatmapRow: {
@@ -473,7 +495,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontWeight: '800',
     color: colors.textDim,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+    fontFamily: fonts.monoBold
   },
   miniSquaresGroup: {
     flexDirection: 'row',
@@ -509,6 +531,7 @@ const styles = StyleSheet.create({
   primaryFocusText: {
     fontSize: 13,
     fontWeight: '700',
+    fontFamily: fonts.bold,
     color: '#FFFFFF'
   },
   audioBtn: {
@@ -529,6 +552,7 @@ const styles = StyleSheet.create({
   audioBtnText: {
     fontSize: 12,
     fontWeight: '600',
+    fontFamily: fonts.semiBold,
     color: colors.textPrimary
   },
   bottomLinkRow: {
@@ -541,10 +565,28 @@ const styles = StyleSheet.create({
   bottomLinkText: {
     fontSize: 11,
     fontWeight: '600',
+    fontFamily: fonts.semiBold,
     color: colors.textDim
   },
   dotSeparator: {
     color: colors.borderHairline,
     fontSize: 12
+  },
+  portfolioFooterRow: {
+    marginTop: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 6
+  },
+  portfolioFooterText: {
+    fontSize: 11,
+    color: colors.textDim,
+    fontFamily: fonts.mono
+  },
+  portfolioLinkText: {
+    color: colors.primaryDark,
+    fontWeight: '800',
+    fontFamily: fonts.monoBold,
+    textDecorationLine: 'underline'
   }
 });
