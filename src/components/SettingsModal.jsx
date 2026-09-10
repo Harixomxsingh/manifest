@@ -408,6 +408,22 @@ export default function SettingsModal() {
               </button>
             </div>
           </div>
+
+          {/* 6. License & Copyright Protection Section */}
+          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-bold text-amber-300 font-mono flex items-center gap-1.5 uppercase tracking-wider">
+                <Shield className="w-3.5 h-3.5 text-amber-400" />
+                <span>License & Copyright Protection</span>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold">
+                PolyForm Noncommercial 1.0.0
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+              <strong>© 2026 Hariom Singh (Hari). All rights reserved.</strong> Open for personal, educational use and community contributions. Commercial exploitation, distribution, or unauthorized monetization is strictly prohibited under any circumstances.
+            </p>
+          </div>
         </div>
 
         {/* Modal Footer */}
