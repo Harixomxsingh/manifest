@@ -115,3 +115,147 @@
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Dynamic Weather Animations (Apple / Samsung Weather style) */
+@keyframes weather-raindrop {
+  0% {
+    transform: translateY(-15px) scaleY(1);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.75;
+  }
+  80% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(120px) scaleY(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes weather-rain-streak {
+  0% {
+    transform: translateY(-50px) translateX(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.55;
+  }
+  85% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(280px) translateX(-25px);
+    opacity: 0;
+  }
+}
+
+@keyframes weather-sun-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes weather-sun-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes weather-cloud-drift {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+@keyframes weather-cloud-drift-reverse {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-8px);
+  }
+}
+
+@keyframes weather-lightning-flash {
+  0%, 88%, 100% {
+    opacity: 0;
+  }
+  89% {
+    opacity: 0.75;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  92% {
+    opacity: 0.95;
+  }
+  95% {
+    opacity: 0;
+  }
+}
+
+@keyframes weather-snow-float {
+  0% {
+    transform: translateY(-10px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(110px) translateX(12px) rotate(180deg);
+    opacity: 0;
+  }
+}
+
+@keyframes weather-fog-glide {
+  0%, 100% {
+    transform: translateX(-12px) scaleX(1);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(12px) scaleX(1.08);
+    opacity: 0.65;
+  }
+}
+
+.animate-weather-sun-spin {
+  animation: weather-sun-spin 36s linear infinite;
+}
+
+.animate-weather-sun-pulse {
+  animation: weather-sun-pulse 4s ease-in-out infinite;
+}
+
+.animate-weather-cloud-drift {
+  animation: weather-cloud-drift 7s ease-in-out infinite;
+}
+
+.animate-weather-cloud-drift-reverse {
+  animation: weather-cloud-drift-reverse 9s ease-in-out infinite;
+}
+
+.animate-weather-lightning {
+  animation: weather-lightning-flash 6s ease-in-out infinite;
+}
+
+.animate-weather-fog {
+  animation: weather-fog-glide 8s ease-in-out infinite;
+}
+

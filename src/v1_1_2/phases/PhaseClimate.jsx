@@ -1,6 +1,330 @@
-import React, { useState } from 'react';
-import { ArrowRight, Sun, CloudRain, Cloud, Shirt, Footprints, MapPin, RefreshCw } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import {
+  ArrowRight,
+  Sun,
+  CloudRain,
+  CloudDrizzle,
+  Cloud,
+  CloudSun,
+  CloudLightning,
+  CloudSnow,
+  CloudFog,
+  Shirt,
+  Footprints,
+  MapPin,
+  RefreshCw,
+  Umbrella,
+  Droplets,
+  Wind,
+  Sparkles
+} from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+
+/**
+ * Determine weather category from code or label
+ */
+export function categorizeWeather(code, label = '') {
+  const lbl = (label || '').toLowerCase();
+
+  // Thunderstorm
+  if (code === 95 || code === 96 || lbl.includes('thunder') || lbl.includes('storm') || lbl.includes('lightning')) {
+    return 'thunderstorm';
+  }
+  // Heavy Rain / Showers
+  if (code === 65 || code === 82 || lbl.includes('heavy rain') || lbl.includes('violent')) {
+    return 'heavy_rain';
+  }
+  // Moderate / Slight Rain
+  if (code === 61 || code === 63 || code === 80 || code === 81 || lbl.includes('rain') || lbl.includes('shower')) {
+    return 'rain';
+  }
+  // Drizzle
+  if (code === 51 || code === 53 || code === 55 || lbl.includes('drizzle')) {
+    return 'drizzle';
+  }
+  // Snow
+  if (code === 71 || code === 73 || code === 75 || lbl.includes('snow') || lbl.includes('sleet') || lbl.includes('blizzard')) {
+    return 'snow';
+  }
+  // Fog / Mist
+  if (code === 45 || code === 48 || lbl.includes('fog') || lbl.includes('mist') || lbl.includes('haze')) {
+    return 'fog';
+  }
+  // Overcast
+  if (code === 3 || lbl.includes('overcast')) {
+    return 'overcast';
+  }
+  // Partly Cloudy
+  if (code === 2 || lbl.includes('partly')) {
+    return 'partly_cloudy';
+  }
+  // Clear / Sunny
+  return 'clear';
+}
+
+/**
+ * Get matching icon component for an hourly item
+ */
+export function getHourlyIcon(code, rainProb = 0) {
+  const cat = categorizeWeather(code);
+  switch (cat) {
+    case 'thunderstorm':
+      return CloudLightning;
+    case 'heavy_rain':
+    case 'rain':
+      return CloudRain;
+    case 'drizzle':
+      return CloudDrizzle;
+    case 'snow':
+      return CloudSnow;
+    case 'fog':
+      return CloudFog;
+    case 'overcast':
+      return Cloud;
+    case 'partly_cloudy':
+      return rainProb > 30 ? CloudDrizzle : CloudSun;
+    case 'clear':
+    default:
+      return rainProb > 40 ? CloudDrizzle : Sun;
+  }
+}
+
+/**
+ * Apple/Samsung Weather Style Hero Animated Centerpiece
+ */
+function WeatherHeroScene({ category, label, high, low, unit }) {
+  return (
+    <div className="flex flex-col items-center justify-center my-3 relative select-none">
+      {/* Dynamic Animated Weather Centerpiece */}
+      <div className="relative w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center mb-2">
+        {/* 1. RAIN & DRIZZLE HERO */}
+        {(category === 'rain' || category === 'drizzle' || category === 'heavy_rain') && (
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Ambient Water Aura */}
+            <div className="absolute inset-2 rounded-full bg-cyan-400/10 blur-xl animate-pulse" />
+
+            {/* Stylized Cloud */}
+            <div className="relative z-10 animate-weather-cloud-drift">
+              <svg className="w-20 h-20 text-slate-700 drop-shadow-md" viewBox="0 0 64 64" fill="currentColor">
+                <path d="M46 44H18a12 12 0 0 1-2.6-23.7A16 16 0 0 1 47.4 22 13 13 0 0 1 46 44z" />
+              </svg>
+            </div>
+
+            {/* Falling Animated Raindrops */}
+            <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden flex justify-center gap-2.5 pt-14">
+              <span
+                className="w-1 h-3.5 bg-gradient-to-b from-cyan-300 to-blue-500 rounded-full"
+                style={{ animation: 'weather-raindrop 1.1s linear infinite', animationDelay: '0s' }}
+              />
+              <span
+                className="w-1 h-4 bg-gradient-to-b from-cyan-400 to-blue-600 rounded-full"
+                style={{ animation: 'weather-raindrop 0.9s linear infinite', animationDelay: '0.35s' }}
+              />
+              <span
+                className="w-1 h-3.5 bg-gradient-to-b from-cyan-300 to-blue-500 rounded-full"
+                style={{ animation: 'weather-raindrop 1.2s linear infinite', animationDelay: '0.7s' }}
+              />
+              <span
+                className="w-1 h-4 bg-gradient-to-b from-cyan-400 to-blue-600 rounded-full"
+                style={{ animation: 'weather-raindrop 1.0s linear infinite', animationDelay: '0.2s' }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* 2. THUNDERSTORM HERO */}
+        {category === 'thunderstorm' && (
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Ambient Storm Aura */}
+            <div className="absolute inset-0 rounded-full bg-amber-500/15 blur-xl animate-weather-lightning" />
+
+            {/* Dark Storm Cloud */}
+            <div className="relative z-10 animate-weather-cloud-drift">
+              <svg className="w-20 h-20 text-slate-800 drop-shadow-lg" viewBox="0 0 64 64" fill="currentColor">
+                <path d="M46 42H18a12 12 0 0 1-2.6-23.7A16 16 0 0 1 47.4 20 13 13 0 0 1 46 42z" />
+              </svg>
+            </div>
+
+            {/* Pulsing Lightning Bolt */}
+            <div className="absolute z-30 top-11 animate-weather-lightning">
+              <CloudLightning className="w-10 h-10 text-amber-400 fill-amber-400/40 drop-shadow-[0_0_12px_rgba(251,191,36,0.9)]" />
+            </div>
+
+            {/* Fast Raindrops */}
+            <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden flex justify-center gap-3 pt-14">
+              <span
+                className="w-1 h-4 bg-gradient-to-b from-amber-200 to-blue-400 rounded-full"
+                style={{ animation: 'weather-raindrop 0.7s linear infinite', animationDelay: '0.1s' }}
+              />
+              <span
+                className="w-1 h-4 bg-gradient-to-b from-amber-300 to-blue-500 rounded-full"
+                style={{ animation: 'weather-raindrop 0.65s linear infinite', animationDelay: '0.4s' }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* 3. SUNNY / CLEAR HERO */}
+        {category === 'clear' && (
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Radiant Solar Corona Halo */}
+            <div className="absolute inset-1 rounded-full bg-amber-400/25 blur-xl animate-weather-sun-pulse" />
+
+            {/* Rotating Solar Rays */}
+            <div className="absolute inset-0 flex items-center justify-center animate-weather-sun-spin">
+              <svg className="w-24 h-24 text-amber-400/60" viewBox="0 0 100 100" fill="currentColor">
+                {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+                  <rect
+                    key={deg}
+                    x="48"
+                    y="6"
+                    width="4"
+                    height="12"
+                    rx="2"
+                    transform={`rotate(${deg} 50 50)`}
+                  />
+                ))}
+              </svg>
+            </div>
+
+            {/* Golden Core Sun Orb */}
+            <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 shadow-[0_0_24px_rgba(245,158,11,0.6)] border-2 border-amber-200/80 z-10 flex items-center justify-center animate-weather-sun-pulse">
+              <Sun className="w-7 h-7 text-amber-950 stroke-[2.2]" />
+            </div>
+          </div>
+        )}
+
+        {/* 4. PARTLY CLOUDY HERO */}
+        {category === 'partly_cloudy' && (
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Sun Peeking Behind */}
+            <div className="absolute top-2 right-4 w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 shadow-[0_0_18px_rgba(245,158,11,0.5)] animate-weather-sun-pulse flex items-center justify-center">
+              <Sun className="w-6 h-6 text-amber-950 stroke-[2]" />
+            </div>
+
+            {/* Floating Soft Cloud */}
+            <div className="relative z-10 top-3 animate-weather-cloud-drift">
+              <svg className="w-20 h-20 text-slate-600/90 drop-shadow-md" viewBox="0 0 64 64" fill="currentColor">
+                <path d="M46 44H18a12 12 0 0 1-2.6-23.7A16 16 0 0 1 47.4 22 13 13 0 0 1 46 44z" />
+              </svg>
+            </div>
+          </div>
+        )}
+
+        {/* 5. OVERCAST / CLOUDY HERO */}
+        {category === 'overcast' && (
+          <div className="relative w-full h-full flex items-center justify-center">
+            {/* Back Cloud */}
+            <div className="absolute top-2 left-3 opacity-60 animate-weather-cloud-drift-reverse">
+              <svg className="w-16 h-16 text-slate-400 drop-shadow-sm" viewBox="0 0 64 64" fill="currentColor">
+                <path d="M46 44H18a12 12 0 0 1-2.6-23.7A16 16 0 0 1 47.4 22 13 13 0 0 1 46 44z" />
+              </svg>
+            </div>
+            {/* Front Cloud */}
+            <div className="relative z-10 top-2 animate-weather-cloud-drift">
+              <svg className="w-20 h-20 text-slate-600 drop-shadow-md" viewBox="0 0 64 64" fill="currentColor">
+                <path d="M46 44H18a12 12 0 0 1-2.6-23.7A16 16 0 0 1 47.4 22 13 13 0 0 1 46 44z" />
+              </svg>
+            </div>
+          </div>
+        )}
+
+        {/* 6. SNOW HERO */}
+        {category === 'snow' && (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <div className="absolute inset-2 rounded-full bg-indigo-300/20 blur-xl animate-pulse" />
+            <div className="relative z-10 animate-weather-cloud-drift">
+              <svg className="w-20 h-20 text-slate-600 drop-shadow-md" viewBox="0 0 64 64" fill="currentColor">
+                <path d="M46 44H18a12 12 0 0 1-2.6-23.7A16 16 0 0 1 47.4 22 13 13 0 0 1 46 44z" />
+              </svg>
+            </div>
+            {/* Drifting Snowflakes */}
+            <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden flex justify-center gap-3 pt-13">
+              <span style={{ animation: 'weather-snow-float 2.2s linear infinite', animationDelay: '0s' }}>❄️</span>
+              <span style={{ animation: 'weather-snow-float 2.6s linear infinite', animationDelay: '0.8s' }}>❄️</span>
+              <span style={{ animation: 'weather-snow-float 2.0s linear infinite', animationDelay: '0.4s' }}>❄️</span>
+            </div>
+          </div>
+        )}
+
+        {/* 7. FOG / MIST HERO */}
+        {category === 'fog' && (
+          <div className="relative w-full h-full flex items-center justify-center">
+            <div className="w-20 h-16 flex flex-col justify-center gap-2 animate-weather-fog">
+              <div className="w-20 h-2 rounded-full bg-slate-400/80 shadow-xs" />
+              <div className="w-16 h-2 rounded-full bg-slate-300/80 shadow-xs ml-2" />
+              <div className="w-18 h-2 rounded-full bg-slate-400/80 shadow-xs" />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Hero Temperature Readout */}
+      <div className="text-4xl sm:text-5xl font-bold text-stone-900 tracking-tight leading-none mb-1">
+        {high}{unit}
+      </div>
+
+      {/* Condition Label & Low */}
+      <div className="text-xs sm:text-sm font-semibold text-stone-600 flex items-center gap-1.5 mt-0.5">
+        <span>{label}</span>
+        <span className="text-stone-300">•</span>
+        <span className="font-mono text-stone-500 text-xs">Low {low}{unit}</span>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Ambient Atmospheric Particle Background (Apple / Samsung Weather Style)
+ */
+function AmbientCardAtmosphere({ category }) {
+  if (category === 'rain' || category === 'drizzle' || category === 'heavy_rain') {
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 -z-0">
+        {[...Array(12)].map((_, i) => (
+          <span
+            key={i}
+            className="absolute w-0.5 h-6 bg-gradient-to-b from-blue-400 to-cyan-500 rounded-full"
+            style={{
+              left: `${(i * 8.5) + 3}%`,
+              animation: `weather-rain-streak ${0.8 + (i % 4) * 0.25}s linear infinite`,
+              animationDelay: `${(i * 0.18) % 1.2}s`
+            }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (category === 'thunderstorm') {
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden -z-0">
+        <div className="absolute inset-0 bg-indigo-900/10 animate-weather-lightning" />
+        {[...Array(14)].map((_, i) => (
+          <span
+            key={i}
+            className="absolute w-0.5 h-8 bg-gradient-to-b from-amber-300 to-blue-500 rounded-full opacity-40"
+            style={{
+              left: `${(i * 7.5) + 2}%`,
+              animation: `weather-rain-streak ${0.6 + (i % 3) * 0.2}s linear infinite`,
+              animationDelay: `${(i * 0.12) % 0.8}s`
+            }}
+          />
+        ))}
+      </div>
+    );
+  }
+
+  if (category === 'clear') {
+    return (
+      <div className="absolute inset-0 pointer-events-none overflow-hidden -z-0 opacity-40">
+        <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-64 h-64 rounded-full bg-radial from-amber-300/30 via-amber-200/10 to-transparent blur-2xl animate-weather-sun-pulse" />
+      </div>
+    );
+  }
+
+  return null;
+}
 
 export default function PhaseClimate({ onAdvance }) {
   const {
@@ -17,18 +341,81 @@ export default function PhaseClimate({ onAdvance }) {
   const unit = weatherData?.unit ?? '°C';
   const label = weatherData?.weatherLabel ?? 'Clear Sky';
   const locationName = weatherData?.locationName || activeLocation?.name || 'San Francisco, USA';
-  const hourlyStrip = weatherData?.hourlyStrip || [
-    { hour: '07:00', temp: low },
-    { hour: '10:00', temp: Math.round((high + low) / 2) },
-    { hour: '13:00', temp: high },
-    { hour: '16:00', temp: high - 2 },
-    { hour: '19:00', temp: low + 2 }
-  ];
+  const maxRainProb = weatherData?.maxRainProb ?? 0;
 
-  const tactics = weatherData?.tactics || {
-    clothingAdvice: 'Breathable natural fabrics. Comfortable morning temperature before midday.',
-    commuteOrOutdoorGuidance: 'Optimal dry conditions. Complete errands before afternoon rain windows.'
-  };
+  // Active Category
+  const category = useMemo(() => {
+    return categorizeWeather(weatherData?.weatherCode, label);
+  }, [weatherData?.weatherCode, label]);
+
+  // Hourly Strip Builder (12-Hour daytime entries or fallback)
+  const hourlyStrip = useMemo(() => {
+    if (weatherData?.daytimeEntries && weatherData.daytimeEntries.length > 0) {
+      // Pick 5 distributed daytime slots for clean fit
+      const entries = weatherData.daytimeEntries;
+      if (entries.length <= 5) return entries;
+      const step = (entries.length - 1) / 4;
+      return [0, 1, 2, 3, 4].map((i) => entries[Math.round(i * step)]);
+    }
+
+    // Default 5-slot strip
+    const isCold = high < 18;
+    return [
+      { hour: '07:00', temp: low, code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 0, rainProb: category === 'rain' ? 80 : 5 },
+      { hour: '10:00', temp: Math.round((high + low) / 2), code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 1, rainProb: category === 'rain' ? 90 : 10 },
+      { hour: '13:00', temp: high, code: category === 'rain' ? 65 : category === 'drizzle' ? 53 : (isCold ? 2 : 0), rainProb: category === 'rain' ? 98 : 15 },
+      { hour: '16:00', temp: high - 2, code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 2, rainProb: category === 'rain' ? 75 : 10 },
+      { hour: '19:00', temp: low + 2, code: category === 'rain' ? 51 : 0, rainProb: category === 'rain' ? 40 : 5 }
+    ];
+  }, [weatherData, high, low, category]);
+
+  // Minimal, Punchy, Super Actionable Tactics (Executive 1-liners)
+  const minimalTactics = useMemo(() => {
+    const isHot = high >= 28;
+    const isCold = high <= 14;
+    const hasRain = category === 'rain' || category === 'drizzle' || category === 'heavy_rain' || category === 'thunderstorm' || maxRainProb > 40;
+
+    // 1. Apparel Tag
+    let apparelTitle = 'Breathable Cotton';
+    let apparelSub = 'Optimal mild layers';
+    if (isHot) {
+      apparelTitle = 'Lightweight Linen';
+      apparelSub = `Hot & Humid (${high}${unit})`;
+    } else if (isCold) {
+      apparelTitle = 'Thermal Layer';
+      apparelSub = `Chilly ${low}${unit} morning`;
+    } else if (hasRain) {
+      apparelTitle = 'Waterproof Layer';
+      apparelSub = 'Wet roadway conditions';
+    }
+
+    // 2. Tactical Mobility Tag
+    let tacticTitle = 'Optimal Morning Walk';
+    let tacticSub = 'Dry window before 11 AM';
+    let TacticIcon = Footprints;
+
+    if (category === 'thunderstorm') {
+      tacticTitle = 'Transition Indoors';
+      tacticSub = 'Active thunderstorm risk';
+      TacticIcon = CloudLightning;
+    } else if (hasRain) {
+      tacticTitle = 'Carry Umbrella';
+      tacticSub = maxRainProb > 0 ? `${maxRainProb}% Rain Risk Peak` : 'Precipitation expected';
+      TacticIcon = Umbrella;
+    } else if (isHot) {
+      tacticTitle = 'Early Walk Window';
+      tacticSub = 'Walk before 10 AM (UV Peak)';
+      TacticIcon = Sun;
+    }
+
+    return {
+      apparelTitle,
+      apparelSub,
+      tacticTitle,
+      tacticSub,
+      TacticIcon
+    };
+  }, [high, low, unit, category, maxRainProb]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -39,7 +426,7 @@ export default function PhaseClimate({ onAdvance }) {
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col items-center animate-fade-in">
       {/* Top Phase Header Tracker */}
       <div className="w-full mb-5">
         <div className="flex items-center justify-between mb-2">
@@ -55,65 +442,118 @@ export default function PhaseClimate({ onAdvance }) {
         </div>
       </div>
 
-      {/* Main Climate Card */}
-      <div className="w-full bg-white border border-stone-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-7 mb-6 shadow-sm">
+      {/* Main Dynamic Climate Card (Living Weather Aura) */}
+      <div className="w-full bg-white border border-stone-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-7 mb-6 shadow-sm relative overflow-hidden">
+        {/* Apple/Samsung Weather Style Ambient Backdrop */}
+        <AmbientCardAtmosphere category={category} />
+
         {/* Location & Refresh Header */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex justify-between items-center mb-2 relative z-10">
           <button
             onClick={() => setIsLocationModalOpen?.(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50/80 border border-amber-200/60 text-xs font-bold text-amber-900 hover:bg-amber-100/80 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50/90 border border-amber-200/70 text-xs font-bold text-amber-950 hover:bg-amber-100 transition-colors cursor-pointer shadow-2xs"
           >
             <MapPin className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-            <span className="truncate max-w-[180px] sm:max-w-[240px]">{locationName.split(',')[0]}</span>
+            <span className="truncate max-w-[180px] sm:max-w-[240px]">
+              {locationName.split(',')[0]}
+            </span>
           </button>
 
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors disabled:opacity-50"
+            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 hover:bg-stone-100 transition-colors disabled:opacity-50 cursor-pointer"
             title="Refresh weather"
           >
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-amber-600' : ''}`} />
           </button>
         </div>
 
-        {/* Temperature & Weather Symbol */}
-        <div className="flex flex-col items-center my-4">
-          <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center mb-3 text-amber-600 shadow-inner">
-            <Sun className="w-8 h-8" strokeWidth={1.8} />
-          </div>
-          <div className="text-4xl sm:text-5xl font-bold text-stone-900 tracking-tight">
-            {high}{unit}
-          </div>
-          <div className="text-xs sm:text-sm text-stone-500 mt-1 font-medium">
-            {label} • Low {low}{unit}
-          </div>
+        {/* Dynamic Hero Animated Weather Scene & Temp */}
+        <div className="relative z-10">
+          <WeatherHeroScene
+            category={category}
+            label={label}
+            high={high}
+            low={low}
+            unit={unit}
+          />
         </div>
 
-        {/* Hourly Forecast Strip */}
-        <div className="flex gap-2.5 overflow-x-auto py-3 no-scrollbar border-y border-stone-100 my-4">
-          {hourlyStrip.map((item, idx) => (
-            <div
-              key={idx}
-              className="flex flex-col items-center justify-center bg-stone-50/80 rounded-xl px-3 py-2 min-w-[58px] gap-1.5 border border-stone-100 shrink-0"
-            >
-              <span className="text-[10px] font-mono text-stone-400">{item.hour}</span>
-              <Sun className="w-3.5 h-3.5 text-amber-600" />
-              <span className="text-xs font-bold text-stone-800">{item.temp}°</span>
+        {/* Dynamic Hourly Forecast Strip (Icons matched per hour) */}
+        <div className="relative z-10 flex gap-2 overflow-x-auto py-3 no-scrollbar border-y border-stone-100 my-4 justify-between">
+          {hourlyStrip.map((item, idx) => {
+            const HourIcon = getHourlyIcon(item.code, item.rainProb);
+            const hourCat = categorizeWeather(item.code);
+            const isRainy = hourCat === 'rain' || hourCat === 'drizzle' || hourCat === 'heavy_rain' || hourCat === 'thunderstorm';
+
+            return (
+              <div
+                key={idx}
+                className={`flex flex-col items-center justify-center rounded-2xl px-2.5 py-2 min-w-[56px] flex-1 gap-1.5 border transition-all ${
+                  idx === 0
+                    ? 'bg-amber-50/80 border-amber-300/80 shadow-2xs'
+                    : 'bg-stone-50/80 hover:bg-stone-100/70 border-stone-100'
+                }`}
+              >
+                <span className="text-[10px] font-mono font-medium text-stone-400">
+                  {item.hour}
+                </span>
+
+                {/* Condition-specific icon */}
+                <div className={`p-1 rounded-lg ${isRainy ? 'text-cyan-700 bg-cyan-50' : 'text-amber-600 bg-amber-50'}`}>
+                  <HourIcon className="w-4 h-4" />
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <span className="text-xs font-bold text-stone-800">{item.temp}°</span>
+                  {item.rainProb > 25 && (
+                    <span className="text-[9px] font-mono font-bold text-cyan-700 mt-0.5">
+                      {item.rainProb}%
+                    </span>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Minimal, Super Actionable Glance Tags (No Clutter!) */}
+        <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+          {/* 1. Apparel Action Tag */}
+          <div className="flex items-center gap-3 bg-stone-50/90 rounded-2xl p-3 border border-stone-100 shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 border border-amber-200/70 flex items-center justify-center shrink-0">
+              <Shirt className="w-4 h-4" />
             </div>
-          ))}
-        </div>
-
-        {/* Minimal Tactics Pillars */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2">
-          <div className="flex items-start gap-2.5 bg-stone-50/90 rounded-xl p-3 border border-stone-100">
-            <Shirt className="w-4 h-4 text-amber-800 shrink-0 mt-0.5" />
-            <p className="text-xs text-stone-700 leading-relaxed">{tactics.clothingAdvice}</p>
+            <div className="min-w-0">
+              <span className="block text-[9px] font-mono font-extrabold text-amber-800 uppercase tracking-wider">
+                APPAREL
+              </span>
+              <p className="text-xs font-bold text-stone-900 truncate">
+                {minimalTactics.apparelTitle}
+              </p>
+              <p className="text-[10px] text-stone-500 truncate">
+                {minimalTactics.apparelSub}
+              </p>
+            </div>
           </div>
 
-          <div className="flex items-start gap-2.5 bg-stone-50/90 rounded-xl p-3 border border-stone-100">
-            <Footprints className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <p className="text-xs text-stone-700 leading-relaxed">{tactics.commuteOrOutdoorGuidance}</p>
+          {/* 2. Tactical Mobility Tag */}
+          <div className="flex items-center gap-3 bg-stone-50/90 rounded-2xl p-3 border border-stone-100 shadow-2xs">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 border border-amber-200/70 flex items-center justify-center shrink-0">
+              <minimalTactics.TacticIcon className="w-4 h-4" />
+            </div>
+            <div className="min-w-0">
+              <span className="block text-[9px] font-mono font-extrabold text-amber-800 uppercase tracking-wider">
+                TACTIC
+              </span>
+              <p className="text-xs font-bold text-stone-900 truncate">
+                {minimalTactics.tacticTitle}
+              </p>
+              <p className="text-[10px] text-stone-500 truncate">
+                {minimalTactics.tacticSub}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -121,7 +561,7 @@ export default function PhaseClimate({ onAdvance }) {
       {/* Action Button */}
       <button
         onClick={onAdvance}
-        className="w-full flex items-center justify-center gap-2 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3.5 px-6 rounded-full shadow-md shadow-amber-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] text-sm"
+        className="w-full flex items-center justify-center gap-2 bg-amber-900 hover:bg-amber-950 text-white font-bold py-3.5 px-6 rounded-full shadow-md shadow-amber-900/10 transition-all hover:scale-[1.01] active:scale-[0.99] text-sm cursor-pointer"
       >
         <span>Proceed to Summary</span>
         <ArrowRight className="w-4 h-4" />
