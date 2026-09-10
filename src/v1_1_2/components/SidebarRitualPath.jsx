@@ -23,38 +23,8 @@ export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVa
   const progressRatio = safeIndex / (RITUAL_PHASES.length - 1);
 
   return (
-    <aside className="hidden lg:flex fixed top-16 left-0 bottom-0 w-64 border-r border-stone-200/80 bg-[#FDF9F1]/80 backdrop-blur-sm flex-col justify-between p-5 z-30 overflow-y-auto">
-      <div className="space-y-5">
-        {/* Top Priority Streak Banner */}
-        {onOpenStreak && (
-          <button
-            onClick={onOpenStreak}
-            className="w-full text-left p-3 rounded-2xl bg-gradient-to-br from-amber-500/15 via-amber-400/20 to-yellow-300/10 hover:from-amber-500/25 hover:to-yellow-300/20 border-2 border-amber-400/70 hover:border-amber-400 transition-all shadow-[0_0_12px_rgba(245,158,11,0.15)] hover:scale-[1.02] active:scale-[0.98] cursor-pointer group"
-          >
-            <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center gap-1.5">
-                <div className="w-6 h-6 rounded-lg bg-amber-500 flex items-center justify-center text-white shadow-[0_0_8px_rgba(245,158,11,0.5)]">
-                  <Flame className="w-3.5 h-3.5 fill-white" />
-                </div>
-                <span className="text-[11px] font-mono font-black text-amber-950 tracking-wider">
-                  DAILY STREAK
-                </span>
-              </div>
-              <span className="text-[10px] font-mono font-bold text-amber-900 bg-amber-200/80 px-1.5 py-0.5 rounded">
-                Grid
-              </span>
-            </div>
-            <div className="flex items-baseline justify-between">
-              <span className="text-xl font-mono font-black text-stone-900">
-                {streak.currentStreak} <span className="text-xs font-semibold text-stone-500">Days</span>
-              </span>
-              <span className="text-[10px] font-bold text-amber-800 group-hover:underline">
-                View Heatmap →
-              </span>
-            </div>
-          </button>
-        )}
-
+    <aside className="hidden lg:flex fixed top-16 left-0 bottom-0 w-64 border-r border-stone-200/80 bg-[#FDF9F1]/80 backdrop-blur-sm flex-col justify-between p-6 z-30 overflow-y-auto">
+      <div className="space-y-6">
         <div>
           <span className="text-[10px] font-mono font-bold text-stone-400 tracking-wider uppercase block mb-1">
             RITUAL SEQUENCE
@@ -154,7 +124,7 @@ export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVa
               className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-100/90 to-amber-50 hover:from-amber-200 hover:to-amber-100 border border-amber-300/80 text-amber-950 text-xs font-bold transition-all shadow-2xs cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
             >
               <div className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-600" />
+                <Flame className="w-4 h-4 text-amber-600 fill-amber-500" />
                 <span>Focus Heatmap & Streak</span>
               </div>
               <span className="text-[10px] font-mono font-extrabold text-amber-800 bg-amber-200/80 px-1.5 py-0.5 rounded">
