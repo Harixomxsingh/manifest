@@ -104,7 +104,7 @@ export default function PhaseLaunch({ onResetToWelcome, onOpenVault }) {
             <span className="block text-[10px] font-mono font-extrabold text-amber-800 tracking-wider mb-1">
               IDENTITY ANCHOR
             </span>
-            <p className="text-xs sm:text-sm font-semibold text-amber-950 italic leading-relaxed">
+            <p className="text-xs sm:text-sm font-semibold text-amber-950 leading-relaxed">
               "{anchor.identityReminder}"
             </p>
           </div>
@@ -118,7 +118,7 @@ export default function PhaseLaunch({ onResetToWelcome, onOpenVault }) {
               <span className="block text-[10px] font-mono font-extrabold text-amber-700 tracking-wider mb-1">
                 SPOKEN VOICE ANCHOR
               </span>
-              <p className="text-xs sm:text-sm font-semibold text-amber-900 italic leading-relaxed">
+              <p className="text-xs sm:text-sm font-semibold text-amber-900 leading-relaxed">
                 "{voiceJournal.synthesis.manifestationAnchor}"
               </p>
             </div>

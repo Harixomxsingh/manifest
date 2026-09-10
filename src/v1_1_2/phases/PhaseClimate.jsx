@@ -82,7 +82,7 @@ export default function PhaseClimate({ onAdvance }) {
           <div className="w-16 h-16 rounded-full bg-amber-50 border border-amber-200/60 flex items-center justify-center mb-3 text-amber-600 shadow-inner">
             <Sun className="w-8 h-8" strokeWidth={1.8} />
           </div>
-          <div className="text-4xl sm:text-5xl font-serif text-stone-900 font-light">
+          <div className="text-4xl sm:text-5xl font-bold text-stone-900 tracking-tight">
             {high}{unit}
           </div>
           <div className="text-xs sm:text-sm text-stone-500 mt-1 font-medium">

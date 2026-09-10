@@ -31,11 +31,11 @@ export default function PhaseIdentity({ onAdvance }) {
           MINDSET ANCHOR
         </span>
 
-        <h2 className="font-serif italic text-xl sm:text-2xl text-[#78350F] leading-snug mb-4">
+        <h2 className="text-xl sm:text-2xl font-bold text-amber-950 leading-snug mb-4 tracking-tight">
           "{anchor.identityReminder}"
         </h2>
 
-        <p className="text-xs sm:text-sm text-[#78716C] leading-relaxed mb-6 px-2">
+        <p className="text-xs sm:text-sm text-stone-600 leading-relaxed mb-6 px-2 font-medium">
           {anchor.content}
         </p>
 

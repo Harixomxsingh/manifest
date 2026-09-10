@@ -224,7 +224,7 @@ export default function PromptBrowserModal({
                         </span>
                       )}
                     </div>
-                    <p className="font-serif italic text-stone-900 text-sm sm:text-base leading-relaxed">
+                    <p className="text-stone-900 text-sm sm:text-base font-medium leading-relaxed">
                       "{promptText}"
                     </p>
                   </div>

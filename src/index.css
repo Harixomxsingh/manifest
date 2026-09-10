@@ -1,9 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
 @layer base {
   :root {
-    --font-sans: 'Geist', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    --font-serif: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+    --font-serif: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
 
@@ -58,7 +64,7 @@
 .font-display-hero,
 .font-editorial,
 .font-quote-editorial {
-  font-family: 'Playfair Display', 'Bodoni Moda', Georgia, serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
 
 .font-body,
@@ -68,7 +74,7 @@
 .font-label-caps,
 .font-label-mono,
 .font-metadata-footnote {
-  font-family: 'Geist', 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
 }
 
 /* Editorial Brutalism & Dawn Parchment styling */

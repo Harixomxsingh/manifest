@@ -43,7 +43,7 @@ export default function PhaseReading({ onAdvance }) {
 
         {/* Foundational Axiom Box */}
         <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 sm:p-5 mb-5">
-          <p className="font-serif italic text-base sm:text-lg text-[#78350F] leading-relaxed">
+          <p className="text-base sm:text-lg font-medium text-amber-950 leading-relaxed">
             “{article.coreIdea || article.hook}”
           </p>
         </div>

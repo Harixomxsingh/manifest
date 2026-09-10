@@ -39,16 +39,16 @@ export default function PhaseWelcome({ onAdvance }) {
       </div>
 
       {/* Main Bold Inspiring Title */}
-      <h1 className="text-3xl sm:text-4xl font-serif text-[#1C1C17] font-normal tracking-tight mb-2">
+      <h1 className="text-3xl sm:text-4xl font-bold text-stone-900 tracking-tight mb-2">
         Manifest Within
       </h1>
-      <p className="text-xs sm:text-sm text-[#78716C] max-w-xs sm:max-w-sm mb-6 leading-relaxed">
+      <p className="text-xs sm:text-sm text-stone-500 max-w-xs sm:max-w-sm mb-6 leading-relaxed font-medium">
         A two-minute ritual to command your mind and master your day.
       </p>
 
       {/* Daily Ambitious Quote Card */}
       <div className="w-full bg-white border border-amber-500/25 rounded-2xl p-5 sm:p-6 mb-8 shadow-sm text-center relative">
-        <p className="font-serif italic text-base sm:text-lg text-[#78350F] leading-relaxed mb-4">
+        <p className="text-base sm:text-lg font-medium text-amber-950 leading-relaxed mb-4">
           "{quote.quote}"
         </p>
 

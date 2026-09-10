@@ -350,7 +350,7 @@ export default function JournalVaultModal({ isOpen, onClose }) {
                           <span className="block text-[9px] font-mono font-extrabold text-amber-800 uppercase tracking-wider mb-0.5">
                             YOUR CORE FOCUS
                           </span>
-                          <p className="font-serif italic text-xs font-semibold text-amber-950">
+                          <p className="text-xs font-semibold text-amber-950">
                             "{item.synthesis.manifestationAnchor}"
                           </p>
                         </div>

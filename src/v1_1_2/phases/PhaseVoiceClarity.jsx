@@ -363,7 +363,7 @@ export default function PhaseVoiceClarity({ onAdvance }) {
             </div>
           </div>
 
-          <p className="font-serif italic text-sm sm:text-base text-amber-950 font-medium leading-relaxed">
+          <p className="text-sm sm:text-base text-amber-950 font-semibold leading-relaxed">
             "{promptText}"
           </p>
         </div>
@@ -522,7 +522,7 @@ export default function PhaseVoiceClarity({ onAdvance }) {
                   YOUR CORE FOCUS
                 </span>
               </div>
-              <p className="font-serif italic text-xs sm:text-sm font-semibold text-amber-950 leading-relaxed">
+              <p className="text-xs sm:text-sm font-semibold text-amber-950 leading-relaxed">
                 "{synthesis.manifestationAnchor}"
               </p>
             </div>
