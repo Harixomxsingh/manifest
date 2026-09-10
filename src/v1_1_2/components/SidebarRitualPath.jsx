@@ -157,6 +157,9 @@ export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVa
             hari
           </a>
         </p>
+        <p className="text-[9.5px] text-stone-400 font-mono">
+          © 2026 Hari • PolyForm Noncommercial
+        </p>
       </div>
     </aside>
   );

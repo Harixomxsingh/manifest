@@ -261,16 +261,20 @@ Ready to make today count! 🚀`;
           </TouchableOpacity>
         </View>
 
-        {/* Footer Portfolio Link */}
-        <TouchableOpacity
-          onPress={() => Linking.openURL('https://harixomxsingh.github.io/portfolio/')}
-          activeOpacity={0.7}
-          style={styles.portfolioFooterRow}
-        >
-          <Text style={styles.portfolioFooterText}>
-            made with ❤️ by <Text style={styles.portfolioLinkText}>hari</Text>
+        {/* Footer Portfolio & Copyright Link */}
+        <View style={styles.portfolioFooterRow}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL('https://harixomxsingh.github.io/portfolio/')}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.portfolioFooterText}>
+              made with ❤️ by <Text style={styles.portfolioLinkText}>hari</Text>
+            </Text>
+          </TouchableOpacity>
+          <Text style={styles.copyrightText}>
+            © 2026 Hari • PolyForm Noncommercial License
           </Text>
-        </TouchableOpacity>
+        </View>
       </View>
 
       {/* Modals */}
@@ -576,7 +580,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 6
+    paddingVertical: 6,
+    gap: 3
   },
   portfolioFooterText: {
     fontSize: 11,
@@ -588,5 +593,10 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     fontFamily: fonts.monoBold,
     textDecorationLine: 'underline'
+  },
+  copyrightText: {
+    fontSize: 9.5,
+    color: colors.textDim,
+    fontFamily: fonts.mono
   }
 });

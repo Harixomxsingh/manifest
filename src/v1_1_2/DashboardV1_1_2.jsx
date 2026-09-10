@@ -104,8 +104,8 @@ export default function DashboardV1_1_2() {
             )}
 
             {/* Subtle Mobile Footer */}
-            <div className="mt-8 mb-2 text-center lg:hidden">
-              <p className="text-[11px] text-stone-400 font-sans">
+            <div className="mt-8 mb-2 text-center lg:hidden space-y-1">
+              <p className="text-[11px] text-stone-500 font-sans">
                 made with ❤️ by{' '}
                 <a
                   href="https://harixomxsingh.github.io/portfolio/"
@@ -115,6 +115,9 @@ export default function DashboardV1_1_2() {
                 >
                   hari
                 </a>
+              </p>
+              <p className="text-[9.5px] text-stone-400 font-mono">
+                © 2026 Hari • PolyForm Noncommercial License
               </p>
             </div>
           </div>

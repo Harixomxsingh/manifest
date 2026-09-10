@@ -23,7 +23,11 @@ export default function FooterKeyboardBar() {
         </div>
       </div>
 
-      <div className="flex items-center gap-1 text-stone-500 font-sans text-xs">
+      <div className="flex items-center gap-3 text-stone-500 font-sans text-xs">
+        <span className="text-[10.5px] text-stone-400 font-mono">
+          © 2026 Hari • PolyForm Noncommercial License
+        </span>
+        <span className="text-stone-300">•</span>
         <span>made with ❤️ by</span>
         <a
           href="https://harixomxsingh.github.io/portfolio/"

@@ -5,7 +5,8 @@
 
 [![Live Web App](https://img.shields.io/badge/Live_Web_App-Launch_Manifest-D97706?style=for-the-badge&logo=googlechrome&logoColor=white)](https://harixomxsingh.github.io/manifest/)
 [![GitHub Release](https://img.shields.io/badge/Release-v1.1.2-B45309?style=for-the-badge&logo=github)](https://github.com/Harixomxsingh/manifest/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge)](LICENSE)
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm_Noncommercial_1.0.0-D97706?style=for-the-badge)](LICENSE)
+[![Copyright](https://img.shields.io/badge/Copyright-2026_Hari-10B981?style=for-the-badge)](https://harixomxsingh.github.io/portfolio/)
 
 👉 **[Launch Live Web Application (v1.1.2) ➔](https://harixomxsingh.github.io/manifest/)**
 
@@ -18,7 +19,7 @@
 - 🎆 **Full-Screen Dopamine Celebration**: Multi-stage confetti explosion, harmonic audio victory chime, and visual level-up recognition upon completing your daily morning cadence.
 - ⏱️ **25-Minute Deep Focus Pomodoro Timer**: Built-in flow timer that automatically logs focus minutes to your daily contribution squares.
 - 🎙️ **Voice & Text Clarity Synthesis**: Spoken or typed manifestation goals with intelligent synthesis.
-- 🌦️ **Actionable Atmospheric Intelligence**: Real-time hourly weather forecast with tailored attire and morning walk guidance.
+- 🌦️ **Actionable Atmospheric Intelligence**: Real-time hourly forecast with tailored attire and morning walk guidance.
 - 📱 **Cross-Platform Parity**: Full feature parity across both the Web Application and the companion Android / Mobile Expo app (`/mobile`).
 
 ---
@@ -79,6 +80,12 @@ npx expo start
 
 ---
 
-## 📄 License
+## ⚖️ License & Copyright
 
-MIT License © 2026 Hariom Singh
+**Copyright © 2026 [Hariom Singh (Hari)](https://harixomxsingh.github.io/portfolio/). All rights reserved.**
+
+This project is licensed under the **[PolyForm Noncommercial License 1.0.0](LICENSE)**.
+
+- **Open for Personal & Educational Use**: You are welcome to view, run, fork, learn from, and submit contributions/PRs to this codebase for non-commercial purposes.
+- 🚫 **Strictly Prohibited from Commercial Exploitation**: Under **no circumstances** may this software, codebase, design, or assets be sold, relicensed, used for paid commercial products/services, or hosted as a monetized SaaS without explicit written permission from the copyright owner.
+

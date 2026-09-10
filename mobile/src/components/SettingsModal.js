@@ -180,6 +180,18 @@ export default function SettingsModal({ isOpen, onClose }) {
                 </TouchableOpacity>
               </View>
 
+              {/* License & Copyright Card */}
+              <View style={styles.settingCard}>
+                <View style={styles.settingHeader}>
+                  <Shield size={16} color={colors.primaryDark} />
+                  <Text style={styles.settingTitle}>License & Copyright</Text>
+                </View>
+                <Text style={styles.privacyNote}>
+                  © 2026 Hariom Singh (Hari). All rights reserved.{'\n'}
+                  Licensed under the PolyForm Noncommercial License 1.0.0. Open for personal and educational use; commercial exploitation or monetization is strictly prohibited.
+                </Text>
+              </View>
+
               {/* App Version Info */}
               <View style={styles.aboutCard}>
                 <Sparkles size={14} color={colors.primary} />
