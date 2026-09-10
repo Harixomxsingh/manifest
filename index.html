@@ -24,12 +24,26 @@
 
     <!-- Google Identity Services (GIS) Client -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script type="module" crossorigin src="/manifest/assets/index-vzIk8e-N.js"></script>
-    <link rel="stylesheet" crossorigin href="/manifest/assets/index-BqtxkoYY.css">
+    <script type="module" crossorigin src="/manifest/assets/index-2pmI5W2z.js"></script>
+    <link rel="stylesheet" crossorigin href="/manifest/assets/index-BT5NN1_1.css">
   </head>
   <body class="bg-[#FDF9F1] text-[#1C1C17] antialiased min-h-screen selection:bg-amber-100 selection:text-amber-900">
     <div id="root"></div>
     <script>
+      // Fallback loader for GitHub Pages deployments serving from repository root
+      if (window.location.hostname.includes('github.io') && !window.__MANIFEST_DEV__) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/manifest/assets/index-BT5NN1_1.css';
+        document.head.appendChild(link);
+
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.crossOrigin = 'anonymous';
+        script.src = '/manifest/assets/index-2pmI5W2z.js';
+        document.body.appendChild(script);
+      }
+
       // Service Worker Registration for PWA
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
