@@ -105,51 +105,51 @@ export default function Header({ onOpenVault, onOpenStreak }) {
           </span>
         </div>
 
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Daily Shuffle Button */}
+        {/* Right: Actions (Clean & Decluttered for Mobile) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Daily Shuffle Button (Always available, compact on mobile) */}
           <button
             onClick={() => {
               if (shuffleDailyQuote) shuffleDailyQuote();
               else if (randomizeAllDailyContent) randomizeAllDailyContent();
             }}
             title="Shuffle quote and reflection"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/70 text-amber-900 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/70 text-amber-900 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
             <Shuffle className="w-3.5 h-3.5 text-amber-700" />
-            <span className="hidden sm:inline">Shuffle</span>
+            <span className="hidden sm:inline ml-1.5">Shuffle</span>
           </button>
 
-          {/* Journal Vault Trigger */}
+          {/* Journal Vault Trigger (Visible on tablet & desktop, accessible via drawer/cards on mobile) */}
           {onOpenVault && (
             <button
               onClick={onOpenVault}
               title="Journal Vault & Archive"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 text-stone-700 text-xs font-semibold transition-all cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 text-stone-700 text-xs font-semibold transition-all cursor-pointer"
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-800" />
-              <span className="hidden sm:inline">Vault</span>
+              <span>Vault</span>
             </button>
           )}
 
-          {/* PWA Install Button */}
+          {/* PWA Install Button (Desktop/Tablet) */}
           {isInstallable && (
             <button
               onClick={handleInstallPWA}
               title="Install Manifest as App"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-800 text-white text-xs font-bold hover:bg-amber-900 shadow-xs transition-all"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-800 text-white text-xs font-bold hover:bg-amber-900 shadow-xs transition-all"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Install App</span>
             </button>
           )}
 
-          {/* Audio toggle button if available */}
+          {/* Audio toggle button if available (Visible on tablet/desktop) */}
           {toggleAudioReadout && (
             <button
               onClick={toggleAudioReadout}
               title={isAudioPlaying ? 'Mute' : 'Audio Dispatch'}
-              className={`p-2 rounded-full border transition-all ${
+              className={`hidden sm:flex p-2 rounded-full border transition-all ${
                 isAudioPlaying
                   ? 'bg-amber-900 text-white border-amber-900 shadow-xs'
                   : 'bg-stone-50 border-stone-200 text-stone-600 hover:text-stone-900 hover:border-amber-300'
@@ -163,13 +163,13 @@ export default function Header({ onOpenVault, onOpenStreak }) {
             </button>
           )}
 
-          {/* Settings Trigger */}
+          {/* Settings Trigger (Always clean and accessible) */}
           <button
             onClick={() => setIsSettingsOpen?.(true)}
             title="Settings"
-            className="p-2 rounded-full bg-amber-800 hover:bg-amber-900 text-white shadow-xs transition-transform active:scale-95"
+            className="p-2 rounded-full bg-amber-800 hover:bg-amber-900 text-white shadow-xs transition-transform active:scale-95 cursor-pointer"
           >
-            <Settings className="w-4 h-4" />
+            <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>
         </div>
       </div>

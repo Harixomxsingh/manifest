@@ -100,21 +100,8 @@ export default function Header() {
             <View style={styles.activeDot} />
           </TouchableOpacity>
 
-          {/* Action Icons */}
+          {/* Action Icons (Clean & Spacious for Mobile) */}
           <View style={styles.actionRow}>
-            {/* Quick Vault Button */}
-            <TouchableOpacity
-              onPress={() => {
-                triggerHaptic('light');
-                setIsVaultOpen(true);
-              }}
-              activeOpacity={0.8}
-              style={styles.iconBtn}
-              accessibilityLabel="Journal Vault"
-            >
-              <BookOpen size={14} color={colors.primaryDark} />
-            </TouchableOpacity>
-
             {/* Randomize Day Button */}
             <TouchableOpacity
               onPress={randomizeAllDailyContent}
@@ -123,23 +110,6 @@ export default function Header() {
               accessibilityLabel="Randomize Content"
             >
               <Shuffle size={14} color={colors.primary} />
-            </TouchableOpacity>
-
-            {/* Audio Speech Readout Button */}
-            <TouchableOpacity
-              onPress={toggleSpeechSummary}
-              activeOpacity={0.8}
-              style={[
-                styles.iconBtn,
-                isSpeechPlaying && styles.iconBtnActive
-              ]}
-              accessibilityLabel="Speech Summary"
-            >
-              {isSpeechPlaying ? (
-                <VolumeX size={14} color="#FFFFFF" />
-              ) : (
-                <Volume2 size={14} color={colors.primaryDark} />
-              )}
             </TouchableOpacity>
 
             {/* Location Pill */}
