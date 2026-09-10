@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Download, Shuffle, Volume2, VolumeX, BookOpen } from 'lucide-react';
+import { Settings, Download, Shuffle, Volume2, VolumeX, BookOpen, Flame } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ManifestSunLogo from '../../components/ManifestSunLogo';
+import { getStreakData } from '../../services/streakService';
 
-export default function Header({ onOpenVault }) {
+export default function Header({ onOpenVault, onOpenStreak }) {
   const {
     isAudioPlaying,
     toggleAudioReadout,
@@ -16,6 +17,11 @@ export default function Header({ onOpenVault }) {
   const [currentDate, setCurrentDate] = useState('');
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [streakData, setStreakData] = useState(() => getStreakData());
+
+  useEffect(() => {
+    setStreakData(getStreakData());
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -59,23 +65,44 @@ export default function Header({ onOpenVault }) {
   return (
     <header className="fixed top-0 left-0 right-0 h-16 z-40 bg-[#FDF9F1]/95 backdrop-blur-md border-b border-stone-200/80 shadow-[0_1px_8px_rgba(180,83,9,0.03)]">
       <div className="h-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
-        {/* Left: Brand & Animated Sun Logo */}
-        <div className="flex items-center gap-3 min-w-0">
+        {/* Left: Brand & Animated Sun Logo + Prominent Streak Badge */}
+        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <ManifestSunLogo size={32} interactive={true} />
 
-          <div className="flex items-baseline gap-2.5">
+          <div className="flex items-baseline gap-2">
             <span
-              className="text-lg sm:text-xl tracking-tight text-amber-950 font-serif font-bold"
+              className="text-lg sm:text-xl tracking-tight text-amber-950 font-bold"
             >
               Manifest
             </span>
-
-            <span className="hidden md:inline-block w-1 h-1 rounded-full bg-stone-300" />
-
-            <span className="hidden md:inline-block text-xs text-stone-500 font-mono">
-              {currentDate} • {currentTime}
-            </span>
           </div>
+
+          {/* First Priority: Ultra-Prominent Eye-Catching Streak Badge */}
+          {onOpenStreak && (
+            <button
+              onClick={onOpenStreak}
+              className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-amber-400/25 to-yellow-400/15 hover:from-amber-500/25 hover:to-yellow-400/25 border-2 border-amber-400/80 hover:border-amber-500 text-amber-950 text-xs sm:text-sm font-mono font-extrabold transition-all duration-300 shadow-[0_0_14px_rgba(245,158,11,0.25)] hover:shadow-[0_0_20px_rgba(245,158,11,0.45)] hover:scale-105 active:scale-95 cursor-pointer ml-1 sm:ml-2"
+              title="Daily Streak & Focus Heatmap — Click to view calendar"
+            >
+              <div className="relative flex items-center justify-center">
+                <span className="absolute -inset-1 rounded-full bg-amber-400/50 animate-ping opacity-75" />
+                <Flame className="w-4 h-4 text-amber-600 fill-amber-500 relative z-10 transition-transform group-hover:scale-110" />
+              </div>
+              <span className="font-mono font-black text-amber-950 tracking-tight">
+                {streakData.currentStreak}D STREAK
+              </span>
+              <span className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-amber-200/80 text-[10px] font-sans font-bold text-amber-900 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                ACTIVE
+              </span>
+            </button>
+          )}
+
+          <span className="hidden lg:inline-block w-1 h-1 rounded-full bg-stone-300 ml-1" />
+
+          <span className="hidden lg:inline-block text-xs text-stone-500 font-mono">
+            {currentDate} • {currentTime}
+          </span>
         </div>
 
         {/* Right: Actions */}
@@ -87,7 +114,7 @@ export default function Header({ onOpenVault }) {
               else if (randomizeAllDailyContent) randomizeAllDailyContent();
             }}
             title="Shuffle quote and reflection"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/70 text-amber-900 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/70 text-amber-900 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
             <Shuffle className="w-3.5 h-3.5 text-amber-700" />
             <span className="hidden sm:inline">Shuffle</span>
@@ -98,7 +125,7 @@ export default function Header({ onOpenVault }) {
             <button
               onClick={onOpenVault}
               title="Journal Vault & Archive"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 text-stone-700 text-xs font-semibold transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 text-stone-700 text-xs font-semibold transition-all cursor-pointer"
             >
               <BookOpen className="w-3.5 h-3.5 text-amber-800" />
               <span className="hidden sm:inline">Vault</span>

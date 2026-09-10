@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Play, Pause, RotateCcw, Flame, Sparkles, Volume2, CheckCircle2, Clock } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { recordFocusSession, playTriumphantChime } from '../../services/streakService';
 
 export default function FocusTimerModal({ isOpen, onClose, initialMinutes = 25, currentFocusText = '' }) {
   const [durationMinutes, setDurationMinutes] = useState(initialMinutes);
@@ -30,6 +31,8 @@ export default function FocusTimerModal({ isOpen, onClose, initialMinutes = 25, 
             clearInterval(interval);
             setIsRunning(false);
             setIsCompleted(true);
+            recordFocusSession(durationMinutes);
+            playTriumphantChime();
             try {
               confetti({
                 particleCount: 70,
@@ -47,7 +50,7 @@ export default function FocusTimerModal({ isOpen, onClose, initialMinutes = 25, 
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isRunning, secondsLeft]);
+  }, [isRunning, secondsLeft, durationMinutes]);
 
   if (!isOpen) return null;
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import confetti from 'canvas-confetti';
 import {
   Flame,
   Copy,
@@ -13,14 +12,30 @@ import {
   BookOpen,
   Sun,
   Shield,
-  Target
+  Target,
+  Sparkles,
+  Calendar
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ManifestSunLogo from '../../components/ManifestSunLogo';
-import { getStreakData, recordDailyCompletion } from '../../services/streakService';
+import {
+  getStreakData,
+  recordDailyCompletion,
+  recordFocusSession,
+  generateGitHubHeatmapGrid
+} from '../../services/streakService';
 import FocusTimerModal from '../components/FocusTimerModal';
+import StreakCelebrationModal from '../components/StreakCelebrationModal';
 
-export default function PhaseLaunch({ onResetToWelcome, onOpenVault }) {
+const GREEN_LEVEL_COLORS = [
+  'bg-stone-200/70 border-stone-200',
+  'bg-[#9BE9A8] border-[#86d994]',
+  'bg-[#40C463] border-[#34b055]',
+  'bg-[#30A14E] border-[#258d40]',
+  'bg-[#216E39] border-[#18562c]'
+];
+
+export default function PhaseLaunch({ onResetToWelcome, onOpenVault, onOpenStreak }) {
   const {
     briefing,
     todayArticle,
@@ -31,20 +46,17 @@ export default function PhaseLaunch({ onResetToWelcome, onOpenVault }) {
   const [isSpeechPlaying, setIsSpeechPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isFocusTimerOpen, setIsFocusTimerOpen] = useState(false);
+  const [isCelebrationOpen, setIsCelebrationOpen] = useState(false);
   const [streak, setStreak] = useState(() => getStreakData());
 
   useEffect(() => {
     const updated = recordDailyCompletion();
     setStreak(updated);
 
-    try {
-      confetti({
-        particleCount: 45,
-        spread: 60,
-        origin: { y: 0.65 },
-        colors: ['#F59E0B', '#10B981', '#3B82F6', '#D97706']
-      });
-    } catch (e) {}
+    // If first time completing today, trigger full-screen celebration modal
+    if (updated.wasFirstCompletionToday) {
+      setIsCelebrationOpen(true);
+    }
   }, []);
 
   const anchor = briefing?.optimismAnchor || {
@@ -57,6 +69,17 @@ export default function PhaseLaunch({ onResetToWelcome, onOpenVault }) {
 
   const weatherLabel = weatherData ? `${weatherData.highTemp}°${weatherData.unit || 'C'} • ${weatherData.weatherLabel}` : 'Optimal Day';
   const weatherTip = weatherData?.tactics?.clothingAdvice?.split('.')[0] || weatherData?.tactics?.commuteOrOutdoorGuidance?.split('.')[0] || 'Clear day ahead';
+
+  // Last 14 days mini heatmap strip for direct visual reward on Launchpad
+  const { weeks } = useMemo(() => {
+    return generateGitHubHeatmapGrid('green');
+  }, [streak]);
+
+  const recentDays = useMemo(() => {
+    if (!weeks || weeks.length === 0) return [];
+    const flat = weeks.flat();
+    return flat.slice(-14); // Last 14 days
+  }, [weeks]);
 
   const handleCopySummary = () => {
     const today = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
@@ -125,7 +148,7 @@ Ready to conquer today! 🚀`;
       </div>
 
       {/* Clean Emblem & Title */}
-      <div className="mb-3 flex items-center justify-center">
+      <div className="mb-2.5 flex items-center justify-center">
         <ManifestSunLogo size={58} interactive={true} />
       </div>
 
@@ -133,16 +156,23 @@ Ready to conquer today! 🚀`;
         You're All Set
       </h2>
 
-      {/* Minimal Streak Badge */}
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-xs font-mono font-bold text-amber-900 mb-6 shadow-2xs">
-        <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+      {/* Interactive Eye-Catching Streak & Heatmap Capsule */}
+      <button
+        onClick={onOpenStreak}
+        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-100 to-amber-50 hover:from-amber-200 hover:to-amber-100 border border-amber-300 text-xs font-mono font-bold text-amber-950 mb-4 shadow-2xs transition-all hover:scale-105 active:scale-95 cursor-pointer"
+        title="Open Full Focus Calendar"
+      >
+        <Flame className="w-4 h-4 text-amber-600 fill-amber-500 animate-pulse" />
         <span>{streak.currentStreak}-DAY STREAK</span>
         <span className="text-stone-300">•</span>
-        <span className="text-stone-500 font-sans font-medium text-[11px]">Ready to conquer today</span>
-      </div>
+        <span className="text-emerald-800 font-sans font-bold text-[11px] flex items-center gap-1">
+          <span className="w-2 h-2 rounded-[2px] bg-[#30A14E]" />
+          View Calendar →
+        </span>
+      </button>
 
       {/* Pure, Minimal Monolithic Card (Zero Clutter) */}
-      <div className="w-full bg-white border border-stone-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-6 mb-5 shadow-sm text-left relative">
+      <div className="w-full bg-white border border-stone-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-6 mb-4 shadow-sm text-left relative">
         {/* Top Minimal Action Row */}
         <div className="flex items-center justify-between pb-3 mb-4 border-b border-stone-100">
           <span className="text-[10px] font-mono font-bold text-stone-400 uppercase tracking-wider">
@@ -202,6 +232,23 @@ Ready to conquer today! 🚀`;
             <span className="font-bold text-stone-800 truncate block">
               {weatherLabel}
             </span>
+          </div>
+        </div>
+
+        {/* Mini 14-Day Heatmap Preview Strip at bottom of card */}
+        <div className="pt-3 border-t border-stone-100 mt-3 flex items-center justify-between text-[11px] text-stone-500">
+          <span className="font-mono text-[10px] font-bold text-stone-400 uppercase">Recent Focus</span>
+          <div className="flex items-center gap-1">
+            {recentDays.map((day, idx) => {
+              const col = GREEN_LEVEL_COLORS[day.level] || GREEN_LEVEL_COLORS[0];
+              return (
+                <div
+                  key={idx}
+                  className={`w-2.5 h-2.5 rounded-[2px] border ${col} ${day.isToday ? 'ring-1.5 ring-amber-500' : ''}`}
+                  title={`${day.dateStr}: Level ${day.level}`}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
@@ -272,9 +319,20 @@ Ready to conquer today! 🚀`;
       {/* 25-Minute Focus Session Modal */}
       <FocusTimerModal
         isOpen={isFocusTimerOpen}
-        onClose={() => setIsFocusTimerOpen(false)}
+        onClose={() => {
+          setIsFocusTimerOpen(false);
+          setStreak(getStreakData());
+        }}
         initialMinutes={25}
         currentFocusText={mainGoal}
+      />
+
+      {/* Full-Screen Dopamine Streak Celebration Modal */}
+      <StreakCelebrationModal
+        isOpen={isCelebrationOpen}
+        onClose={() => setIsCelebrationOpen(false)}
+        streakCount={streak.currentStreak}
+        onOpenHeatmap={onOpenStreak}
       />
     </div>
   );

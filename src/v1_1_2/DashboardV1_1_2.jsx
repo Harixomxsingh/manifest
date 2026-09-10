@@ -13,11 +13,13 @@ import LocationModal from '../v1_1_1/components/LocationModal';
 import SettingsModal from '../components/SettingsModal';
 import HistoryDrawer from '../components/HistoryDrawer';
 import JournalVaultModal from './components/JournalVaultModal';
+import MomentumHeatmapModal from './components/MomentumHeatmapModal';
 import { useApp } from '../context/AppContext';
 
 export default function DashboardV1_1_2() {
   const [activePhase, setActivePhase] = useState('welcome');
   const [isJournalVaultOpen, setIsJournalVaultOpen] = useState(false);
+  const [isMomentumHeatmapOpen, setIsMomentumHeatmapOpen] = useState(false);
   const { isSettingsOpen, isHistoryOpen, isLocationModalOpen, setVoiceJournal } = useApp();
 
   const phaseOrder = ['welcome', 'identity', 'reading', 'voice', 'climate', 'launch'];
@@ -65,7 +67,10 @@ export default function DashboardV1_1_2() {
   return (
     <div className="bg-[#FDF9F1] text-[#1C1C17] min-h-screen antialiased selection:bg-amber-100 selection:text-amber-900 font-sans relative">
       {/* Fixed Top Header */}
-      <Header onOpenVault={() => setIsJournalVaultOpen(true)} />
+      <Header
+        onOpenVault={() => setIsJournalVaultOpen(true)}
+        onOpenStreak={() => setIsMomentumHeatmapOpen(true)}
+      />
 
       {/* Fixed Left Navigation Sidebar (Desktop viewports) */}
       <SidebarRitualPath
@@ -75,6 +80,7 @@ export default function DashboardV1_1_2() {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         onOpenVault={() => setIsJournalVaultOpen(true)}
+        onOpenStreak={() => setIsMomentumHeatmapOpen(true)}
       />
 
       {/* Main Content Area with Mobile & Tablet Safe Padding */}
@@ -93,6 +99,7 @@ export default function DashboardV1_1_2() {
                   setActivePhase('welcome');
                 }}
                 onOpenVault={() => setIsJournalVaultOpen(true)}
+                onOpenStreak={() => setIsMomentumHeatmapOpen(true)}
               />
             )}
           </div>
@@ -113,7 +120,11 @@ export default function DashboardV1_1_2() {
         }}
       />
 
-      {/* Modals & Journal Vault */}
+      {/* Modals & Focus Heatmap */}
+      <MomentumHeatmapModal
+        isOpen={isMomentumHeatmapOpen}
+        onClose={() => setIsMomentumHeatmapOpen(false)}
+      />
       <JournalVaultModal
         isOpen={isJournalVaultOpen}
         onClose={() => setIsJournalVaultOpen(false)}
