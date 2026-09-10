@@ -81,17 +81,21 @@ export default function Header({ onOpenVault, onOpenStreak }) {
           {onOpenStreak && (
             <button
               onClick={onOpenStreak}
-              className="group flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-amber-400/25 to-yellow-400/15 hover:from-amber-500/25 hover:to-yellow-400/25 border-2 border-amber-400/80 hover:border-amber-500 text-amber-950 text-xs sm:text-sm font-mono font-extrabold transition-all duration-300 shadow-[0_0_14px_rgba(245,158,11,0.25)] hover:shadow-[0_0_20px_rgba(245,158,11,0.45)] hover:scale-105 active:scale-95 cursor-pointer ml-1 sm:ml-2"
+              className="group flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-amber-400/25 to-yellow-400/15 hover:from-amber-500/25 hover:to-yellow-400/25 border-2 border-amber-400/80 hover:border-amber-500 text-amber-950 text-xs sm:text-sm font-mono font-extrabold transition-all duration-300 shadow-[0_0_12px_rgba(245,158,11,0.2)] hover:shadow-[0_0_18px_rgba(245,158,11,0.4)] hover:scale-105 active:scale-95 cursor-pointer ml-1"
               title="Daily Streak & Focus Heatmap — Click to view calendar"
             >
               <div className="relative flex items-center justify-center">
                 <span className="absolute -inset-1 rounded-full bg-amber-400/50 animate-ping opacity-75" />
-                <Flame className="w-4 h-4 text-amber-600 fill-amber-500 relative z-10 transition-transform group-hover:scale-110" />
+                <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-600 fill-amber-500 relative z-10 transition-transform group-hover:scale-110" />
               </div>
               <span className="font-mono font-black text-amber-950 tracking-tight">
-                {streakData.currentStreak}D STREAK
+                {streakData.currentStreak}
+                <span className="hidden sm:inline">D</span>
               </span>
-              <span className="hidden md:inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-amber-200/80 text-[10px] font-sans font-bold text-amber-900 uppercase tracking-wider">
+              <span className="hidden md:inline font-sans font-bold text-amber-900 text-xs">
+                STREAK
+              </span>
+              <span className="hidden lg:inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-amber-200/80 text-[10px] font-sans font-bold text-amber-900 uppercase tracking-wider">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 ACTIVE
               </span>

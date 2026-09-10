@@ -53,10 +53,8 @@ export default function PhaseLaunch({ onResetToWelcome, onOpenVault, onOpenStrea
     const updated = recordDailyCompletion();
     setStreak(updated);
 
-    // If first time completing today, trigger full-screen celebration modal
-    if (updated.wasFirstCompletionToday) {
-      setIsCelebrationOpen(true);
-    }
+    // Always trigger full-screen celebration modal when landing on Launchpad
+    setIsCelebrationOpen(true);
   }, []);
 
   const anchor = briefing?.optimismAnchor || {

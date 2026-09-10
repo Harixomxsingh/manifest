@@ -67,11 +67,8 @@ export default function PhaseLaunch() {
       const updated = await recordDailyCompletion();
       setStreak(updated);
 
-      if (updated.wasFirstCompletionToday) {
-        setIsCelebrationOpen(true);
-      } else {
-        triggerPartyCelebration();
-      }
+      // Always trigger full-screen celebration modal when landing on Launchpad
+      setIsCelebrationOpen(true);
     };
     handleCompletion();
   }, []);

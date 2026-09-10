@@ -95,9 +95,8 @@ export default function Header() {
               <Flame size={13} color="#D97706" />
             </View>
             <Text style={styles.streakBadgeText}>
-              {streakData.currentStreak}D STREAK
+              {streakData.currentStreak}
             </Text>
-            <View style={styles.activeDot} />
           </TouchableOpacity>
 
           {/* Action Icons (Clean & Spacious for Mobile) */}
