@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   ArrowRight,
   Sun,
@@ -19,6 +19,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { getWmoInfo } from '../../services/weatherService';
 
 /**
  * Determine weather category from code or label
@@ -63,6 +64,28 @@ export function categorizeWeather(code, label = '') {
 }
 
 /**
+ * Convert hour string like "6 AM", "12 PM", "1 PM", "13:00" to 24-hour integer
+ */
+export function parseHourStringTo24(hourStr) {
+  if (typeof hourStr === 'number') return hourStr;
+  if (!hourStr) return 12;
+  const str = String(hourStr).trim();
+
+  // Handle "13:00" or "07:00"
+  if (str.includes(':')) {
+    const parts = str.split(':');
+    return parseInt(parts[0], 10) || 12;
+  }
+
+  // Handle "1 PM" or "6 AM"
+  const upper = str.toUpperCase();
+  const num = parseInt(upper.replace(/[^0-9]/g, ''), 10) || 12;
+  if (upper.includes('PM') && num < 12) return num + 12;
+  if (upper.includes('AM') && num === 12) return 0;
+  return num;
+}
+
+/**
  * Get matching icon component for an hourly item
  */
 export function getHourlyIcon(code, rainProb = 0) {
@@ -92,7 +115,7 @@ export function getHourlyIcon(code, rainProb = 0) {
 /**
  * Apple/Samsung Weather Style Hero Animated Centerpiece
  */
-function WeatherHeroScene({ category, label, high, low, unit }) {
+function WeatherHeroScene({ category, label, temp, low, unit, hourLabel, isCurrentHour }) {
   return (
     <div className="flex flex-col items-center justify-center my-3 relative select-none">
       {/* Dynamic Animated Weather Centerpiece */}
@@ -261,14 +284,27 @@ function WeatherHeroScene({ category, label, high, low, unit }) {
 
       {/* Hero Temperature Readout */}
       <div className="text-4xl sm:text-5xl font-bold text-stone-900 tracking-tight leading-none mb-1">
-        {high}{unit}
+        {temp}{unit}
       </div>
 
-      {/* Condition Label & Low */}
+      {/* Condition Label & Selected Hour Indicator */}
       <div className="text-xs sm:text-sm font-semibold text-stone-600 flex items-center gap-1.5 mt-0.5">
         <span>{label}</span>
         <span className="text-stone-300">•</span>
-        <span className="font-mono text-stone-500 text-xs">Low {low}{unit}</span>
+        {isCurrentHour ? (
+          <span className="inline-flex items-center gap-1 font-mono font-bold text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded-full text-[11px]">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-600 animate-ping" />
+            Now
+          </span>
+        ) : (
+          <span className="font-mono text-stone-500 text-xs">{hourLabel}</span>
+        )}
+        {low != null && (
+          <>
+            <span className="text-stone-300">•</span>
+            <span className="font-mono text-stone-500 text-xs">Low {low}{unit}</span>
+          </>
+        )}
       </div>
     </div>
   );
@@ -343,15 +379,14 @@ export default function PhaseClimate({ onAdvance }) {
   const locationName = weatherData?.locationName || activeLocation?.name || 'San Francisco, USA';
   const maxRainProb = weatherData?.maxRainProb ?? 0;
 
-  // Active Category
-  const category = useMemo(() => {
+  // Global default category
+  const dominantCategory = useMemo(() => {
     return categorizeWeather(weatherData?.weatherCode, label);
   }, [weatherData?.weatherCode, label]);
 
   // Hourly Strip Builder (12-Hour daytime entries or fallback)
   const hourlyStrip = useMemo(() => {
     if (weatherData?.daytimeEntries && weatherData.daytimeEntries.length > 0) {
-      // Pick 5 distributed daytime slots for clean fit
       const entries = weatherData.daytimeEntries;
       if (entries.length <= 5) return entries;
       const step = (entries.length - 1) / 4;
@@ -361,26 +396,63 @@ export default function PhaseClimate({ onAdvance }) {
     // Default 5-slot strip
     const isCold = high < 18;
     return [
-      { hour: '07:00', temp: low, code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 0, rainProb: category === 'rain' ? 80 : 5 },
-      { hour: '10:00', temp: Math.round((high + low) / 2), code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 1, rainProb: category === 'rain' ? 90 : 10 },
-      { hour: '13:00', temp: high, code: category === 'rain' ? 65 : category === 'drizzle' ? 53 : (isCold ? 2 : 0), rainProb: category === 'rain' ? 98 : 15 },
-      { hour: '16:00', temp: high - 2, code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 2, rainProb: category === 'rain' ? 75 : 10 },
-      { hour: '19:00', temp: low + 2, code: category === 'rain' ? 51 : 0, rainProb: category === 'rain' ? 40 : 5 }
+      { hour: '6 AM', hour24: 6, temp: low, code: dominantCategory === 'rain' ? 61 : dominantCategory === 'drizzle' ? 51 : 0, rainProb: dominantCategory === 'rain' ? 80 : 5 },
+      { hour: '9 AM', hour24: 9, temp: Math.round((high + low) / 2), code: dominantCategory === 'rain' ? 61 : dominantCategory === 'drizzle' ? 51 : 1, rainProb: dominantCategory === 'rain' ? 90 : 10 },
+      { hour: '12 PM', hour24: 12, temp: high, code: dominantCategory === 'rain' ? 65 : dominantCategory === 'drizzle' ? 53 : (isCold ? 2 : 0), rainProb: dominantCategory === 'rain' ? 98 : 15 },
+      { hour: '3 PM', hour24: 15, temp: high - 2, code: dominantCategory === 'rain' ? 61 : dominantCategory === 'drizzle' ? 51 : 2, rainProb: dominantCategory === 'rain' ? 75 : 10 },
+      { hour: '6 PM', hour24: 18, temp: low + 2, code: dominantCategory === 'rain' ? 51 : 0, rainProb: dominantCategory === 'rain' ? 40 : 5 }
     ];
-  }, [weatherData, high, low, category]);
+  }, [weatherData, high, low, dominantCategory]);
+
+  // Automatically find the index closest to current local hour!
+  const currentHourIndex = useMemo(() => {
+    if (!hourlyStrip || hourlyStrip.length === 0) return 0;
+    const nowH = new Date().getHours();
+    let bestIdx = 0;
+    let minDiff = 999;
+
+    hourlyStrip.forEach((item, idx) => {
+      const itemH = item.hour24 ?? parseHourStringTo24(item.hour);
+      const diff = Math.abs(itemH - nowH);
+      if (diff < minDiff) {
+        minDiff = diff;
+        bestIdx = idx;
+      }
+    });
+
+    return bestIdx;
+  }, [hourlyStrip]);
+
+  // User-selected hourly slot (defaults automatically to the current local hour!)
+  const [selectedHourIndex, setSelectedHourIndex] = useState(currentHourIndex);
+
+  // Sync selected index whenever currentHourIndex changes (e.g., on mount or refresh)
+  useEffect(() => {
+    setSelectedHourIndex(currentHourIndex);
+  }, [currentHourIndex]);
+
+  // Selected item forecast details
+  const activeHourlyItem = hourlyStrip[selectedHourIndex] || hourlyStrip[0] || {};
+  const isCurrentHour = selectedHourIndex === currentHourIndex;
+
+  const displayTemp = activeHourlyItem.temp ?? high;
+  const displayCode = activeHourlyItem.code ?? weatherData?.weatherCode ?? 0;
+  const displayLabel = activeHourlyItem.label || getWmoInfo(displayCode).label || label;
+  const activeCategory = categorizeWeather(displayCode, displayLabel);
+  const displayRainProb = activeHourlyItem.rainProb ?? maxRainProb;
 
   // Minimal, Punchy, Super Actionable Tactics (Executive 1-liners)
   const minimalTactics = useMemo(() => {
-    const isHot = high >= 28;
-    const isCold = high <= 14;
-    const hasRain = category === 'rain' || category === 'drizzle' || category === 'heavy_rain' || category === 'thunderstorm' || maxRainProb > 40;
+    const isHot = displayTemp >= 28;
+    const isCold = displayTemp <= 14;
+    const hasRain = activeCategory === 'rain' || activeCategory === 'drizzle' || activeCategory === 'heavy_rain' || activeCategory === 'thunderstorm' || displayRainProb > 40;
 
     // 1. Apparel Tag
     let apparelTitle = 'Breathable Cotton';
     let apparelSub = 'Optimal mild layers';
     if (isHot) {
       apparelTitle = 'Lightweight Linen';
-      apparelSub = `Hot & Humid (${high}${unit})`;
+      apparelSub = `Hot & Humid (${displayTemp}${unit})`;
     } else if (isCold) {
       apparelTitle = 'Thermal Layer';
       apparelSub = `Chilly ${low}${unit} morning`;
@@ -394,13 +466,13 @@ export default function PhaseClimate({ onAdvance }) {
     let tacticSub = 'Dry window before 11 AM';
     let TacticIcon = Footprints;
 
-    if (category === 'thunderstorm') {
+    if (activeCategory === 'thunderstorm') {
       tacticTitle = 'Transition Indoors';
       tacticSub = 'Active thunderstorm risk';
       TacticIcon = CloudLightning;
     } else if (hasRain) {
       tacticTitle = 'Carry Umbrella';
-      tacticSub = maxRainProb > 0 ? `${maxRainProb}% Rain Risk Peak` : 'Precipitation expected';
+      tacticSub = displayRainProb > 0 ? `${displayRainProb}% Rain Risk Peak` : 'Precipitation expected';
       TacticIcon = Umbrella;
     } else if (isHot) {
       tacticTitle = 'Early Walk Window';
@@ -415,7 +487,7 @@ export default function PhaseClimate({ onAdvance }) {
       tacticSub,
       TacticIcon
     };
-  }, [high, low, unit, category, maxRainProb]);
+  }, [displayTemp, low, unit, activeCategory, displayRainProb]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -445,7 +517,7 @@ export default function PhaseClimate({ onAdvance }) {
       {/* Main Dynamic Climate Card (Living Weather Aura) */}
       <div className="w-full bg-white border border-stone-200/80 rounded-2xl sm:rounded-3xl p-5 sm:p-7 mb-6 shadow-sm relative overflow-hidden">
         {/* Apple/Samsung Weather Style Ambient Backdrop */}
-        <AmbientCardAtmosphere category={category} />
+        <AmbientCardAtmosphere category={activeCategory} />
 
         {/* Location & Refresh Header */}
         <div className="flex justify-between items-center mb-2 relative z-10">
@@ -472,31 +544,49 @@ export default function PhaseClimate({ onAdvance }) {
         {/* Dynamic Hero Animated Weather Scene & Temp */}
         <div className="relative z-10">
           <WeatherHeroScene
-            category={category}
-            label={label}
-            high={high}
+            category={activeCategory}
+            label={displayLabel}
+            temp={displayTemp}
             low={low}
             unit={unit}
+            hourLabel={activeHourlyItem.hour}
+            isCurrentHour={isCurrentHour}
           />
         </div>
 
-        {/* Dynamic Hourly Forecast Strip (Icons matched per hour) */}
+        {/* Dynamic Interactive Hourly Forecast Strip */}
         <div className="relative z-10 flex gap-2 overflow-x-auto py-3 no-scrollbar border-y border-stone-100 my-4 justify-between">
           {hourlyStrip.map((item, idx) => {
             const HourIcon = getHourlyIcon(item.code, item.rainProb);
             const hourCat = categorizeWeather(item.code);
             const isRainy = hourCat === 'rain' || hourCat === 'drizzle' || hourCat === 'heavy_rain' || hourCat === 'thunderstorm';
+            const isSlotActive = idx === selectedHourIndex;
+            const isSlotCurrent = idx === currentHourIndex;
 
             return (
-              <div
+              <button
                 key={idx}
-                className={`flex flex-col items-center justify-center rounded-2xl px-2.5 py-2 min-w-[56px] flex-1 gap-1.5 border transition-all ${
-                  idx === 0
-                    ? 'bg-amber-50/80 border-amber-300/80 shadow-2xs'
-                    : 'bg-stone-50/80 hover:bg-stone-100/70 border-stone-100'
+                type="button"
+                onClick={() => setSelectedHourIndex(idx)}
+                className={`flex flex-col items-center justify-center rounded-2xl px-2.5 py-2 min-w-[56px] flex-1 gap-1.5 border transition-all cursor-pointer relative ${
+                  isSlotActive
+                    ? 'bg-amber-50 border-2 border-amber-400 shadow-md ring-2 ring-amber-400/20 scale-102'
+                    : 'bg-stone-50/80 hover:bg-stone-100/70 border-stone-200/80'
                 }`}
+                title={`View ${item.hour} forecast`}
               >
-                <span className="text-[10px] font-mono font-medium text-stone-400">
+                {/* Now Badge if Current Hour */}
+                {isSlotCurrent && (
+                  <span className="absolute -top-2 px-1.5 py-0.2 bg-amber-800 text-white rounded-full text-[8px] font-mono font-extrabold uppercase tracking-tight shadow-xs">
+                    Now
+                  </span>
+                )}
+
+                <span
+                  className={`text-[10px] font-mono ${
+                    isSlotActive ? 'font-bold text-amber-950' : 'text-stone-400'
+                  }`}
+                >
                   {item.hour}
                 </span>
 
@@ -506,14 +596,20 @@ export default function PhaseClimate({ onAdvance }) {
                 </div>
 
                 <div className="flex flex-col items-center">
-                  <span className="text-xs font-bold text-stone-800">{item.temp}°</span>
+                  <span
+                    className={`text-xs ${
+                      isSlotActive ? 'font-extrabold text-stone-900' : 'font-bold text-stone-800'
+                    }`}
+                  >
+                    {item.temp}°
+                  </span>
                   {item.rainProb > 25 && (
                     <span className="text-[9px] font-mono font-bold text-cyan-700 mt-0.5">
                       {item.rainProb}%
                     </span>
                   )}
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

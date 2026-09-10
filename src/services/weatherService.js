@@ -254,19 +254,22 @@ export async function fetchWeatherForecast(lat = 37.7749, lon = -122.4194, isFah
     const codes = hourly.weather_code || [];
     const uvIndices = hourly.uv_index || [];
 
-    // Filter for 06:00 to 18:00 (12-hour morning & daytime window)
+    // Filter for 06:00 to 22:00 (active morning, afternoon & evening window)
     const daytimeEntries = [];
     for (let i = 0; i < times.length; i++) {
       const date = new Date(times[i]);
       const hour = date.getHours();
-      if (hour >= 6 && hour <= 18) {
+      if (hour >= 6 && hour <= 22) {
+        const code = codes[i] ?? 0;
         daytimeEntries.push({
           time: times[i],
           hour: `${hour % 12 || 12} ${hour >= 12 ? 'PM' : 'AM'}`,
+          hour24: hour,
           temp: Math.round(temps[i]),
           feelsLike: Math.round(feelsLike[i]),
           rainProb: rainProbs[i] ?? 0,
-          code: codes[i] ?? 0,
+          code,
+          label: getWmoInfo(code).label,
           uv: uvIndices[i] ?? 0
         });
       }

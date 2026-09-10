@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import {
   ArrowRight,
@@ -30,6 +30,20 @@ function categorizeWeather(code, label = '') {
   if (code === 3 || lbl.includes('overcast')) return 'overcast';
   if (code === 2 || lbl.includes('partly')) return 'partly_cloudy';
   return 'clear';
+}
+
+function parseHourStringTo24(hourStr) {
+  if (typeof hourStr === 'number') return hourStr;
+  if (!hourStr) return 12;
+  const str = String(hourStr).trim();
+  if (str.includes(':')) {
+    return parseInt(str.split(':')[0], 10) || 12;
+  }
+  const upper = str.toUpperCase();
+  const num = parseInt(upper.replace(/[^0-9]/g, ''), 10) || 12;
+  if (upper.includes('PM') && num < 12) return num + 12;
+  if (upper.includes('AM') && num === 12) return 0;
+  return num;
 }
 
 function getConditionIcon(cat, size = 32, color = colors.primary) {
@@ -73,7 +87,7 @@ export default function PhaseClimate() {
   const locationName = weatherData?.locationName || activeLocation?.name || 'San Francisco, USA';
   const maxRainProb = weatherData?.maxRainProb ?? 0;
 
-  const category = useMemo(() => {
+  const dominantCategory = useMemo(() => {
     return categorizeWeather(weatherData?.weatherCode, label);
   }, [weatherData?.weatherCode, label]);
 
@@ -85,24 +99,55 @@ export default function PhaseClimate() {
       return [0, 1, 2, 3, 4].map((i) => entries[Math.round(i * step)]);
     }
     return [
-      { hour: '07:00', temp: low, code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 0, rainProb: category === 'rain' ? 80 : 5 },
-      { hour: '10:00', temp: Math.round((high + low) / 2), code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 1, rainProb: category === 'rain' ? 90 : 10 },
-      { hour: '13:00', temp: high, code: category === 'rain' ? 65 : category === 'drizzle' ? 53 : 0, rainProb: category === 'rain' ? 98 : 15 },
-      { hour: '16:00', temp: high - 2, code: category === 'rain' ? 61 : category === 'drizzle' ? 51 : 2, rainProb: category === 'rain' ? 75 : 10 },
-      { hour: '19:00', temp: low + 2, code: category === 'rain' ? 51 : 0, rainProb: category === 'rain' ? 40 : 5 }
+      { hour: '6 AM', hour24: 6, temp: low, code: dominantCategory === 'rain' ? 61 : dominantCategory === 'drizzle' ? 51 : 0, rainProb: dominantCategory === 'rain' ? 80 : 5 },
+      { hour: '9 AM', hour24: 9, temp: Math.round((high + low) / 2), code: dominantCategory === 'rain' ? 61 : dominantCategory === 'drizzle' ? 51 : 1, rainProb: dominantCategory === 'rain' ? 90 : 10 },
+      { hour: '12 PM', hour24: 12, temp: high, code: dominantCategory === 'rain' ? 65 : dominantCategory === 'drizzle' ? 53 : 0, rainProb: dominantCategory === 'rain' ? 98 : 15 },
+      { hour: '3 PM', hour24: 15, temp: high - 2, code: dominantCategory === 'rain' ? 61 : dominantCategory === 'drizzle' ? 51 : 2, rainProb: dominantCategory === 'rain' ? 75 : 10 },
+      { hour: '6 PM', hour24: 18, temp: low + 2, code: dominantCategory === 'rain' ? 51 : 0, rainProb: dominantCategory === 'rain' ? 40 : 5 }
     ];
-  }, [weatherData, high, low, category]);
+  }, [weatherData, high, low, dominantCategory]);
+
+  const currentHourIndex = useMemo(() => {
+    if (!hourlyStrip || hourlyStrip.length === 0) return 0;
+    const nowH = new Date().getHours();
+    let bestIdx = 0;
+    let minDiff = 999;
+    hourlyStrip.forEach((item, idx) => {
+      const itemH = item.hour24 ?? parseHourStringTo24(item.hour);
+      const diff = Math.abs(itemH - nowH);
+      if (diff < minDiff) {
+        minDiff = diff;
+        bestIdx = idx;
+      }
+    });
+    return bestIdx;
+  }, [hourlyStrip]);
+
+  const [selectedHourIndex, setSelectedHourIndex] = useState(currentHourIndex);
+
+  useEffect(() => {
+    setSelectedHourIndex(currentHourIndex);
+  }, [currentHourIndex]);
+
+  const activeHourlyItem = hourlyStrip[selectedHourIndex] || hourlyStrip[0] || {};
+  const isCurrentHour = selectedHourIndex === currentHourIndex;
+
+  const displayTemp = activeHourlyItem.temp ?? high;
+  const displayCode = activeHourlyItem.code ?? weatherData?.weatherCode ?? 0;
+  const displayLabel = activeHourlyItem.label || label;
+  const activeCategory = categorizeWeather(displayCode, displayLabel);
+  const displayRainProb = activeHourlyItem.rainProb ?? maxRainProb;
 
   const minimalTactics = useMemo(() => {
-    const isHot = high >= 28;
-    const isCold = high <= 14;
-    const hasRain = category === 'rain' || category === 'drizzle' || category === 'heavy_rain' || category === 'thunderstorm' || maxRainProb > 40;
+    const isHot = displayTemp >= 28;
+    const isCold = displayTemp <= 14;
+    const hasRain = activeCategory === 'rain' || activeCategory === 'drizzle' || activeCategory === 'heavy_rain' || activeCategory === 'thunderstorm' || displayRainProb > 40;
 
     let apparelTitle = 'Breathable Cotton';
     let apparelSub = 'Optimal mild layers';
     if (isHot) {
       apparelTitle = 'Lightweight Linen';
-      apparelSub = `Hot & Humid (${high}${unit})`;
+      apparelSub = `Hot & Humid (${displayTemp}${unit})`;
     } else if (isCold) {
       apparelTitle = 'Thermal Layer';
       apparelSub = `Chilly ${low}${unit} morning`;
@@ -114,19 +159,19 @@ export default function PhaseClimate() {
     let tacticTitle = 'Optimal Morning Walk';
     let tacticSub = 'Dry window before 11 AM';
 
-    if (category === 'thunderstorm') {
+    if (activeCategory === 'thunderstorm') {
       tacticTitle = 'Transition Indoors';
       tacticSub = 'Active thunderstorm risk';
     } else if (hasRain) {
       tacticTitle = 'Carry Umbrella';
-      tacticSub = maxRainProb > 0 ? `${maxRainProb}% Rain Risk Peak` : 'Precipitation expected';
+      tacticSub = displayRainProb > 0 ? `${displayRainProb}% Rain Risk Peak` : 'Precipitation expected';
     } else if (isHot) {
       tacticTitle = 'Early Walk Window';
       tacticSub = 'Walk before 10 AM (UV Peak)';
     }
 
     return { apparelTitle, apparelSub, tacticTitle, tacticSub };
-  }, [high, low, unit, category, maxRainProb]);
+  }, [displayTemp, low, unit, activeCategory, displayRainProb]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -174,10 +219,20 @@ export default function PhaseClimate() {
         {/* Dynamic Condition Icon & Temperature */}
         <View style={styles.tempCenter}>
           <View style={styles.weatherIconCircle}>
-            {getConditionIcon(category, 36, colors.primary)}
+            {getConditionIcon(activeCategory, 36, colors.primary)}
           </View>
-          <Text style={styles.tempValue}>{high}{unit}</Text>
-          <Text style={styles.conditionText}>{label} • Low {low}{unit}</Text>
+          <Text style={styles.tempValue}>{displayTemp}{unit}</Text>
+          <View style={styles.conditionRow}>
+            <Text style={styles.conditionText}>{displayLabel}</Text>
+            {isCurrentHour ? (
+              <View style={styles.nowBadge}>
+                <Text style={styles.nowBadgeText}>NOW</Text>
+              </View>
+            ) : (
+              <Text style={styles.hourBadgeText}>• {activeHourlyItem.hour}</Text>
+            )}
+            <Text style={styles.conditionText}>• Low {low}{unit}</Text>
+          </View>
         </View>
 
         {/* Hourly Forecast Strip */}
@@ -188,15 +243,32 @@ export default function PhaseClimate() {
         >
           {hourlyStrip.map((item, idx) => {
             const hourCat = categorizeWeather(item.code);
+            const isSlotActive = idx === selectedHourIndex;
+            const isSlotCurrent = idx === currentHourIndex;
+
             return (
-              <View key={idx} style={[styles.hourlyItem, idx === 0 && styles.hourlyItemActive]}>
-                <Text style={styles.hourlyTime}>{item.hour}</Text>
-                {getConditionIcon(hourCat, 15, colors.primary)}
-                <Text style={styles.hourlyTemp}>{item.temp}°</Text>
+              <TouchableOpacity
+                key={idx}
+                onPress={() => setSelectedHourIndex(idx)}
+                activeOpacity={0.7}
+                style={[
+                  styles.hourlyItem,
+                  isSlotActive && styles.hourlyItemActive,
+                  isSlotCurrent && !isSlotActive && styles.hourlyItemCurrent
+                ]}
+              >
+                {isSlotCurrent && (
+                  <View style={styles.miniNowBadge}>
+                    <Text style={styles.miniNowBadgeText}>NOW</Text>
+                  </View>
+                )}
+                <Text style={[styles.hourlyTime, isSlotActive && styles.hourlyTimeActive]}>{item.hour}</Text>
+                {getConditionIcon(hourCat, 15, isSlotActive ? colors.primaryDark : colors.primary)}
+                <Text style={[styles.hourlyTemp, isSlotActive && styles.hourlyTempActive]}>{item.temp}°</Text>
                 {item.rainProb > 25 && (
                   <Text style={styles.rainProbText}>{item.rainProb}%</Text>
                 )}
-              </View>
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
@@ -216,7 +288,7 @@ export default function PhaseClimate() {
 
           <View style={styles.tacticItem}>
             <View style={styles.tacticIconBox}>
-              {category === 'rain' || category === 'drizzle' || category === 'heavy_rain' ? (
+              {activeCategory === 'rain' || activeCategory === 'drizzle' || activeCategory === 'heavy_rain' ? (
                 <Umbrella size={14} color={colors.primaryDark} />
               ) : (
                 <Footprints size={14} color={colors.primaryDark} />
@@ -343,11 +415,33 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     letterSpacing: -0.5
   },
+  conditionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: 2
+  },
   conditionText: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.textMuted,
-    marginTop: 2
+    color: colors.textMuted
+  },
+  nowBadge: {
+    backgroundColor: colors.primaryDark,
+    paddingHorizontal: 6,
+    paddingVertical: 1.5,
+    borderRadius: 10
+  },
+  nowBadgeText: {
+    fontSize: 8,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+  },
+  hourBadgeText: {
+    fontSize: 11,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    color: colors.textDim
   },
   hourlyList: {
     flexDirection: 'row',
@@ -361,22 +455,48 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     gap: 4,
-    minWidth: 54
+    minWidth: 54,
+    position: 'relative'
   },
   hourlyItemActive: {
     backgroundColor: colors.bgHighlight,
+    borderWidth: 1.5,
+    borderColor: colors.primary
+  },
+  hourlyItemCurrent: {
     borderWidth: 1,
     borderColor: colors.borderHighlight
+  },
+  miniNowBadge: {
+    position: 'absolute',
+    top: -6,
+    backgroundColor: colors.primaryDark,
+    paddingHorizontal: 4,
+    paddingVertical: 1,
+    borderRadius: 6
+  },
+  miniNowBadgeText: {
+    fontSize: 7,
+    fontWeight: '800',
+    color: '#FFFFFF'
   },
   hourlyTime: {
     fontSize: 9,
     color: colors.textDim,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
   },
+  hourlyTimeActive: {
+    color: colors.primaryDark,
+    fontWeight: '700'
+  },
   hourlyTemp: {
     fontSize: 11,
     fontWeight: '700',
     color: colors.textPrimary
+  },
+  hourlyTempActive: {
+    color: colors.primaryDark,
+    fontWeight: '800'
   },
   rainProbText: {
     fontSize: 8,
