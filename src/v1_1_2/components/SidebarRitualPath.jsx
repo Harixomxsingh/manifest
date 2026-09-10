@@ -145,9 +145,17 @@ export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVa
         </div>
       </div>
 
-      <div className="pt-4 border-t border-stone-200/60 text-center">
-        <p className="text-[11px] text-stone-400 font-mono">
-          Manifest • v1.2.0 PWA
+      <div className="pt-3 border-t border-stone-200/60 text-center space-y-1">
+        <p className="text-[11px] text-stone-500 font-sans">
+          made with ❤️ by{' '}
+          <a
+            href="https://harixomxsingh.github.io/portfolio/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-amber-800 hover:text-amber-950 font-bold hover:underline"
+          >
+            hari
+          </a>
         </p>
       </div>
     </aside>

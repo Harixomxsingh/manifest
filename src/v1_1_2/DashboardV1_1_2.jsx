@@ -102,6 +102,21 @@ export default function DashboardV1_1_2() {
                 onOpenStreak={() => setIsMomentumHeatmapOpen(true)}
               />
             )}
+
+            {/* Subtle Mobile Footer */}
+            <div className="mt-8 mb-2 text-center lg:hidden">
+              <p className="text-[11px] text-stone-400 font-sans">
+                made with ❤️ by{' '}
+                <a
+                  href="https://harixomxsingh.github.io/portfolio/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-amber-800 hover:text-amber-950 font-bold hover:underline"
+                >
+                  hari
+                </a>
+              </p>
+            </div>
           </div>
         </main>
 
