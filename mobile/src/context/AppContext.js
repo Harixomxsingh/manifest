@@ -6,6 +6,7 @@ import { getTodayArticle } from '../services/jamesClearService';
 import { getTodayIdentityAnchor } from '../services/identityService';
 import { getTodayQuote, getRandomQuote } from '../services/quoteService';
 import { checkForAppUpdatesSilently } from '../services/updateService';
+import { initStreakService } from '../services/streakService';
 
 const AppContext = createContext();
 
@@ -31,7 +32,7 @@ export const AppProvider = ({ children }) => {
 
   const phaseOrder = ['welcome', 'identity', 'reading', 'voice', 'climate', 'launch'];
 
-  // Initial load: GPS detection + weather fetch + daily content sync + silent OTA update check
+  // Initial load: GPS detection + weather fetch + daily content sync + silent OTA update check + streak init
   useEffect(() => {
     const today = getTodayStr();
     setTodayQuote(getTodayQuote(today));
@@ -42,7 +43,10 @@ export const AppProvider = ({ children }) => {
       // 1. Silent Background OTA Update Check (zero impact on startup speed)
       checkForAppUpdatesSilently();
 
-      // 2. Fetch location & weather
+      // 2. Initialize streak service from AsyncStorage
+      await initStreakService();
+
+      // 3. Fetch location & weather
       const loc = await detectGpsCoordinates();
       setActiveLocation(loc);
       const w = await fetchOpenMeteoWeather(loc.lat, loc.lon, loc.name);
