@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform } from 'react-native';
-import { Compass, CheckCheck, Shield, Mic, Volume2, VolumeX, RotateCcw, BookOpen } from 'lucide-react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform, Alert, Clipboard } from 'react-native';
+import { Flame, Shield, Target, Zap, BookOpen, Sun, Volume2, VolumeX, RotateCcw, Clock, Copy, Check } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
 import ManifestSunLogo from '../components/ManifestSunLogo';
@@ -19,13 +19,41 @@ export default function PhaseLaunch() {
   } = useApp();
 
   const [isVaultOpen, setIsVaultOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     triggerPartyCelebration();
   }, []);
 
   const anchor = briefing?.optimismAnchor || {
-    identityReminder: 'I view every challenge today through an opportunistic and constructive lens.'
+    identityReminder: 'I bring pride and world-class craftsmanship to every line of work today.'
+  };
+
+  const mainGoal = voiceJournal?.synthesis?.manifestationAnchor ||
+    voiceJournal?.text ||
+    "Focus on knocking down your single highest-impact priority today.";
+
+  const nextStep = voiceJournal?.synthesis?.kineticAction ||
+    "Take 5 minutes to clear your workspace and begin deep work.";
+
+  const weatherLabel = weatherData ? `${weatherData.highTemp}°${weatherData.unit || 'C'} • ${weatherData.weatherLabel}` : 'Optimal Day';
+
+  const handleCopySummary = () => {
+    const today = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    const formatted = `☀️ MORNING ACTION PLAN — ${today}
+💡 Mindset: "${anchor.identityReminder}"
+⚡ Main Focus: "${mainGoal}"
+🎯 Next Step: ${nextStep}
+📖 Reading: ${todayArticle?.title || 'Atomic Habits'}
+🌤️ Weather: ${weatherLabel}
+
+Ready to make today count! 🚀`;
+
+    if (Clipboard && Clipboard.setString) {
+      Clipboard.setString(formatted);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -34,60 +62,95 @@ export default function PhaseLaunch() {
       <View style={styles.progressHeader}>
         <View style={styles.progressTextRow}>
           <Text style={styles.progressLabel}>PHASE 05 OF 05</Text>
-          <Text style={styles.progressPhaseName}>Launchpad Ready</Text>
+          <Text style={styles.progressPhaseName}>Ready to Go! 🚀</Text>
         </View>
         <View style={styles.progressBarTrack}>
           <View style={[styles.progressBarFill, { width: '100%' }]} />
         </View>
       </View>
 
-      {/* Triumphant Glowing Emblem */}
+      {/* Streak Capsule */}
+      <View style={styles.streakCapsule}>
+        <Flame size={14} color="#D97706" />
+        <Text style={styles.streakText}>4-DAY STREAK</Text>
+        <Text style={styles.streakSubText}>• Keep the momentum going!</Text>
+      </View>
+
+      {/* Sun Emblem */}
       <View style={styles.logoWrapper}>
         <ManifestSunLogo size={64} interactive={true} />
       </View>
 
       {/* Title & Subtitle */}
-      <Text style={styles.title}>Ritual Complete</Text>
+      <Text style={styles.title}>You're All Set!</Text>
       <Text style={styles.subtitle}>
-        Anchored in identity, nourished in mindset, and crystalline in intention. Conquer your day.
+        Your morning mind is clear, focused, and ready. Let's make today count.
       </Text>
 
-      {/* Unified Summary Slate */}
+      {/* Today's Action Plan Card */}
       <View style={styles.card}>
-        {/* 1. Identity Anchor */}
+        <View style={styles.planHeader}>
+          <Text style={styles.planHeaderTitle}>TODAY'S ACTION PLAN</Text>
+          <TouchableOpacity onPress={handleCopySummary} style={styles.copyBtn} activeOpacity={0.7}>
+            {copied ? (
+              <>
+                <Check size={12} color="#059669" />
+                <Text style={styles.copyBtnTextActive}>Copied!</Text>
+              </>
+            ) : (
+              <>
+                <Copy size={12} color={colors.primaryDark} />
+                <Text style={styles.copyBtnText}>Copy Plan</Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* 1. Mindset */}
         <View style={styles.anchorRow}>
           <Shield size={14} color={colors.primaryDark} style={{ marginTop: 2 }} />
           <View style={styles.anchorTextCol}>
-            <Text style={styles.summaryLabel}>IDENTITY ANCHOR</Text>
+            <Text style={styles.summaryLabel}>TODAY'S MINDSET</Text>
             <Text style={styles.anchorQuote}>"{anchor.identityReminder}"</Text>
           </View>
         </View>
 
-        {/* 2. Voice Anchor (if spoken) */}
-        {voiceJournal?.synthesis?.manifestationAnchor && (
-          <View style={[styles.anchorRow, styles.voiceAnchorRow]}>
-            <Mic size={14} color="#B45309" style={{ marginTop: 2 }} />
-            <View style={styles.anchorTextCol}>
-              <Text style={[styles.summaryLabel, { color: '#B45309' }]}>SPOKEN VOICE ANCHOR</Text>
-              <Text style={[styles.anchorQuote, { color: '#92400E' }]}>
-                "{voiceJournal.synthesis.manifestationAnchor}"
-              </Text>
-            </View>
+        {/* 2. Main Focus */}
+        <View style={styles.goalRow}>
+          <Target size={14} color={colors.primaryDark} style={{ marginTop: 2 }} />
+          <View style={styles.anchorTextCol}>
+            <Text style={[styles.summaryLabel, { color: colors.textDim }]}>MAIN FOCUS & GOAL</Text>
+            <Text style={styles.goalText}>"{mainGoal}"</Text>
+            {nextStep && (
+              <View style={styles.nextStepRow}>
+                <Zap size={11} color="#D97706" />
+                <Text style={styles.nextStepText} numberOfLines={2}>
+                  Next: {nextStep}
+                </Text>
+              </View>
+            )}
           </View>
-        )}
+        </View>
 
-        {/* 3. Mindset & Atmosphere 2-Col Strip */}
+        {/* 3. Reading & Atmosphere Strip */}
         <View style={styles.metaRow}>
           <View style={styles.metaItem}>
-            <Text style={styles.metaLabel}>MINDSET</Text>
+            <View style={styles.metaHeaderRow}>
+              <BookOpen size={11} color={colors.primaryDark} />
+              <Text style={styles.metaLabel}>TODAY'S READ</Text>
+            </View>
             <Text style={styles.metaValue} numberOfLines={1}>
               {todayArticle?.title || 'Atomic Habits'}
             </Text>
           </View>
+
           <View style={styles.metaItem}>
-            <Text style={styles.metaLabel}>ATMOSPHERE</Text>
+            <View style={styles.metaHeaderRow}>
+              <Sun size={11} color="#D97706" />
+              <Text style={styles.metaLabel}>ATMOSPHERE</Text>
+            </View>
             <Text style={styles.metaValue} numberOfLines={1}>
-              {weatherData ? `${weatherData.highTemp}°C • ${weatherData.weatherLabel}` : 'Optimal Day'}
+              {weatherLabel}
             </Text>
           </View>
         </View>
@@ -95,7 +158,7 @@ export default function PhaseLaunch() {
 
       {/* Action Buttons */}
       <View style={styles.actionRow}>
-        {/* Audio Dispatch Button */}
+        {/* Audio Briefing Button */}
         <TouchableOpacity
           onPress={toggleSpeechSummary}
           activeOpacity={0.85}
@@ -107,23 +170,21 @@ export default function PhaseLaunch() {
             <Volume2 size={15} color={colors.primaryDark} />
           )}
           <Text style={[styles.audioBtnText, isSpeechPlaying && styles.audioBtnTextActive]}>
-            {isSpeechPlaying ? 'Mute Dispatch' : 'Listen to Audio Summary'}
+            {isSpeechPlaying ? 'Stop Audio Briefing' : 'Listen to Audio Summary'}
           </Text>
         </TouchableOpacity>
 
         {/* Secondary Actions Row */}
         <View style={styles.secondaryActionsRow}>
-          {/* Browse Vault */}
           <TouchableOpacity
             onPress={() => setIsVaultOpen(true)}
             activeOpacity={0.8}
             style={styles.vaultBtn}
           >
             <BookOpen size={13} color={colors.primaryDark} />
-            <Text style={styles.vaultBtnText}>Browse Journal Vault</Text>
+            <Text style={styles.vaultBtnText}>Past Journal Vault</Text>
           </TouchableOpacity>
 
-          {/* Restart Ritual Button */}
           <TouchableOpacity
             onPress={resetRitual}
             activeOpacity={0.8}
@@ -151,7 +212,7 @@ const styles = StyleSheet.create({
   },
   progressHeader: {
     width: '100%',
-    marginBottom: 20
+    marginBottom: 16
   },
   progressTextRow: {
     flexDirection: 'row',
@@ -183,8 +244,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 2
   },
+  streakCapsule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 20,
+    marginBottom: 14
+  },
+  streakText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#92400E',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+  },
+  streakSubText: {
+    fontSize: 10,
+    color: colors.textDim,
+    fontWeight: '600'
+  },
   logoWrapper: {
-    marginBottom: 16,
+    marginBottom: 12,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -193,7 +277,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.textPrimary,
     textAlign: 'center',
-    marginBottom: 6,
+    marginBottom: 4,
     letterSpacing: -0.3
   },
   subtitle: {
@@ -201,7 +285,7 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     textAlign: 'center',
     lineHeight: 18,
-    marginBottom: 20,
+    marginBottom: 18,
     paddingHorizontal: 16
   },
   card: {
@@ -219,6 +303,42 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 2
   },
+  planHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderHairline
+  },
+  planHeaderTitle: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: colors.primaryDark,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    letterSpacing: 0.8
+  },
+  copyBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: colors.bgHighlight,
+    borderWidth: 1,
+    borderColor: colors.borderHighlight,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 8
+  },
+  copyBtnText: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: colors.primaryDark
+  },
+  copyBtnTextActive: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#059669'
+  },
   anchorRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -226,12 +346,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgHighlight,
     borderWidth: 1,
     borderColor: colors.borderHighlight,
-    borderRadius: 12,
-    padding: 10
+    borderRadius: 14,
+    padding: 12
   },
-  voiceAnchorRow: {
-    backgroundColor: '#FFFBEB',
-    borderColor: '#FDE68A'
+  goalRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    backgroundColor: colors.bgSecondary,
+    borderWidth: 1,
+    borderColor: colors.borderHairline,
+    borderRadius: 14,
+    padding: 12
   },
   anchorTextCol: {
     flex: 1
@@ -248,8 +374,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     color: colors.primaryDeep,
-    fontStyle: 'italic',
     lineHeight: 16
+  },
+  goalText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: colors.textPrimary,
+    lineHeight: 16
+  },
+  nextStepRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 6,
+    paddingTop: 6,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderHairline
+  },
+  nextStepText: {
+    fontSize: 11,
+    color: colors.textMuted,
+    fontWeight: '600'
   },
   metaRow: {
     flexDirection: 'row',
@@ -261,13 +406,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 10
   },
+  metaHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 2
+  },
   metaLabel: {
     fontSize: 8.5,
     fontWeight: '700',
     color: colors.textDim,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 0.5,
-    marginBottom: 2
+    letterSpacing: 0.5
   },
   metaValue: {
     fontSize: 11,
