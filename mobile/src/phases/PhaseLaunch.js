@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Platform, Alert, Clipboard } from 'react-native';
-import { Flame, Shield, Target, Zap, BookOpen, Sun, Volume2, VolumeX, RotateCcw, Clock, Copy, Check } from 'lucide-react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Platform, Clipboard } from 'react-native';
+import { Flame, Target, BookOpen, Sun, Volume2, VolumeX, RotateCcw, Clock, Copy, Check, ArrowRight } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
 import ManifestSunLogo from '../components/ManifestSunLogo';
@@ -31,21 +31,16 @@ export default function PhaseLaunch() {
 
   const mainGoal = voiceJournal?.synthesis?.manifestationAnchor ||
     voiceJournal?.text ||
-    "Focus on knocking down your single highest-impact priority today.";
-
-  const nextStep = voiceJournal?.synthesis?.kineticAction ||
-    "Take 5 minutes to clear your workspace and begin deep work.";
+    null;
 
   const weatherLabel = weatherData ? `${weatherData.highTemp}°${weatherData.unit || 'C'} • ${weatherData.weatherLabel}` : 'Optimal Day';
 
   const handleCopySummary = () => {
     const today = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-    const formatted = `☀️ MORNING ACTION PLAN — ${today}
-💡 Mindset: "${anchor.identityReminder}"
-⚡ Main Focus: "${mainGoal}"
-🎯 Next Step: ${nextStep}
-📖 Reading: ${todayArticle?.title || 'Atomic Habits'}
-🌤️ Weather: ${weatherLabel}
+    const formatted = `☀️ MORNING MANIFESTATION — ${today}
+• Mindset: "${anchor.identityReminder}"
+${mainGoal ? `• Focus Goal: "${mainGoal}"\n` : ''}• Reading: ${todayArticle?.title || 'Atomic Habits'}
+• Atmosphere: ${weatherLabel}
 
 Ready to make today count! 🚀`;
 
@@ -62,94 +57,72 @@ Ready to make today count! 🚀`;
       <View style={styles.progressHeader}>
         <View style={styles.progressTextRow}>
           <Text style={styles.progressLabel}>PHASE 05 OF 05</Text>
-          <Text style={styles.progressPhaseName}>Ready to Go! 🚀</Text>
+          <Text style={styles.progressPhaseName}>Final Summary</Text>
         </View>
         <View style={styles.progressBarTrack}>
           <View style={[styles.progressBarFill, { width: '100%' }]} />
         </View>
       </View>
 
-      {/* Streak Capsule */}
-      <View style={styles.streakCapsule}>
-        <Flame size={14} color="#D97706" />
-        <Text style={styles.streakText}>4-DAY STREAK</Text>
-        <Text style={styles.streakSubText}>• Keep the momentum going!</Text>
-      </View>
-
       {/* Sun Emblem */}
       <View style={styles.logoWrapper}>
-        <ManifestSunLogo size={64} interactive={true} />
+        <ManifestSunLogo size={56} interactive={true} />
       </View>
 
-      {/* Title & Subtitle */}
-      <Text style={styles.title}>You're All Set!</Text>
-      <Text style={styles.subtitle}>
-        Your morning mind is clear, focused, and ready. Let's make today count.
-      </Text>
+      {/* Title */}
+      <Text style={styles.title}>You're All Set</Text>
 
-      {/* Today's Action Plan Card */}
+      {/* Minimal Streak Badge */}
+      <View style={styles.streakCapsule}>
+        <Flame size={12} color="#D97706" />
+        <Text style={styles.streakText}>4-DAY STREAK</Text>
+        <Text style={styles.streakSubText}>• Ready to conquer today</Text>
+      </View>
+
+      {/* Single Pure Minimal Card */}
       <View style={styles.card}>
-        <View style={styles.planHeader}>
-          <Text style={styles.planHeaderTitle}>TODAY'S ACTION PLAN</Text>
-          <TouchableOpacity onPress={handleCopySummary} style={styles.copyBtn} activeOpacity={0.7}>
+        {/* Top Blueprint Row */}
+        <View style={styles.cardHeaderRow}>
+          <Text style={styles.cardHeaderLabel}>TODAY'S BLUEPRINT</Text>
+          <TouchableOpacity onPress={handleCopySummary} activeOpacity={0.7} style={styles.copyButton}>
             {copied ? (
               <>
-                <Check size={12} color="#059669" />
-                <Text style={styles.copyBtnTextActive}>Copied!</Text>
+                <Check size={11} color="#059669" />
+                <Text style={styles.copyButtonTextActive}>Copied</Text>
               </>
             ) : (
               <>
-                <Copy size={12} color={colors.primaryDark} />
-                <Text style={styles.copyBtnText}>Copy Plan</Text>
+                <Copy size={11} color={colors.textDim} />
+                <Text style={styles.copyButtonText}>Copy</Text>
               </>
             )}
           </TouchableOpacity>
         </View>
 
-        {/* 1. Mindset */}
-        <View style={styles.anchorRow}>
-          <Shield size={14} color={colors.primaryDark} style={{ marginTop: 2 }} />
-          <View style={styles.anchorTextCol}>
-            <Text style={styles.summaryLabel}>TODAY'S MINDSET</Text>
-            <Text style={styles.anchorQuote}>"{anchor.identityReminder}"</Text>
-          </View>
-        </View>
+        {/* Mindset Quote */}
+        <Text style={styles.anchorQuote}>"{anchor.identityReminder}"</Text>
 
-        {/* 2. Main Focus */}
-        <View style={styles.goalRow}>
-          <Target size={14} color={colors.primaryDark} style={{ marginTop: 2 }} />
-          <View style={styles.anchorTextCol}>
-            <Text style={[styles.summaryLabel, { color: colors.textDim }]}>MAIN FOCUS & GOAL</Text>
-            <Text style={styles.goalText}>"{mainGoal}"</Text>
-            {nextStep && (
-              <View style={styles.nextStepRow}>
-                <Zap size={11} color="#D97706" />
-                <Text style={styles.nextStepText} numberOfLines={2}>
-                  Next: {nextStep}
-                </Text>
-              </View>
-            )}
+        {/* Goal (if recorded) */}
+        {mainGoal && (
+          <View style={styles.goalStrip}>
+            <Target size={12} color={colors.primaryDark} />
+            <Text style={styles.goalText} numberOfLines={2}>
+              <Text style={styles.goalBold}>Focus: </Text>"{mainGoal}"
+            </Text>
           </View>
-        </View>
+        )}
 
-        {/* 3. Reading & Atmosphere Strip */}
+        {/* 2-Column Status Row */}
         <View style={styles.metaRow}>
-          <View style={styles.metaItem}>
-            <View style={styles.metaHeaderRow}>
-              <BookOpen size={11} color={colors.primaryDark} />
-              <Text style={styles.metaLabel}>TODAY'S READ</Text>
-            </View>
-            <Text style={styles.metaValue} numberOfLines={1}>
+          <View style={styles.metaCol}>
+            <Text style={styles.metaColLabel}>READING</Text>
+            <Text style={styles.metaColValue} numberOfLines={1}>
               {todayArticle?.title || 'Atomic Habits'}
             </Text>
           </View>
-
-          <View style={styles.metaItem}>
-            <View style={styles.metaHeaderRow}>
-              <Sun size={11} color="#D97706" />
-              <Text style={styles.metaLabel}>ATMOSPHERE</Text>
-            </View>
-            <Text style={styles.metaValue} numberOfLines={1}>
+          <View style={styles.metaCol}>
+            <Text style={styles.metaColLabel}>WEATHER</Text>
+            <Text style={styles.metaColValue} numberOfLines={1}>
               {weatherLabel}
             </Text>
           </View>
@@ -165,33 +138,23 @@ Ready to make today count! 🚀`;
           style={[styles.audioBtn, isSpeechPlaying && styles.audioBtnActive]}
         >
           {isSpeechPlaying ? (
-            <VolumeX size={15} color="#FFFFFF" />
+            <VolumeX size={14} color={colors.primaryDark} />
           ) : (
-            <Volume2 size={15} color={colors.primaryDark} />
+            <Volume2 size={14} color={colors.primaryDark} />
           )}
-          <Text style={[styles.audioBtnText, isSpeechPlaying && styles.audioBtnTextActive]}>
+          <Text style={styles.audioBtnText}>
             {isSpeechPlaying ? 'Stop Audio Briefing' : 'Listen to Audio Summary'}
           </Text>
         </TouchableOpacity>
 
-        {/* Secondary Actions Row */}
-        <View style={styles.secondaryActionsRow}>
-          <TouchableOpacity
-            onPress={() => setIsVaultOpen(true)}
-            activeOpacity={0.8}
-            style={styles.vaultBtn}
-          >
-            <BookOpen size={13} color={colors.primaryDark} />
-            <Text style={styles.vaultBtnText}>Past Journal Vault</Text>
+        {/* Subtle Link Row */}
+        <View style={styles.bottomLinkRow}>
+          <TouchableOpacity onPress={() => setIsVaultOpen(true)} activeOpacity={0.7}>
+            <Text style={styles.bottomLinkText}>Journal Vault</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={resetRitual}
-            activeOpacity={0.8}
-            style={styles.resetBtn}
-          >
-            <RotateCcw size={13} color={colors.textDim} />
-            <Text style={styles.resetBtnText}>Restart Ritual</Text>
+          <Text style={styles.dotSeparator}>•</Text>
+          <TouchableOpacity onPress={resetRitual} activeOpacity={0.7}>
+            <Text style={styles.bottomLinkText}>Restart Ritual</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -244,31 +207,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 2
   },
-  streakCapsule: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#FEF3C7',
-    borderWidth: 1,
-    borderColor: '#FDE68A',
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 20,
-    marginBottom: 14
-  },
-  streakText: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: '#92400E',
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
-  },
-  streakSubText: {
-    fontSize: 10,
-    color: colors.textDim,
-    fontWeight: '600'
-  },
   logoWrapper: {
-    marginBottom: 12,
+    marginBottom: 10,
     alignItems: 'center',
     justifyContent: 'center'
   },
@@ -277,16 +217,31 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: colors.textPrimary,
     textAlign: 'center',
-    marginBottom: 4,
+    marginBottom: 6,
     letterSpacing: -0.3
   },
-  subtitle: {
-    fontSize: 12,
-    color: colors.textMuted,
-    textAlign: 'center',
-    lineHeight: 18,
-    marginBottom: 18,
-    paddingHorizontal: 16
+  streakCapsule: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: colors.bgHighlight,
+    borderWidth: 1,
+    borderColor: colors.borderHighlight,
+    paddingHorizontal: 10,
+    paddingVertical: 3.5,
+    borderRadius: 16,
+    marginBottom: 16
+  },
+  streakText: {
+    fontSize: 9.5,
+    fontWeight: '800',
+    color: '#92400E',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace'
+  },
+  streakSubText: {
+    fontSize: 9.5,
+    color: colors.textDim,
+    fontWeight: '500'
   },
   card: {
     width: '100%',
@@ -295,186 +250,96 @@ const styles = StyleSheet.create({
     borderColor: colors.borderHairline,
     borderRadius: 20,
     padding: 16,
-    gap: 10,
-    marginBottom: 20,
+    marginBottom: 16,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.04,
     shadowRadius: 12,
     elevation: 2
   },
-  planHeader: {
+  cardHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: colors.borderHairline
+    borderBottomColor: colors.borderHairline,
+    marginBottom: 12
   },
-  planHeaderTitle: {
-    fontSize: 10,
+  cardHeaderLabel: {
+    fontSize: 9,
     fontWeight: '800',
-    color: colors.primaryDark,
+    color: colors.textDim,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     letterSpacing: 0.8
   },
-  copyBtn: {
+  copyButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 8
+    gap: 3
   },
-  copyBtnText: {
+  copyButtonText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: colors.primaryDark
+    fontWeight: '600',
+    color: colors.textDim
   },
-  copyBtnTextActive: {
+  copyButtonTextActive: {
     fontSize: 10,
     fontWeight: '700',
     color: '#059669'
   },
-  anchorRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 8,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    borderRadius: 14,
-    padding: 12
-  },
-  goalRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 8,
-    backgroundColor: colors.bgSecondary,
-    borderWidth: 1,
-    borderColor: colors.borderHairline,
-    borderRadius: 14,
-    padding: 12
-  },
-  anchorTextCol: {
-    flex: 1
-  },
-  summaryLabel: {
-    fontSize: 8.5,
-    fontWeight: '800',
-    color: colors.primaryDark,
-    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 0.6,
-    marginBottom: 2
-  },
   anchorQuote: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: colors.primaryDeep,
-    lineHeight: 16
-  },
-  goalText: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '700',
-    color: colors.textPrimary,
-    lineHeight: 16
+    color: colors.primaryDeep,
+    lineHeight: 20,
+    marginBottom: 8
   },
-  nextStepRow: {
+  goalStrip: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    marginTop: 6,
-    paddingTop: 6,
+    gap: 6,
+    paddingTop: 8,
     borderTopWidth: 1,
-    borderTopColor: colors.borderHairline
+    borderTopColor: colors.borderHairline,
+    marginBottom: 8
   },
-  nextStepText: {
+  goalText: {
     fontSize: 11,
-    color: colors.textMuted,
-    fontWeight: '600'
+    color: colors.textPrimary,
+    flex: 1
+  },
+  goalBold: {
+    fontWeight: '700',
+    color: colors.textPrimary
   },
   metaRow: {
     flexDirection: 'row',
-    gap: 8
+    gap: 12,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderHairline
   },
-  metaItem: {
-    flex: 1,
-    backgroundColor: colors.bgSecondary,
-    borderRadius: 10,
-    padding: 10
+  metaCol: {
+    flex: 1
   },
-  metaHeaderRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginBottom: 2
-  },
-  metaLabel: {
-    fontSize: 8.5,
-    fontWeight: '700',
+  metaColLabel: {
+    fontSize: 8,
+    fontWeight: '800',
     color: colors.textDim,
     fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
-    letterSpacing: 0.5
+    marginBottom: 2
   },
-  metaValue: {
+  metaColValue: {
     fontSize: 11,
     fontWeight: '700',
     color: colors.textPrimary
   },
   actionRow: {
     width: '100%',
-    gap: 8
+    gap: 10
   },
   audioBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    paddingVertical: 13,
-    borderRadius: 24
-  },
-  audioBtnActive: {
-    backgroundColor: colors.primaryDark,
-    borderColor: colors.primaryDark
-  },
-  audioBtnText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: colors.primaryDark
-  },
-  audioBtnTextActive: {
-    color: '#FFFFFF'
-  },
-  secondaryActionsRow: {
-    flexDirection: 'row',
-    gap: 8,
-    width: '100%'
-  },
-  vaultBtn: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    backgroundColor: colors.bgHighlight,
-    borderWidth: 1,
-    borderColor: colors.borderHighlight,
-    paddingVertical: 11,
-    borderRadius: 24
-  },
-  vaultBtnText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: colors.primaryDark
-  },
-  resetBtn: {
-    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -482,12 +347,32 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgSecondary,
     borderWidth: 1,
     borderColor: colors.borderHairline,
-    paddingVertical: 11,
+    paddingVertical: 12,
     borderRadius: 24
   },
-  resetBtnText: {
+  audioBtnActive: {
+    backgroundColor: colors.bgHighlight,
+    borderColor: colors.borderHighlight
+  },
+  audioBtnText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.textPrimary
+  },
+  bottomLinkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    paddingTop: 4
+  },
+  bottomLinkText: {
     fontSize: 11,
     fontWeight: '600',
     color: colors.textDim
+  },
+  dotSeparator: {
+    color: colors.borderHairline,
+    fontSize: 12
   }
 });
