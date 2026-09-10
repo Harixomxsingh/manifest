@@ -24,7 +24,7 @@ import { getWmoInfo } from '../../services/weatherService';
 /**
  * Determine weather category from code or label
  */
-export function categorizeWeather(code, label = '') {
+function categorizeWeather(code, label = '') {
   const lbl = (label || '').toLowerCase();
 
   // Thunderstorm
@@ -66,7 +66,7 @@ export function categorizeWeather(code, label = '') {
 /**
  * Convert hour string like "6 AM", "12 PM", "1 PM", "13:00" to 24-hour integer
  */
-export function parseHourStringTo24(hourStr) {
+function parseHourStringTo24(hourStr) {
   if (typeof hourStr === 'number') return hourStr;
   if (!hourStr) return 12;
   const str = String(hourStr).trim();
@@ -88,7 +88,7 @@ export function parseHourStringTo24(hourStr) {
 /**
  * Get matching icon component for an hourly item
  */
-export function getHourlyIcon(code, rainProb = 0) {
+function getHourlyIcon(code, rainProb = 0) {
   const cat = categorizeWeather(code);
   switch (cat) {
     case 'thunderstorm':
