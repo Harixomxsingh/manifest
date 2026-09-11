@@ -1,0 +1,91 @@
+name: 📱 Build & Release Android APK
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: 🤖 Compile Android Standalone APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ☕ Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'gradle'
+
+      - name: ⚙️ Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: 📦 Install Root & Mobile Dependencies
+        run: |
+          npm install
+          cd mobile && npm install
+
+      - name: 🏗️ Generate Android Native Project
+        working-directory: ./mobile
+        run: npx expo prebuild --platform android --clean
+
+      - name: 🔨 Build Android Release APK via Gradle
+        working-directory: ./mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+
+      - name: 📂 Locate and Rename Compiled APK
+        run: |
+          mkdir -p build-output docs
+          APK_PATH=$(find mobile/android/app/build/outputs/apk -name "*.apk" | head -n 1)
+          if [ -f "$APK_PATH" ]; then
+            cp "$APK_PATH" build-output/manifest-v1.1.2.apk
+            cp "$APK_PATH" docs/manifest.apk
+            echo "APK generated successfully at build-output/manifest-v1.1.2.apk and docs/manifest.apk"
+          else
+            echo "APK not found!" && exit 1
+          fi
+
+      - name: 📤 Upload APK as GitHub Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: manifest-android-apk
+          path: build-output/manifest-v1.1.2.apk
+          retention-days: 30
+
+      - name: 🚀 Publish GitHub Release with APK Attached
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.1.2-android
+          name: "Manifest v1.1.2 • Android Native App Release"
+          body: |
+            ## ☀️ Morning Manifestation • Android Release v1.1.2
+
+            ### 📱 Download & Install:
+            - **Direct APK Download**: Download [`manifest-v1.1.2.apk`](https://github.com/Harixomxsingh/manifest/releases/download/v1.1.2-android/manifest-v1.1.2.apk)
+            - **Web Application**: [https://harixomxsingh.github.io/manifest/](https://harixomxsingh.github.io/manifest/)
+
+            ### ✨ Key Features in this Build:
+            - **☀️ Illuminating Sun Logo**: Dawn glow animation and solar ray aesthetics.
+            - **🌡️ Default Celsius (°C) Climate**: Native temperature & weather intelligence.
+            - **🔥 Minimalist Real-Time Streak Sync**: Daily streak tracker with 0 clutter (`🔥 <count>`).
+            - **🛡️ Zero-Data-Loss Local Vault**: Redundant snapshot backups and 1-click JSON export.
+            - **⚡ Live OTA Updates**: Automatic silent background updates via `expo-updates`.
+            - **© PolyForm Noncommercial License 1.0.0** by Hari.
+          files: build-output/manifest-v1.1.2.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

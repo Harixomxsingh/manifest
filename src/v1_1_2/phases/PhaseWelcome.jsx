@@ -89,6 +89,15 @@ export default function PhaseWelcome({ onAdvance, onOpenAbout }) {
           <Sparkles className="w-3.5 h-3.5 text-amber-600" />
           <span>Why Manifest? Purpose & 4 Core Benefits</span>
         </button>
+
+        <a
+          href="https://github.com/Harixomxsingh/manifest/releases/tag/v1.1.2-android"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-600/30 text-emerald-900 text-xs font-bold transition-all mt-1"
+        >
+          <span>📱 Download Android App (.apk)</span>
+        </a>
       </div>
     </div>
   );
