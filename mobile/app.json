@@ -31,7 +31,10 @@
       },
       "permissions": [
         "ACCESS_COARSE_LOCATION",
-        "ACCESS_FINE_LOCATION"
+        "ACCESS_FINE_LOCATION",
+        "POST_NOTIFICATIONS",
+        "RECEIVE_BOOT_COMPLETED",
+        "SCHEDULE_EXACT_ALARM"
       ]
     },
     "web": {
@@ -39,7 +42,14 @@
     },
     "plugins": [
       "expo-audio",
-      "expo-updates"
+      "expo-updates",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#F59E0B"
+        }
+      ]
     ]
   }
 }

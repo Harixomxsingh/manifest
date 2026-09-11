@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,7 +8,8 @@ import {
   ScrollView,
   SafeAreaView,
   Platform,
-  Alert
+  Alert,
+  Switch
 } from 'react-native';
 import {
   X,
@@ -22,7 +23,9 @@ import {
   Info,
   Download,
   Cloud,
-  RefreshCw
+  RefreshCw,
+  Bell,
+  Clock
 } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../theme/colors';
@@ -31,11 +34,75 @@ import { triggerHaptic } from '../services/hapticsService';
 import { useApp } from '../context/AppContext';
 import { exportAllDataAsJSON, exportDataForCloudMigration } from '../services/storagePersistenceService';
 import { checkForAppUpdatesSilently } from '../services/updateService';
+import {
+  getNotificationSettings,
+  saveNotificationSettings,
+  sendTestNotificationNow
+} from '../services/notificationService';
 
 export default function SettingsModal({ isOpen, onClose }) {
-  const { weatherData, resetRitual, setIsAboutOpen } = useApp();
+  const { weatherData, resetRitual, setIsAboutOpen, streakData, identity } = useApp();
   const [unit, setUnit] = useState('C'); // 'C' | 'F'
   const [speechSpeed, setSpeechSpeed] = useState(1.0);
+  const [notifEnabled, setNotifEnabled] = useState(true);
+  const [notifHour, setNotifHour] = useState(9);
+  const [isSendingTest, setIsSendingTest] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      getNotificationSettings().then((settings) => {
+        setNotifEnabled(settings.enabled);
+        setNotifHour(settings.hour);
+      });
+    }
+  }, [isOpen]);
+
+  const handleToggleNotification = async (val) => {
+    triggerHaptic('selection');
+    setNotifEnabled(val);
+    await saveNotificationSettings({
+      enabled: val,
+      hour: notifHour,
+      streakCount: streakData?.currentStreak || 0,
+      identityTitle: identity?.title || ''
+    });
+  };
+
+  const handleSelectHour = async (h) => {
+    triggerHaptic('selection');
+    setNotifHour(h);
+    await saveNotificationSettings({
+      enabled: notifEnabled,
+      hour: h,
+      streakCount: streakData?.currentStreak || 0,
+      identityTitle: identity?.title || ''
+    });
+  };
+
+  const handleTestNotification = async () => {
+    triggerHaptic('medium');
+    setIsSendingTest(true);
+    const result = await sendTestNotificationNow({
+      streakCount: streakData?.currentStreak || 0,
+      identityTitle: identity?.title || ''
+    });
+    setIsSendingTest(false);
+
+    if (result.success) {
+      triggerHaptic('success');
+      Alert.alert(
+        '🔔 Notification Sent!',
+        `Sample notification generated from our 1,000+ library:\n\n"${result.prompt.title}"\n${result.prompt.body}`,
+        [{ text: 'Great!' }]
+      );
+    } else {
+      Alert.alert(
+        'Permission Notice',
+        'Please allow notification permissions in your device settings to receive daily 9:00 AM reminders.',
+        [{ text: 'OK' }]
+      );
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -100,6 +167,70 @@ export default function SettingsModal({ isOpen, onClose }) {
               showsVerticalScrollIndicator={false}
               contentContainerStyle={styles.scrollContent}
             >
+              {/* Daily 9:00 AM Motivation Reminder */}
+              <View style={[styles.settingCard, styles.notifHighlightCard]}>
+                <View style={styles.notifHeaderRow}>
+                  <View style={styles.settingHeader}>
+                    <View style={styles.notifIconCircle}>
+                      <Bell size={15} color="#D97706" />
+                    </View>
+                    <View>
+                      <Text style={styles.settingTitle}>Daily Morning Reminder</Text>
+                      <Text style={styles.notifSubtitle}>
+                        {notifEnabled ? `Active daily at ${notifHour}:00 AM` : 'Reminders paused'}
+                      </Text>
+                    </View>
+                  </View>
+                  <Switch
+                    value={notifEnabled}
+                    onValueChange={handleToggleNotification}
+                    trackColor={{ false: '#E2E8F0', true: '#FDE68A' }}
+                    thumbColor={notifEnabled ? '#D97706' : '#94A3B8'}
+                  />
+                </View>
+
+                <Text style={styles.privacyNote}>
+                  Every morning at {notifHour}:00 AM, receive a fresh, warm spark from our library of 1,000+ motivational prompts. Never repetitive.
+                </Text>
+
+                {notifEnabled && (
+                  <View style={styles.timePickerContainer}>
+                    <View style={styles.timePickerHeader}>
+                      <Clock size={12} color={colors.textDim} />
+                      <Text style={styles.timePickerLabel}>Preferred Reminder Time</Text>
+                    </View>
+                    <View style={styles.toggleRow}>
+                      {[7, 8, 9, 10].map((h) => (
+                        <TouchableOpacity
+                          key={h}
+                          onPress={() => handleSelectHour(h)}
+                          style={[
+                            styles.toggleOption,
+                            notifHour === h && styles.toggleOptionActive
+                          ]}
+                        >
+                          <Text style={[styles.toggleText, notifHour === h && styles.toggleTextActive]}>
+                            {h}:00 AM{h === 9 ? ' ⭐' : ''}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
+                  </View>
+                )}
+
+                <TouchableOpacity
+                  onPress={handleTestNotification}
+                  disabled={isSendingTest}
+                  activeOpacity={0.8}
+                  style={styles.testNotifBtn}
+                >
+                  <Bell size={13} color="#D97706" />
+                  <Text style={styles.testNotifText}>
+                    {isSendingTest ? 'Sending Test...' : '🔔 Send Test Notification Now'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
               {/* Temperature Unit Setting */}
               <View style={styles.settingCard}>
                 <View style={styles.settingHeader}>
@@ -525,5 +656,62 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.textPrimary,
     fontFamily: fonts.medium
+  },
+  notifHighlightCard: {
+    borderColor: '#FDE68A',
+    backgroundColor: '#FFFDF7'
+  },
+  notifHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  notifIconCircle: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: '#FEF3C7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8
+  },
+  notifSubtitle: {
+    fontSize: 10,
+    color: '#D97706',
+    fontFamily: fonts.medium,
+    marginTop: 1
+  },
+  timePickerContainer: {
+    marginTop: 8,
+    marginBottom: 4
+  },
+  timePickerHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 6
+  },
+  timePickerLabel: {
+    fontSize: 10.5,
+    color: colors.textDim,
+    fontFamily: fonts.medium
+  },
+  testNotifBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FCD34D',
+    paddingVertical: 9,
+    borderRadius: 12,
+    marginTop: 6
+  },
+  testNotifText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#B45309',
+    fontFamily: fonts.bold
   }
 });

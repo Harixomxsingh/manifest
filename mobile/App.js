@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
+import * as Notifications from 'expo-notifications';
 import {
   useFonts,
   PlusJakartaSans_400Regular,
@@ -26,9 +27,32 @@ import PhaseVoiceClarity from './src/phases/PhaseVoiceClarity';
 import PhaseClimate from './src/phases/PhaseClimate';
 import PhaseLaunch from './src/phases/PhaseLaunch';
 import { colors } from './src/theme/colors';
+import { initNotifications, scheduleDailyManifestationReminder } from './src/services/notificationService';
 
 function MainApp() {
-  const { activePhase, isAboutOpen, setIsAboutOpen } = useApp();
+  const { activePhase, isAboutOpen, setIsAboutOpen, streakData, identity, goToPhase } = useApp();
+
+  useEffect(() => {
+    // Initialize notification channels & schedule daily 9:00 AM dynamic reminder
+    initNotifications().then(() => {
+      scheduleDailyManifestationReminder({
+        streakCount: streakData?.currentStreak || 0,
+        identityTitle: identity?.title || ''
+      });
+    });
+
+    // Handle deep linking when user taps a notification
+    const responseSub = Notifications.addNotificationResponseReceivedListener(response => {
+      const data = response?.notification?.request?.content?.data;
+      if (data?.action === 'start_ritual') {
+        goToPhase('welcome');
+      }
+    });
+
+    return () => {
+      responseSub.remove();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>

@@ -1,8 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { X, Key, Shield, Globe, Cpu, RefreshCw, LogIn, LogOut, ExternalLink, Check, Trash2, Sparkles, Download, Upload, Database, Cloud } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Key, Shield, Globe, Cpu, RefreshCw, LogIn, LogOut, ExternalLink, Check, Trash2, Sparkles, Download, Upload, Database, Cloud, Bell, Clock } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { POPULAR_CITIES } from '../services/weatherService';
 import { downloadBackupJSONFile, importBackupFromJSON, exportDataForCloudMigration, getBackupSnapshot } from '../services/storagePersistenceService';
+import {
+  getWebNotificationSettings,
+  saveWebNotificationSettings,
+  sendWebTestNotification,
+  isWebNotificationSupported
+} from '../services/notificationService';
 
 export default function SettingsModal() {
   const {
@@ -21,8 +27,13 @@ export default function SettingsModal() {
     setIsOnboardingOpen,
     simulatedOffsetDays,
     simulateDateOffset,
-    activeDateKey
+    activeDateKey,
+    streakCount,
+    identityTitle
   } = useApp();
+
+  const [notifSettings, setNotifSettings] = useState(() => getWebNotificationSettings());
+  const [isSendingTestNotif, setIsSendingTestNotif] = useState(false);
 
   const [formData, setFormData] = useState({
     geminiApiKey: settings.geminiApiKey || '',
@@ -379,7 +390,99 @@ export default function SettingsModal() {
             </div>
           </div>
 
-          {/* 5. Onboarding Protocol Settings */}
+          {/* 5. Daily Morning 9:00 AM Manifestation Reminder */}
+          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                  <Bell className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-amber-300 font-mono uppercase tracking-wider">
+                    Daily Morning Reminder
+                  </div>
+                  <div className="text-[11px] text-slate-300">
+                    {notifSettings.enabled ? `Active daily at ${notifSettings.hour}:00 AM` : 'Reminders paused'}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  const updated = { ...notifSettings, enabled: !notifSettings.enabled };
+                  setNotifSettings(updated);
+                  saveWebNotificationSettings(updated);
+                }}
+                className={`w-12 h-6 rounded-full p-0.5 transition-colors ${
+                  notifSettings.enabled ? 'bg-amber-500' : 'bg-slate-700'
+                }`}
+                title="Toggle daily morning reminder"
+              >
+                <div
+                  className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                    notifSettings.enabled ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+            </div>
+
+            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+              Every morning at {notifSettings.hour}:00 AM, receive a fresh, warm spark from our library of 1,000+ motivational prompts. Never repetitive.
+            </p>
+
+            {notifSettings.enabled && (
+              <div className="space-y-1.5 pt-1">
+                <div className="text-[10.5px] font-mono text-slate-400 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-amber-400" />
+                  <span>Preferred Reminder Time</span>
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {[7, 8, 9, 10].map((h) => (
+                    <button
+                      key={h}
+                      type="button"
+                      onClick={() => {
+                        const updated = { ...notifSettings, hour: h };
+                        setNotifSettings(updated);
+                        saveWebNotificationSettings(updated);
+                      }}
+                      className={`px-3 py-1 text-xs rounded-xl border transition-all ${
+                        notifSettings.hour === h
+                          ? 'bg-amber-500 text-slate-950 font-bold border-amber-400 shadow-sm'
+                          : 'bg-slate-900 text-slate-300 border-white/[0.08] hover:bg-slate-800'
+                      }`}
+                    >
+                      {h}:00 AM{h === 9 ? ' ⭐' : ''}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <button
+              type="button"
+              disabled={isSendingTestNotif}
+              onClick={async () => {
+                setIsSendingTestNotif(true);
+                const res = await sendWebTestNotification({ streakCount, identityTitle });
+                setIsSendingTestNotif(false);
+                if (res.success) {
+                  alert(`🔔 Sample Notification:\n\n"${res.prompt.title}"\n${res.prompt.body}`);
+                } else if (res.reason === 'permission_denied') {
+                  alert('Please allow notification permissions in your browser to test.');
+                } else {
+                  alert('Notifications triggered! (Check your system notification center)');
+                }
+              }}
+              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-xs font-bold transition-all cursor-pointer"
+            >
+              <Bell className="w-3.5 h-3.5" />
+              <span>{isSendingTestNotif ? 'Sending Test...' : '🔔 Send Test Notification Now'}</span>
+            </button>
+          </div>
+
+          {/* 6. Onboarding Protocol Settings */}
           <div className="p-3.5 rounded-2xl bg-slate-900/70 border border-white/[0.08] flex items-center justify-between gap-3">
             <div>
               <div className="text-xs font-semibold text-white">Orientation Manual</div>
