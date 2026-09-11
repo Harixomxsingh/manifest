@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Key, Shield, Globe, Cpu, RefreshCw, LogIn, LogOut, ExternalLink, Check, Trash2 } from 'lucide-react';
+import { X, Key, Shield, Globe, Cpu, RefreshCw, LogIn, LogOut, ExternalLink, Check, Trash2, Sparkles } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { POPULAR_CITIES } from '../services/weatherService';
 
@@ -7,6 +7,8 @@ export default function SettingsModal() {
   const {
     isSettingsOpen,
     setIsSettingsOpen,
+    isAboutOpen,
+    setIsAboutOpen,
     settings,
     setSettings,
     isGoogleLinked,
@@ -409,10 +411,33 @@ export default function SettingsModal() {
             </div>
           </div>
 
-          {/* 6. License & Copyright Protection Section */}
-          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-2">
+          {/* 6. About Manifest Philosophy & Benefits */}
+          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5 font-mono">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>About Manifest & Purpose</span>
+              </div>
+              <div className="text-[11px] text-slate-300 leading-snug">
+                Learn why Manifest exists, the two core pillars & daily human benefits.
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setIsSettingsOpen(false);
+                setIsAboutOpen(true);
+              }}
+              className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 text-xs font-bold font-sans shadow-sm transition-all shrink-0 cursor-pointer"
+            >
+              Read About
+            </button>
+          </div>
+
+          {/* 7. License & Copyright Protection Section */}
+          <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/[0.08] space-y-2">
             <div className="flex items-center justify-between">
-              <div className="text-xs font-bold text-amber-300 font-mono flex items-center gap-1.5 uppercase tracking-wider">
+              <div className="text-xs font-bold text-slate-300 font-mono flex items-center gap-1.5 uppercase tracking-wider">
                 <Shield className="w-3.5 h-3.5 text-amber-400" />
                 <span>License & Copyright Protection</span>
               </div>

@@ -17,7 +17,8 @@ import {
   Mic,
   BookOpen,
   Flame,
-  Settings
+  Settings,
+  Sparkles
 } from 'lucide-react-native';
 import { useApp } from '../context/AppContext';
 import { colors } from '../theme/colors';
@@ -34,6 +35,7 @@ export default function Header() {
   const {
     activeLocation,
     setIsLocationModalOpen,
+    setIsAboutOpen,
     isSpeechPlaying,
     toggleSpeechSummary,
     randomizeAllDailyContent,
@@ -112,6 +114,19 @@ export default function Header() {
               accessibilityLabel="Randomize Content"
             >
               <Shuffle size={13} color={colors.primary} />
+            </TouchableOpacity>
+
+            {/* About Manifest Purpose & Benefits */}
+            <TouchableOpacity
+              onPress={() => {
+                triggerHaptic('light');
+                setIsAboutOpen(true);
+              }}
+              activeOpacity={0.8}
+              style={styles.aboutIconBtn}
+              accessibilityLabel="About Manifest"
+            >
+              <Sparkles size={13} color="#D97706" />
             </TouchableOpacity>
 
             {/* Settings Option Button */}
@@ -245,6 +260,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.bgCardAlt,
     borderWidth: 1,
     borderColor: colors.borderCard,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  aboutIconBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FCD34D',
     alignItems: 'center',
     justifyContent: 'center'
   },

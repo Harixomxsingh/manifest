@@ -4,8 +4,8 @@ import ManifestSunLogo from '../../components/ManifestSunLogo';
 import { useApp } from '../../context/AppContext';
 import { getTodayQuote, getRandomQuote } from '../../services/quoteService';
 
-export default function PhaseWelcome({ onAdvance }) {
-  const { todayQuote, setTodayQuote } = useApp();
+export default function PhaseWelcome({ onAdvance, onOpenAbout }) {
+  const { todayQuote, setTodayQuote, setIsAboutOpen } = useApp();
   const [liveDate, setLiveDate] = useState('');
 
   useEffect(() => {
@@ -70,13 +70,26 @@ export default function PhaseWelcome({ onAdvance }) {
       </div>
 
       {/* Begin Ritual Button */}
-      <button
-        onClick={onAdvance}
-        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#78350F] hover:bg-[#92400E] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-98"
-      >
-        <span>Begin Ritual</span>
-        <ArrowRight className="w-4 h-4" />
-      </button>
+      <div className="flex flex-col items-center gap-3">
+        <button
+          onClick={onAdvance}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#78350F] hover:bg-[#92400E] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-98 cursor-pointer"
+        >
+          <span>Begin Ritual</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+
+        <button
+          onClick={() => {
+            if (onOpenAbout) onOpenAbout();
+            else if (setIsAboutOpen) setIsAboutOpen(true);
+          }}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800/80 hover:text-amber-950 transition-colors cursor-pointer hover:underline pt-1"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+          <span>Why Manifest? Purpose & 4 Core Benefits</span>
+        </button>
+      </div>
     </div>
   );
 }

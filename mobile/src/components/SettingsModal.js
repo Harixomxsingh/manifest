@@ -28,7 +28,7 @@ import { triggerHaptic } from '../services/hapticsService';
 import { useApp } from '../context/AppContext';
 
 export default function SettingsModal({ isOpen, onClose }) {
-  const { weatherData, resetRitual } = useApp();
+  const { weatherData, resetRitual, setIsAboutOpen } = useApp();
   const [unit, setUnit] = useState('C'); // 'C' | 'F'
   const [speechSpeed, setSpeechSpeed] = useState(1.0);
 
@@ -177,6 +177,30 @@ export default function SettingsModal({ isOpen, onClose }) {
                 >
                   <Trash2 size={14} color="#EF4444" />
                   <Text style={styles.dangerBtnText}>Reset Today's Session Cache</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* About Manifest Philosophy & Benefits */}
+              <View style={styles.settingCard}>
+                <View style={styles.settingHeader}>
+                  <Sparkles size={16} color="#D97706" />
+                  <Text style={styles.settingTitle}>About Manifest & Purpose</Text>
+                </View>
+                <Text style={styles.privacyNote}>
+                  Learn why Manifest exists, the two core pillars (Frictionless Clarity & Unshakable Optimism), and daily transformative benefits.
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => {
+                    triggerHaptic('medium');
+                    onClose();
+                    if (setIsAboutOpen) setIsAboutOpen(true);
+                  }}
+                  activeOpacity={0.8}
+                  style={styles.aboutBtn}
+                >
+                  <Sparkles size={14} color="#FFFFFF" />
+                  <Text style={styles.aboutBtnText}>Read Purpose & 4 Core Benefits</Text>
                 </TouchableOpacity>
               </View>
 
@@ -347,6 +371,27 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '700',
     color: '#EF4444',
+    fontFamily: fonts.bold
+  },
+  aboutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#D97706',
+    paddingVertical: 10,
+    borderRadius: 12,
+    marginTop: 4,
+    shadowColor: '#D97706',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 2
+  },
+  aboutBtnText: {
+    fontSize: 11.5,
+    fontWeight: '700',
+    color: '#FFFFFF',
     fontFamily: fonts.bold
   },
   aboutCard: {

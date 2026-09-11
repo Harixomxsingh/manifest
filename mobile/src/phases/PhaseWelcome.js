@@ -7,7 +7,7 @@ import { fonts } from '../theme/fonts';
 import ManifestSunLogo from '../components/ManifestSunLogo';
 
 export default function PhaseWelcome() {
-  const { advancePhase, todayQuote, shuffleDailyQuote } = useApp();
+  const { advancePhase, todayQuote, shuffleDailyQuote, setIsAboutOpen } = useApp();
   const [liveDate, setLiveDate] = useState('');
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function PhaseWelcome() {
         </View>
       </View>
 
-      {/* Begin Ritual Button */}
+      {/* Begin Ritual Button & About Link */}
       <TouchableOpacity
         onPress={advancePhase}
         activeOpacity={0.85}
@@ -76,6 +76,17 @@ export default function PhaseWelcome() {
       >
         <Text style={styles.actionBtnText}>Begin Ritual</Text>
         <ArrowRight size={18} color="#FFFFFF" />
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => {
+          if (setIsAboutOpen) setIsAboutOpen(true);
+        }}
+        activeOpacity={0.7}
+        style={styles.whyManifestBtn}
+      >
+        <Sparkles size={13} color="#D97706" />
+        <Text style={styles.whyManifestText}>Why Manifest? Purpose & 4 Core Benefits</Text>
       </TouchableOpacity>
     </View>
   );
@@ -207,6 +218,20 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontFamily: fonts.bold,
     letterSpacing: 0.3
+  },
+  whyManifestBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: 14,
+    paddingVertical: 4
+  },
+  whyManifestText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#92400E',
+    fontFamily: fonts.bold,
+    textDecorationLine: 'underline'
   }
 });
 

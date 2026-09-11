@@ -26,6 +26,7 @@ export const AppProvider = ({ children }) => {
   });
   const [weatherData, setWeatherData] = useState(null);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isSpeechPlaying, setIsSpeechPlaying] = useState(false);
   const [voiceJournal, setVoiceJournal] = useState(null);
   const [confettiTrigger, setConfettiTrigger] = useState(0);
@@ -175,6 +176,8 @@ export const AppProvider = ({ children }) => {
         setVoiceJournal,
         isLocationModalOpen,
         setIsLocationModalOpen,
+        isAboutOpen,
+        setIsAboutOpen,
         updateLocationManually,
         refreshGpsLocation,
         isSpeechPlaying,

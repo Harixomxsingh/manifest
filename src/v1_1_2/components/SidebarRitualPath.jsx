@@ -11,7 +11,7 @@ export const RITUAL_PHASES = [
   { id: 'launch', label: 'Launchpad', number: '05', icon: Compass }
 ];
 
-export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVault, onOpenStreak }) {
+export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVault, onOpenStreak, onOpenAbout }) {
   const [streak, setStreak] = useState(() => getStreakData());
 
   useEffect(() => {
@@ -140,6 +140,16 @@ export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVa
             >
               <BookMarked className="w-4 h-4 text-amber-700 shrink-0" />
               <span>Journal Vault & Archive</span>
+            </button>
+          )}
+
+          {onOpenAbout && (
+            <button
+              onClick={onOpenAbout}
+              className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-300/80 text-amber-950 text-xs font-bold transition-all shadow-2xs cursor-pointer hover:scale-[1.01] active:scale-[0.99]"
+            >
+              <Sparkles className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>About & Philosophy</span>
             </button>
           )}
         </div>

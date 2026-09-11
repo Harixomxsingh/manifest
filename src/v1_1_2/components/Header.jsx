@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Settings, Download, Shuffle, Volume2, VolumeX, BookOpen, Flame } from 'lucide-react';
+import { Settings, Download, Shuffle, Volume2, VolumeX, BookOpen, Flame, Sparkles } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import ManifestSunLogo from '../../components/ManifestSunLogo';
 import { getStreakData } from '../../services/streakService';
 
-export default function Header({ onOpenVault, onOpenStreak }) {
+export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
   const {
     isAudioPlaying,
     toggleAudioReadout,
     setIsSettingsOpen,
+    setIsAboutOpen,
     randomizeAllDailyContent,
     shuffleDailyQuote
   } = useApp();
@@ -166,6 +167,19 @@ export default function Header({ onOpenVault, onOpenStreak }) {
               )}
             </button>
           )}
+
+          {/* About Manifest Trigger (Purpose & Benefits) */}
+          <button
+            onClick={() => {
+              if (onOpenAbout) onOpenAbout();
+              else if (setIsAboutOpen) setIsAboutOpen(true);
+            }}
+            title="About Manifest • Purpose, Philosophy & Transformative Benefits"
+            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/10 to-yellow-500/10 hover:from-amber-500/20 hover:to-yellow-500/20 border border-amber-300/80 text-amber-950 text-xs font-bold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <span className="hidden sm:inline">About</span>
+          </button>
 
           {/* Settings Trigger (Always clean and accessible) */}
           <button

@@ -1,6 +1,14 @@
 import React from 'react';
+import { useApp } from '../../context/AppContext';
 
-export default function FooterKeyboardBar() {
+export default function FooterKeyboardBar({ onOpenAbout }) {
+  const { setIsAboutOpen } = useApp();
+
+  const handleAboutClick = () => {
+    if (onOpenAbout) onOpenAbout();
+    else if (setIsAboutOpen) setIsAboutOpen(true);
+  };
+
   return (
     <footer className="w-full py-3.5 px-8 border-t border-stone-200/60 bg-[#FDF9F1] flex items-center justify-between text-[11px] font-mono text-stone-400">
       <div className="flex items-center gap-6">
@@ -24,8 +32,15 @@ export default function FooterKeyboardBar() {
       </div>
 
       <div className="flex items-center gap-3 text-stone-500 font-sans text-xs">
+        <button
+          onClick={handleAboutClick}
+          className="hover:text-amber-900 text-stone-500 font-semibold transition-colors cursor-pointer"
+        >
+          About & Purpose
+        </button>
+        <span className="text-stone-300">•</span>
         <span className="text-[10.5px] text-stone-400 font-mono">
-          © 2026 Hari • PolyForm Noncommercial License
+          © 2026 Hari • PolyForm Noncommercial
         </span>
         <span className="text-stone-300">•</span>
         <span>made with ❤️ by</span>

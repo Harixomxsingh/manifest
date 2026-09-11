@@ -178,6 +178,7 @@ export function AppProvider({ children }) {
   };
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   /**
@@ -584,6 +585,8 @@ export function AppProvider({ children }) {
         updateLocationManually,
         isSettingsOpen,
         setIsSettingsOpen,
+        isAboutOpen,
+        setIsAboutOpen,
         isHistoryOpen,
         setIsHistoryOpen,
         isOnboardingOpen,

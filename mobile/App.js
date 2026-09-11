@@ -18,6 +18,7 @@ import Header from './src/components/Header';
 import BottomRitualBar from './src/components/BottomRitualBar';
 import LocationPickerModal from './src/components/LocationPickerModal';
 import PartyPopper from './src/components/PartyPopper';
+import AboutManifestModal from './src/components/AboutManifestModal';
 import PhaseWelcome from './src/phases/PhaseWelcome';
 import PhaseIdentity from './src/phases/PhaseIdentity';
 import PhaseReading from './src/phases/PhaseReading';
@@ -27,7 +28,7 @@ import PhaseLaunch from './src/phases/PhaseLaunch';
 import { colors } from './src/theme/colors';
 
 function MainApp() {
-  const { activePhase } = useApp();
+  const { activePhase, isAboutOpen, setIsAboutOpen } = useApp();
 
   return (
     <View style={styles.container}>
@@ -56,6 +57,10 @@ function MainApp() {
 
       {/* Modals & Confetti Overlays */}
       <LocationPickerModal />
+      <AboutManifestModal
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+      />
       <PartyPopper />
     </View>
   );

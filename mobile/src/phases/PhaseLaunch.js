@@ -54,7 +54,8 @@ export default function PhaseLaunch() {
     voiceJournal,
     isSpeechPlaying,
     toggleSpeechSummary,
-    triggerPartyCelebration
+    triggerPartyCelebration,
+    setIsAboutOpen
   } = useApp();
 
   const [isVaultOpen, setIsVaultOpen] = useState(false);
@@ -254,6 +255,18 @@ Ready to make today count! 🚀`;
         <View style={styles.bottomLinkRow}>
           <TouchableOpacity onPress={() => setIsVaultOpen(true)} activeOpacity={0.7}>
             <Text style={styles.bottomLinkText}>Journal Vault</Text>
+          </TouchableOpacity>
+          <Text style={styles.dotSeparator}>•</Text>
+          <TouchableOpacity
+            onPress={() => {
+              triggerHaptic('light');
+              if (setIsAboutOpen) setIsAboutOpen(true);
+            }}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.bottomLinkText, { color: colors.primaryDark, fontWeight: '700' }]}>
+              About & Purpose
+            </Text>
           </TouchableOpacity>
           <Text style={styles.dotSeparator}>•</Text>
           <TouchableOpacity onPress={resetRitual} activeOpacity={0.7}>

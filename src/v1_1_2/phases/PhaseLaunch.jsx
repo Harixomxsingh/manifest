@@ -35,12 +35,13 @@ const GREEN_LEVEL_COLORS = [
   'bg-[#216E39] border-[#18562c]'
 ];
 
-export default function PhaseLaunch({ onResetToWelcome, onOpenVault, onOpenStreak }) {
+export default function PhaseLaunch({ onResetToWelcome, onOpenVault, onOpenStreak, onOpenAbout }) {
   const {
     briefing,
     todayArticle,
     weatherData,
-    voiceJournal
+    voiceJournal,
+    setIsAboutOpen
   } = useApp();
 
   const [isSpeechPlaying, setIsSpeechPlaying] = useState(false);
@@ -291,7 +292,7 @@ Ready to conquer today! 🚀`;
         </button>
 
         {/* Subtle Bottom Link Row */}
-        <div className="flex items-center justify-center gap-4 pt-2 text-xs font-medium text-stone-500">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 pt-2 text-xs font-medium text-stone-500">
           {onOpenVault && (
             <button
               onClick={onOpenVault}
@@ -301,6 +302,19 @@ Ready to conquer today! 🚀`;
               <span>Journal Vault</span>
             </button>
           )}
+
+          <span className="text-stone-300">•</span>
+
+          <button
+            onClick={() => {
+              if (onOpenAbout) onOpenAbout();
+              else if (setIsAboutOpen) setIsAboutOpen(true);
+            }}
+            className="hover:text-stone-900 transition-colors cursor-pointer flex items-center gap-1 text-amber-900 font-bold"
+          >
+            <Sparkles className="w-3 h-3 text-amber-600" />
+            <span>About & Purpose</span>
+          </button>
 
           <span className="text-stone-300">•</span>
 

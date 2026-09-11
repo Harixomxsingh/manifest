@@ -14,13 +14,14 @@ import SettingsModal from '../components/SettingsModal';
 import HistoryDrawer from '../components/HistoryDrawer';
 import JournalVaultModal from './components/JournalVaultModal';
 import MomentumHeatmapModal from './components/MomentumHeatmapModal';
+import AboutManifestModal from './components/AboutManifestModal';
 import { useApp } from '../context/AppContext';
 
 export default function DashboardV1_1_2() {
   const [activePhase, setActivePhase] = useState('welcome');
   const [isJournalVaultOpen, setIsJournalVaultOpen] = useState(false);
   const [isMomentumHeatmapOpen, setIsMomentumHeatmapOpen] = useState(false);
-  const { isSettingsOpen, isHistoryOpen, isLocationModalOpen, setVoiceJournal } = useApp();
+  const { isSettingsOpen, isHistoryOpen, isLocationModalOpen, setVoiceJournal, isAboutOpen, setIsAboutOpen } = useApp();
 
   const phaseOrder = ['welcome', 'identity', 'reading', 'voice', 'climate', 'launch'];
 
@@ -70,6 +71,7 @@ export default function DashboardV1_1_2() {
       <Header
         onOpenVault={() => setIsJournalVaultOpen(true)}
         onOpenStreak={() => setIsMomentumHeatmapOpen(true)}
+        onOpenAbout={() => setIsAboutOpen(true)}
       />
 
       {/* Fixed Left Navigation Sidebar (Desktop viewports) */}
@@ -81,13 +83,19 @@ export default function DashboardV1_1_2() {
         }}
         onOpenVault={() => setIsJournalVaultOpen(true)}
         onOpenStreak={() => setIsMomentumHeatmapOpen(true)}
+        onOpenAbout={() => setIsAboutOpen(true)}
       />
 
       {/* Main Content Area with Mobile & Tablet Safe Padding */}
       <div className="pl-0 lg:pl-64 flex flex-col min-h-screen">
         <main className="flex-1 pt-16 sm:pt-20 lg:pt-16 pb-24 md:pb-28 lg:pb-16 w-full">
           <div className="max-w-[42rem] md:max-w-[45rem] lg:max-w-[44rem] xl:max-w-[46rem] mx-auto px-3.5 sm:px-6 md:px-8 py-4 sm:py-8 flex flex-col justify-center min-h-[calc(100vh-8rem)]">
-            {activePhase === 'welcome' && <PhaseWelcome onAdvance={advanceToNextPhase} />}
+            {activePhase === 'welcome' && (
+              <PhaseWelcome
+                onAdvance={advanceToNextPhase}
+                onOpenAbout={() => setIsAboutOpen(true)}
+              />
+            )}
             {activePhase === 'identity' && <PhaseIdentity onAdvance={advanceToNextPhase} />}
             {activePhase === 'reading' && <PhaseReading onAdvance={advanceToNextPhase} />}
             {activePhase === 'voice' && <PhaseVoiceClarity onAdvance={advanceToNextPhase} />}
@@ -100,11 +108,18 @@ export default function DashboardV1_1_2() {
                 }}
                 onOpenVault={() => setIsJournalVaultOpen(true)}
                 onOpenStreak={() => setIsMomentumHeatmapOpen(true)}
+                onOpenAbout={() => setIsAboutOpen(true)}
               />
             )}
 
             {/* Subtle Mobile Footer */}
-            <div className="mt-8 mb-2 text-center lg:hidden space-y-1">
+            <div className="mt-8 mb-2 text-center lg:hidden space-y-2">
+              <button
+                onClick={() => setIsAboutOpen(true)}
+                className="text-xs text-amber-800 font-bold hover:underline cursor-pointer inline-flex items-center gap-1 bg-amber-100/60 border border-amber-200 px-3 py-1 rounded-full"
+              >
+                <span>About Manifest • Purpose & Benefits</span>
+              </button>
               <p className="text-[11px] text-stone-500 font-sans">
                 made with ❤️ by{' '}
                 <a
@@ -125,7 +140,7 @@ export default function DashboardV1_1_2() {
 
         {/* Fixed Desktop Keyboard Shortcuts Helper */}
         <div className="hidden lg:block">
-          <FooterKeyboardBar />
+          <FooterKeyboardBar onOpenAbout={() => setIsAboutOpen(true)} />
         </div>
       </div>
 
@@ -139,6 +154,10 @@ export default function DashboardV1_1_2() {
       />
 
       {/* Modals & Focus Heatmap */}
+      <AboutManifestModal
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+      />
       <MomentumHeatmapModal
         isOpen={isMomentumHeatmapOpen}
         onClose={() => setIsMomentumHeatmapOpen(false)}
