@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createBackupSnapshot } from './storagePersistenceService';
 
 const STORAGE_STREAK_KEY = '@manifest_morning_streak_data';
 const STORAGE_HEATMAP_KEY = '@manifest_focus_heatmap_data';
@@ -179,6 +180,7 @@ export async function recordDailyCompletion() {
       lastActive: new Date().toISOString()
     };
     await AsyncStorage.setItem(STORAGE_HEATMAP_KEY, JSON.stringify(logs));
+    await createBackupSnapshot();
 
     cachedStreakData = {
       ...prev,
@@ -216,6 +218,7 @@ export async function recordFocusSession(minutes = 25) {
     logs[todayStr] = updatedLog;
     cachedHeatmapLogs = logs;
     await AsyncStorage.setItem(STORAGE_HEATMAP_KEY, JSON.stringify(logs));
+    await createBackupSnapshot();
     return updatedLog;
   } catch (e) {
     return null;

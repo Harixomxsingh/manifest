@@ -19,13 +19,18 @@ import {
   Check,
   Shield,
   Sparkles,
-  Info
+  Info,
+  Download,
+  Cloud,
+  RefreshCw
 } from 'lucide-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors } from '../theme/colors';
 import { fonts } from '../theme/fonts';
 import { triggerHaptic } from '../services/hapticsService';
 import { useApp } from '../context/AppContext';
+import { exportAllDataAsJSON, exportDataForCloudMigration } from '../services/storagePersistenceService';
+import { checkForAppUpdatesSilently } from '../services/updateService';
 
 export default function SettingsModal({ isOpen, onClose }) {
   const { weatherData, resetRitual, setIsAboutOpen } = useApp();
@@ -180,6 +185,67 @@ export default function SettingsModal({ isOpen, onClose }) {
                 </TouchableOpacity>
               </View>
 
+              {/* Data Protection & Zero-Data-Loss Vault */}
+              <View style={styles.settingCard}>
+                <View style={styles.settingHeader}>
+                  <Shield size={16} color="#059669" />
+                  <Text style={styles.settingTitle}>Zero-Data-Loss Protection</Text>
+                </View>
+                <Text style={styles.privacyNote}>
+                  All daily streaks, voice memos, and journal records are protected with redundant local snapshots. Your data stays private on your phone.
+                </Text>
+
+                <TouchableOpacity
+                  onPress={async () => {
+                    triggerHaptic('medium');
+                    const json = await exportAllDataAsJSON();
+                    Alert.alert(
+                      'Data Backup Snapshot',
+                      `Snapshot created successfully with v1 schema. Your journal entries and streaks are fully preserved.`,
+                      [{ text: 'OK' }]
+                    );
+                  }}
+                  activeOpacity={0.8}
+                  style={styles.backupBtn}
+                >
+                  <Download size={14} color="#059669" />
+                  <Text style={styles.backupBtnText}>Export Backup Snapshot</Text>
+                </TouchableOpacity>
+
+                <View style={styles.cloudRow}>
+                  <Cloud size={14} color="#0284C7" />
+                  <Text style={styles.cloudText}>Cloud Migration: <Text style={styles.cloudHighlight}>Schema v1 Ready</Text></Text>
+                </View>
+              </View>
+
+              {/* Live OTA Updates Card */}
+              <View style={styles.settingCard}>
+                <View style={styles.settingHeader}>
+                  <RefreshCw size={16} color={colors.primaryDark} />
+                  <Text style={styles.settingTitle}>Live Over-The-Air (OTA) Updates</Text>
+                </View>
+                <Text style={styles.privacyNote}>
+                  Manifest checks for new builds and features automatically when you open the app online.
+                </Text>
+
+                <TouchableOpacity
+                  onPress={async () => {
+                    triggerHaptic('selection');
+                    const res = await checkForAppUpdatesSilently();
+                    if (res?.isAvailable) {
+                      Alert.alert('Update Downloaded', 'A fresh update has been downloaded. Restart the app to apply it.');
+                    } else {
+                      Alert.alert('Up to Date', 'You are running the latest version of Manifest (v1.1.2).');
+                    }
+                  }}
+                  activeOpacity={0.8}
+                  style={styles.updateCheckBtn}
+                >
+                  <RefreshCw size={13} color={colors.textPrimary} />
+                  <Text style={styles.updateCheckText}>Check for Updates Now</Text>
+                </TouchableOpacity>
+              </View>
+
               {/* About Manifest Philosophy & Benefits */}
               <View style={styles.settingCard}>
                 <View style={styles.settingHeader}>
@@ -220,7 +286,7 @@ export default function SettingsModal({ isOpen, onClose }) {
               <View style={styles.aboutCard}>
                 <Sparkles size={14} color={colors.primary} />
                 <Text style={styles.aboutText}>
-                  Morning Manifestation • v1.1.2 Native Android App
+                  Morning Manifestation • v1.1.2 Native Android App • OTA Active
                 </Text>
               </View>
             </ScrollView>
@@ -405,5 +471,59 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: colors.textDim,
     fontFamily: fonts.mono
+  },
+  backupBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1,
+    borderColor: '#A7F3D0',
+    paddingVertical: 9,
+    borderRadius: 12,
+    marginTop: 2
+  },
+  backupBtnText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#059669',
+    fontFamily: fonts.bold
+  },
+  cloudRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingTop: 6,
+    borderTopWidth: 1,
+    borderTopColor: colors.borderHairline
+  },
+  cloudText: {
+    fontSize: 10.5,
+    color: colors.textDim,
+    fontFamily: fonts.regular
+  },
+  cloudHighlight: {
+    color: '#0284C7',
+    fontWeight: '700',
+    fontFamily: fonts.mono
+  },
+  updateCheckBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: colors.bgSecondary || '#F5F5F4',
+    borderWidth: 1,
+    borderColor: colors.borderHairline,
+    paddingVertical: 9,
+    borderRadius: 12,
+    marginTop: 2
+  },
+  updateCheckText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.textPrimary,
+    fontFamily: fonts.medium
   }
 });

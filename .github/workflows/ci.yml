@@ -1,0 +1,41 @@
+name: 🛡️ Manifest CI/CD & Automated Verification Pipeline
+
+on:
+  push:
+    branches: [ main, development ]
+  pull_request:
+    branches: [ main, development ]
+
+jobs:
+  verify-and-test:
+    name: 🧪 Automated Test Suite & Multi-Platform Build Gating
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 1. Web & Shared Logic Tests
+      - name: 📦 Install Web Dependencies
+        run: npm install
+
+      - name: 🧪 Execute Automated Unit & Storage Tests
+        run: npm test
+
+      - name: 🏗️ Verify Web Production Build (Vite)
+        run: npm run build
+
+      # 2. Mobile React Native & Hermes Bytecode Verification
+      - name: 📱 Install Mobile Dependencies
+        working-directory: ./mobile
+        run: npm install
+
+      - name: 🚀 Compile Android Hermes Bundle Verification
+        working-directory: ./mobile
+        run: npx expo export --platform android --no-minify

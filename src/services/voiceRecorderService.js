@@ -1,3 +1,5 @@
+import { createBackupSnapshot } from './storagePersistenceService';
+
 const VOICE_VAULT_KEY = '@manifest_voice_journals_vault';
 
 let mediaRecorder = null;
@@ -232,6 +234,7 @@ export const saveVoiceJournalRecord = async (record) => {
     const filtered = existingList.filter((r) => r.id !== enriched.id);
     const updatedList = [enriched, ...filtered].slice(0, 100);
     localStorage.setItem(VOICE_VAULT_KEY, JSON.stringify(updatedList));
+    createBackupSnapshot();
     return updatedList;
   } catch (err) {
     console.warn('Failed to save journal record locally:', err.message);
@@ -328,6 +331,7 @@ export const deleteVoiceJournalRecord = async (id) => {
     const list = JSON.parse(existingRaw);
     const updatedList = list.filter((r) => r.id !== id);
     localStorage.setItem(VOICE_VAULT_KEY, JSON.stringify(updatedList));
+    createBackupSnapshot();
     return updatedList;
   } catch (err) {
     console.warn('Failed to delete journal record:', err.message);

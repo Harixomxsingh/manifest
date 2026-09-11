@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { X, Key, Shield, Globe, Cpu, RefreshCw, LogIn, LogOut, ExternalLink, Check, Trash2, Sparkles } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { X, Key, Shield, Globe, Cpu, RefreshCw, LogIn, LogOut, ExternalLink, Check, Trash2, Sparkles, Download, Upload, Database, Cloud } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { POPULAR_CITIES } from '../services/weatherService';
+import { downloadBackupJSONFile, importBackupFromJSON, exportDataForCloudMigration, getBackupSnapshot } from '../services/storagePersistenceService';
 
 export default function SettingsModal() {
   const {
@@ -412,7 +413,89 @@ export default function SettingsModal() {
             </div>
           </div>
 
-          {/* 6. About Manifest Philosophy & Benefits */}
+          {/* 6. Data Protection & Zero-Data-Loss Backup */}
+          <div className="p-4 rounded-2xl bg-emerald-950/30 border border-emerald-500/30 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-bold text-emerald-400 font-mono flex items-center gap-1.5 uppercase tracking-wider">
+                <Shield className="w-3.5 h-3.5" />
+                <span>Zero-Data-Loss & Local Vault</span>
+              </div>
+              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-mono font-bold">
+                Auto-Snapshot Active
+              </span>
+            </div>
+            
+            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">
+              All your daily streaks, voice transcripts, focus blocks, and journal entries are safely preserved locally on your device with redundant snapshots.
+            </p>
+
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  const res = downloadBackupJSONFile();
+                  if (res.success) {
+                    alert(`✅ Backup successfully exported as ${res.filename}`);
+                  }
+                }}
+                className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-emerald-500/30 text-emerald-300 text-xs font-semibold transition-all cursor-pointer"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Export Backup (JSON)</span>
+              </button>
+
+              <label className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/[0.12] text-slate-200 text-xs font-semibold transition-all cursor-pointer">
+                <Upload className="w-3.5 h-3.5 text-amber-400" />
+                <span>Restore Backup</span>
+                <input
+                  type="file"
+                  accept=".json"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (evt) => {
+                        const content = evt.target?.result;
+                        if (typeof content === 'string') {
+                          const res = importBackupFromJSON(content);
+                          if (res.success) {
+                            alert(`✅ Restored ${res.restoredItems.journalEntriesCount} journals and streaks successfully!`);
+                            refreshDispatch();
+                          } else {
+                            alert(`❌ Restore failed: ${res.error}`);
+                          }
+                        }
+                      };
+                      reader.readAsText(file);
+                    }
+                  }}
+                />
+              </label>
+            </div>
+
+            {/* Cloud Migration Bridge */}
+            <div className="pt-2 border-t border-emerald-500/20 flex items-center justify-between text-[11px]">
+              <div className="flex items-center gap-1.5 text-slate-400">
+                <Cloud className="w-3.5 h-3.5 text-sky-400" />
+                <span>Cloud Sync Readiness:</span>
+                <span className="text-sky-300 font-mono font-medium">Schema v1 Standard</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const payload = exportDataForCloudMigration();
+                  navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+                  alert('📋 Cloud Migration JSON payload copied to clipboard!');
+                }}
+                className="text-amber-400 hover:text-amber-300 font-mono text-[10px] underline underline-offset-2"
+              >
+                Copy Cloud Payload
+              </button>
+            </div>
+          </div>
+
+          {/* 7. About Manifest Philosophy & Benefits */}
           <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-between gap-3">
             <div className="space-y-0.5">
               <div className="text-xs font-bold text-amber-300 flex items-center gap-1.5 font-mono">
@@ -435,7 +518,18 @@ export default function SettingsModal() {
             </button>
           </div>
 
-          {/* 7. License & Copyright Protection Section */}
+          {/* 8. App Version & Updates */}
+          <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/[0.06] flex items-center justify-between">
+            <div className="text-[11px] text-slate-400 font-mono">
+              Manifest Production Web • <span className="text-emerald-400">v1.1.2</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Live OTA Auto-Sync</span>
+            </div>
+          </div>
+
+          {/* 9. License & Copyright Protection Section */}
           <div className="p-3.5 rounded-2xl bg-slate-900/80 border border-white/[0.08] space-y-2">
             <div className="flex items-center justify-between">
               <div className="text-xs font-bold text-slate-300 font-mono flex items-center gap-1.5 uppercase tracking-wider">

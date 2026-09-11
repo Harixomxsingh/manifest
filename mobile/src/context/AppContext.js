@@ -7,6 +7,7 @@ import { getTodayIdentityAnchor } from '../services/identityService';
 import { getTodayQuote, getRandomQuote } from '../services/quoteService';
 import { checkForAppUpdatesSilently } from '../services/updateService';
 import { initStreakService, getStreakData } from '../services/streakService';
+import { verifyAndHealStorage } from '../services/storagePersistenceService';
 
 const AppContext = createContext();
 
@@ -45,12 +46,15 @@ export const AppProvider = ({ children }) => {
       // 1. Silent Background OTA Update Check (zero impact on startup speed)
       checkForAppUpdatesSilently();
 
-      // 2. Initialize streak service from AsyncStorage
+      // 2. Storage Health & Auto-Healing Check
+      await verifyAndHealStorage();
+
+      // 3. Initialize streak service from AsyncStorage
       await initStreakService();
       const s = await getStreakData();
       setStreakData(s);
 
-      // 3. Fetch location & weather
+      // 4. Fetch location & weather
       const loc = await detectGpsCoordinates();
       setActiveLocation(loc);
       const w = await fetchOpenMeteoWeather(loc.lat, loc.lon, loc.name);

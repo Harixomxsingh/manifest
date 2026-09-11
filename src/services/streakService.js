@@ -3,6 +3,8 @@
  * Manages GitHub-style daily activity and focus time tracking in LocalStorage.
  */
 
+import { createBackupSnapshot } from './storagePersistenceService';
+
 const STORAGE_STREAK_KEY = 'manifest_morning_streak_data';
 const STORAGE_HEATMAP_KEY = 'manifest_focus_heatmap_data';
 
@@ -156,6 +158,7 @@ export function recordDailyCompletion() {
       lastActive: new Date().toISOString()
     };
     saveHeatmapLogs(logs);
+    createBackupSnapshot();
 
     const result = {
       ...streakPayload,
@@ -192,6 +195,7 @@ export function recordFocusSession(minutes = 25) {
 
     logs[todayStr] = updatedLog;
     saveHeatmapLogs(logs);
+    createBackupSnapshot();
 
     if (typeof window !== 'undefined' && window.dispatchEvent) {
       window.dispatchEvent(new CustomEvent('manifest_streak_updated', { detail: updatedLog }));

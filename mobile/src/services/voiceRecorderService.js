@@ -7,6 +7,7 @@ import {
   AudioModule
 } from 'expo-audio';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createBackupSnapshot } from './storagePersistenceService';
 
 const VOICE_VAULT_KEY = '@manifest_voice_journals_vault';
 
@@ -317,6 +318,7 @@ export const saveVoiceJournalRecord = async (record) => {
     const updatedList = [enriched, ...filtered].slice(0, 100);
     
     await AsyncStorage.setItem(VOICE_VAULT_KEY, JSON.stringify(updatedList));
+    await createBackupSnapshot();
     return updatedList;
   } catch (err) {
     console.warn('Failed to save journal record locally:', err.message);
@@ -413,6 +415,7 @@ export const deleteVoiceJournalRecord = async (id) => {
     const list = JSON.parse(existingRaw);
     const updatedList = list.filter((r) => r.id !== id);
     await AsyncStorage.setItem(VOICE_VAULT_KEY, JSON.stringify(updatedList));
+    await createBackupSnapshot();
     return updatedList;
   } catch (err) {
     console.warn('Failed to delete journal record:', err.message);

@@ -20,6 +20,7 @@ import {
 import { generateMorningBriefing } from '../services/geminiService';
 import { speechService } from '../services/speechService';
 import { getStreakData } from '../services/streakService';
+import { verifyAndHealStorage } from '../services/storagePersistenceService';
 
 const AppContext = createContext(null);
 
@@ -193,13 +194,25 @@ export function AppProvider({ children }) {
   const [streakData, setStreakData] = useState(() => getStreakData());
 
   useEffect(() => {
+    // 1. Storage Health & Auto-Healing Check
+    verifyAndHealStorage();
+
+    // 2. Global Event Listeners
     const handleStreakUpdate = () => {
       setStreakData(getStreakData());
     };
+    const handleDataRestored = () => {
+      setStreakData(getStreakData());
+      setReadHistory(getReadHistory());
+    };
+
     window.addEventListener('manifest_streak_updated', handleStreakUpdate);
+    window.addEventListener('manifest_data_restored', handleDataRestored);
     window.addEventListener('storage', handleStreakUpdate);
+
     return () => {
       window.removeEventListener('manifest_streak_updated', handleStreakUpdate);
+      window.removeEventListener('manifest_data_restored', handleDataRestored);
       window.removeEventListener('storage', handleStreakUpdate);
     };
   }, []);
