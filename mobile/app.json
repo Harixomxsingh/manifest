@@ -21,6 +21,8 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.hari.manifest",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#FDF9F1",
         "foregroundImage": "./assets/android-icon-foreground.png",
