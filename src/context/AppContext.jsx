@@ -32,14 +32,21 @@ export function AppProvider({ children }) {
   const [settings, setSettings] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_SETTINGS_KEY);
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        return {
+          ...parsed,
+          // Default to Celsius (°C) unless user explicitly saved Fahrenheit preference
+          isFahrenheit: parsed.isFahrenheit === true && parsed.userSelectedFahrenheit === true
+        };
+      }
     } catch (e) {}
     return {
       geminiApiKey: '',
       geminiModel: 'gemini-2.5-flash',
       googleClientId: '',
       isDemoMode: true,
-      isFahrenheit: true,
+      isFahrenheit: false, // Default to Celsius (°C / Degree)
       cityMode: 'auto', // 'auto' or custom city
       customLocation: { name: 'San Francisco, CA', lat: 37.7749, lon: -122.4194 }
     };

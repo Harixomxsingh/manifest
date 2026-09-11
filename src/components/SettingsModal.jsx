@@ -53,6 +53,7 @@ export default function SettingsModal() {
       googleClientId: formData.googleClientId.trim(),
       isDemoMode: formData.isDemoMode,
       isFahrenheit: formData.isFahrenheit,
+      userSelectedFahrenheit: formData.isFahrenheit,
       cityMode: formData.cityMode,
       customLocation
     }));

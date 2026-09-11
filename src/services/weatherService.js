@@ -237,10 +237,10 @@ export async function detectCoordinates(preferGps = true) {
 /**
  * Fetch 12-hour hourly forecast from Open-Meteo
  */
-export async function fetchWeatherForecast(lat = 37.7749, lon = -122.4194, isFahrenheit = true) {
+export async function fetchWeatherForecast(lat = 37.7749, lon = -122.4194, isFahrenheit = false) {
   try {
     const tempUnit = isFahrenheit ? 'fahrenheit' : 'celsius';
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,uv_index&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&temperature_unit=${tempUnit}&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=1`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,apparent_temperature,precipitation_probability,weather_code,uv_index&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&temperature_unit=${tempUnit}&wind_speed_unit=kmh&precipitation_unit=mm&timezone=auto&forecast_days=1`;
 
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Open-Meteo HTTP error: ${res.status}`);
@@ -333,11 +333,11 @@ function generateHeuristicTactics(high, low, rainProb, code, isFahrenheit) {
   };
 }
 
-export function getMockWeather(isFahrenheit = true) {
-  const high = isFahrenheit ? 72 : 22;
-  const low = isFahrenheit ? 54 : 12;
+export function getMockWeather(isFahrenheit = false) {
+  const high = isFahrenheit ? 72 : 24;
+  const low = isFahrenheit ? 54 : 16;
   return {
-    currentTemp: isFahrenheit ? 62 : 17,
+    currentTemp: isFahrenheit ? 62 : 22,
     highTemp: high,
     lowTemp: low,
     unit: isFahrenheit ? '°F' : '°C',
