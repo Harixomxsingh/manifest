@@ -519,14 +519,25 @@ export default function SettingsModal() {
           </div>
 
           {/* 8. App Version & Updates */}
-          <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/[0.06] flex items-center justify-between">
-            <div className="text-[11px] text-slate-400 font-mono">
-              Manifest Production Web • <span className="text-emerald-400">v1.1.2</span>
+          <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-white/[0.06] flex items-center justify-between gap-3">
+            <div>
+              <div className="text-[11px] text-slate-300 font-mono">
+                Manifest Production • <span className="text-emerald-400 font-bold">v1.1.2</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 mt-0.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Live OTA Auto-Sync Active</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Live OTA Auto-Sync</span>
-            </div>
+
+            <a
+              href="https://github.com/Harixomxsingh/manifest/releases/download/v1.1.2-android/manifest-v1.1.2.apk"
+              download="manifest-v1.1.2.apk"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm shrink-0"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Download APK</span>
+            </a>
           </div>
 
           {/* 9. License & Copyright Protection Section */}

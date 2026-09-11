@@ -122,16 +122,16 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
             </button>
           )}
 
-          {/* Android App Direct Download Link */}
+          {/* Android App Direct Download Link (Auto-starts APK download) */}
           <a
-            href="https://github.com/Harixomxsingh/manifest/releases/tag/v1.1.2-android"
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Download Android Standalone App (.apk)"
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-300/80 text-emerald-950 text-xs font-bold transition-all shadow-2xs hover:scale-[1.02] active:scale-[0.98]"
+            href="https://github.com/Harixomxsingh/manifest/releases/download/v1.1.2-android/manifest-v1.1.2.apk"
+            download="manifest-v1.1.2.apk"
+            title="Direct Download Android App (.apk)"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-300/80 text-emerald-950 text-xs font-bold transition-all shadow-2xs hover:scale-[1.02] active:scale-[0.98]"
           >
             <Download className="w-3.5 h-3.5 text-emerald-700" />
-            <span>Android APK</span>
+            <span className="hidden sm:inline">Android APK</span>
+            <span className="inline sm:hidden">APK</span>
           </a>
 
           {/* PWA Install Button (Desktop/Tablet) */}
