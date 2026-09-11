@@ -6,7 +6,7 @@ import { getTodayArticle } from '../services/jamesClearService';
 import { getTodayIdentityAnchor } from '../services/identityService';
 import { getTodayQuote, getRandomQuote } from '../services/quoteService';
 import { checkForAppUpdatesSilently } from '../services/updateService';
-import { initStreakService } from '../services/streakService';
+import { initStreakService, getStreakData } from '../services/streakService';
 
 const AppContext = createContext();
 
@@ -18,6 +18,7 @@ export const AppProvider = ({ children }) => {
   const [todayQuote, setTodayQuote] = useState(() => getTodayQuote(getTodayStr()));
   const [briefing, setBriefing] = useState(() => ({ optimismAnchor: getTodayIdentityAnchor(getTodayStr()) }));
   const [todayArticle, setTodayArticle] = useState(() => getTodayArticle(getTodayStr()));
+  const [streakData, setStreakData] = useState({ currentStreak: 1, longestStreak: 1 });
   const [activeLocation, setActiveLocation] = useState({
     name: 'San Francisco, USA',
     lat: 37.7749,
@@ -46,6 +47,8 @@ export const AppProvider = ({ children }) => {
 
       // 2. Initialize streak service from AsyncStorage
       await initStreakService();
+      const s = await getStreakData();
+      setStreakData(s);
 
       // 3. Fetch location & weather
       const loc = await detectGpsCoordinates();
@@ -157,6 +160,12 @@ export const AppProvider = ({ children }) => {
     setTodayQuote(randomQ);
   };
 
+  const refreshStreakData = async () => {
+    const s = await getStreakData();
+    setStreakData(s);
+    return s;
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -170,6 +179,9 @@ export const AppProvider = ({ children }) => {
         shuffleDailyQuote,
         briefing,
         todayArticle,
+        streakData,
+        setStreakData,
+        refreshStreakData,
         activeLocation,
         weatherData,
         voiceJournal,

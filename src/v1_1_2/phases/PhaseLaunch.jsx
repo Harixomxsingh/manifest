@@ -41,18 +41,23 @@ export default function PhaseLaunch({ onResetToWelcome, onOpenVault, onOpenStrea
     todayArticle,
     weatherData,
     voiceJournal,
-    setIsAboutOpen
+    setIsAboutOpen,
+    streakData: contextStreak,
+    setStreakData
   } = useApp();
 
   const [isSpeechPlaying, setIsSpeechPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isFocusTimerOpen, setIsFocusTimerOpen] = useState(false);
   const [isCelebrationOpen, setIsCelebrationOpen] = useState(false);
-  const [streak, setStreak] = useState(() => getStreakData());
+  const [streak, setStreak] = useState(() => contextStreak || getStreakData());
 
   useEffect(() => {
     const updated = recordDailyCompletion();
     setStreak(updated);
+    if (setStreakData) {
+      setStreakData(updated);
+    }
 
     // Always trigger full-screen celebration modal when landing on Launchpad
     setIsCelebrationOpen(true);

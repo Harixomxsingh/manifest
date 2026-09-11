@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Sparkles, Shield, BookOpen, Mic, Sun, Compass, BookMarked, Check, Flame } from 'lucide-react';
 import { getStreakData } from '../../services/streakService';
+import { useApp } from '../../context/AppContext';
 
 export const RITUAL_PHASES = [
   { id: 'welcome', label: 'Welcome', number: '00', icon: Sparkles },
@@ -12,11 +13,8 @@ export const RITUAL_PHASES = [
 ];
 
 export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVault, onOpenStreak, onOpenAbout }) {
-  const [streak, setStreak] = useState(() => getStreakData());
-
-  useEffect(() => {
-    setStreak(getStreakData());
-  }, []);
+  const { streakData: contextStreak } = useApp();
+  const streak = contextStreak || getStreakData();
 
   const currentIndex = RITUAL_PHASES.findIndex((p) => p.id === activePhase);
   const safeIndex = currentIndex >= 0 ? currentIndex : 0;
@@ -128,7 +126,7 @@ export default function SidebarRitualPath({ activePhase, onSelectPhase, onOpenVa
                 <span>Focus Heatmap & Streak</span>
               </div>
               <span className="text-[10px] font-mono font-extrabold text-amber-800 bg-amber-200/80 px-1.5 py-0.5 rounded">
-                Grid
+                {streak.currentStreak}d
               </span>
             </button>
           )}

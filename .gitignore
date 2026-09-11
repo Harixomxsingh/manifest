@@ -1,5 +1,26 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Production Build outputs (root dist is ignored, docs/ is used for GitHub Pages)
+dist/
+dist-ssr/
+build/
+web-build/
+
+# Mobile / Expo
+.expo/
+mobile/dist/
+.kotlin/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
 # Logs
-logs
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -7,19 +28,19 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Environment & Local Configs
+.env
+.env*.local
 *.local
 
-# Editor directories and files
+# System & Editor
+.DS_Store
+Thumbs.db
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-node_modules

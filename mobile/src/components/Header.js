@@ -40,7 +40,8 @@ export default function Header() {
     toggleSpeechSummary,
     randomizeAllDailyContent,
     jumpToPhase,
-    activePhase
+    activePhase,
+    streakData
   } = useApp();
 
   const [timeStr, setTimeStr] = useState('');
@@ -48,15 +49,6 @@ export default function Header() {
   const [isHeatmapOpen, setIsHeatmapOpen] = useState(false);
   const [isFocusTimerOpen, setIsFocusTimerOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [streakData, setStreakData] = useState({ currentStreak: 1 });
-
-  useEffect(() => {
-    const loadStreak = async () => {
-      const s = await getStreakData();
-      setStreakData(s);
-    };
-    loadStreak();
-  }, [isHeatmapOpen]);
 
   useEffect(() => {
     const updateTime = () => {

@@ -157,11 +157,17 @@ export function recordDailyCompletion() {
     };
     saveHeatmapLogs(logs);
 
-    return {
+    const result = {
       ...streakPayload,
       isCompletedToday: true,
       wasFirstCompletionToday: wasFirstToday
     };
+
+    if (typeof window !== 'undefined' && window.dispatchEvent) {
+      window.dispatchEvent(new CustomEvent('manifest_streak_updated', { detail: result }));
+    }
+
+    return result;
   } catch (e) {
     return { currentStreak: 1, longestStreak: 1, isCompletedToday: true, wasFirstCompletionToday: false };
   }
@@ -186,6 +192,11 @@ export function recordFocusSession(minutes = 25) {
 
     logs[todayStr] = updatedLog;
     saveHeatmapLogs(logs);
+
+    if (typeof window !== 'undefined' && window.dispatchEvent) {
+      window.dispatchEvent(new CustomEvent('manifest_streak_updated', { detail: updatedLog }));
+    }
+
     return updatedLog;
   } catch (e) {
     return null;

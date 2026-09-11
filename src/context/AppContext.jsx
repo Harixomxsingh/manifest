@@ -19,6 +19,7 @@ import {
 } from '../services/googleAuthService';
 import { generateMorningBriefing } from '../services/geminiService';
 import { speechService } from '../services/speechService';
+import { getStreakData } from '../services/streakService';
 
 const AppContext = createContext(null);
 
@@ -180,6 +181,21 @@ export function AppProvider({ children }) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
+  // Global Reactive Streak State (Syncs instantly across entire app)
+  const [streakData, setStreakData] = useState(() => getStreakData());
+
+  useEffect(() => {
+    const handleStreakUpdate = () => {
+      setStreakData(getStreakData());
+    };
+    window.addEventListener('manifest_streak_updated', handleStreakUpdate);
+    window.addEventListener('storage', handleStreakUpdate);
+    return () => {
+      window.removeEventListener('manifest_streak_updated', handleStreakUpdate);
+      window.removeEventListener('storage', handleStreakUpdate);
+    };
+  }, []);
 
   /**
    * Initialize Google Auth client if clientId is present
@@ -587,6 +603,8 @@ export function AppProvider({ children }) {
         setIsSettingsOpen,
         isAboutOpen,
         setIsAboutOpen,
+        streakData,
+        setStreakData,
         isHistoryOpen,
         setIsHistoryOpen,
         isOnboardingOpen,

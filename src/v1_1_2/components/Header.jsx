@@ -10,6 +10,7 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
     toggleAudioReadout,
     setIsSettingsOpen,
     setIsAboutOpen,
+    streakData: contextStreak,
     randomizeAllDailyContent,
     shuffleDailyQuote
   } = useApp();
@@ -18,11 +19,8 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
   const [currentDate, setCurrentDate] = useState('');
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstallable, setIsInstallable] = useState(false);
-  const [streakData, setStreakData] = useState(() => getStreakData());
 
-  useEffect(() => {
-    setStreakData(getStreakData());
-  }, []);
+  const streakData = contextStreak || getStreakData();
 
   useEffect(() => {
     const updateTime = () => {
@@ -66,7 +64,7 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
   return (
     <header className="fixed top-0 left-0 right-0 h-16 z-40 bg-[#FDF9F1]/95 backdrop-blur-md border-b border-stone-200/80 shadow-[0_1px_8px_rgba(180,83,9,0.03)]">
       <div className="h-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
-        {/* Left: Brand & Animated Sun Logo + Prominent Streak Badge */}
+        {/* Left: Brand & Animated Sun Logo + Minimal Streak Pill */}
         <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
           <ManifestSunLogo size={32} interactive={true} />
 
@@ -78,28 +76,15 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
             </span>
           </div>
 
-          {/* First Priority: Ultra-Prominent Eye-Catching Streak Badge */}
+          {/* Minimalist Fire + Streak Count Pill */}
           {onOpenStreak && (
             <button
               onClick={onOpenStreak}
-              className="group flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-amber-500/15 via-amber-400/25 to-yellow-400/15 hover:from-amber-500/25 hover:to-yellow-400/25 border-2 border-amber-400/80 hover:border-amber-500 text-amber-950 text-xs sm:text-sm font-mono font-extrabold transition-all duration-300 shadow-[0_0_12px_rgba(245,158,11,0.2)] hover:shadow-[0_0_18px_rgba(245,158,11,0.4)] hover:scale-105 active:scale-95 cursor-pointer ml-1"
-              title="Daily Streak & Focus Heatmap — Click to view calendar"
+              className="group flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/90 hover:bg-amber-200/90 border border-amber-300/90 text-amber-950 font-mono font-black text-xs sm:text-sm transition-all shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95 cursor-pointer ml-1"
+              title={`Daily Streak: ${streakData.currentStreak} Day${streakData.currentStreak > 1 ? 's' : ''} — Click to view Heatmap`}
             >
-              <div className="relative flex items-center justify-center">
-                <span className="absolute -inset-1 rounded-full bg-amber-400/50 animate-ping opacity-75" />
-                <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-600 fill-amber-500 relative z-10 transition-transform group-hover:scale-110" />
-              </div>
-              <span className="font-mono font-black text-amber-950 tracking-tight">
-                {streakData.currentStreak}
-                <span className="hidden sm:inline">D</span>
-              </span>
-              <span className="hidden md:inline font-sans font-bold text-amber-900 text-xs">
-                STREAK
-              </span>
-              <span className="hidden lg:inline-flex items-center gap-1 px-1.5 py-0.2 rounded bg-amber-200/80 text-[10px] font-sans font-bold text-amber-900 uppercase tracking-wider">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                ACTIVE
-              </span>
+              <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-600 fill-amber-500 shrink-0 transition-transform group-hover:scale-110" />
+              <span>{streakData.currentStreak}</span>
             </button>
           )}
 
