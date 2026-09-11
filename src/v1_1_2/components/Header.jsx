@@ -63,15 +63,13 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
 
   return (
     <header className="fixed top-0 left-0 right-0 h-16 z-40 bg-[#FDF9F1]/95 backdrop-blur-md border-b border-stone-200/80 shadow-[0_1px_8px_rgba(180,83,9,0.03)]">
-      <div className="h-16 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
+      <div className="h-16 w-full max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-3">
         {/* Left: Brand & Animated Sun Logo + Minimal Streak Pill */}
-        <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <ManifestSunLogo size={32} interactive={true} />
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 shrink">
+          <ManifestSunLogo size={30} interactive={true} />
 
-          <div className="flex items-baseline gap-2">
-            <span
-              className="text-lg sm:text-xl tracking-tight text-amber-950 font-bold"
-            >
+          <div className="flex items-baseline gap-1 sm:gap-2 min-w-0">
+            <span className="text-base sm:text-xl tracking-tight text-amber-950 font-bold truncate">
               Manifest
             </span>
           </div>
@@ -80,7 +78,7 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
           {onOpenStreak && (
             <button
               onClick={onOpenStreak}
-              className="group flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/90 hover:bg-amber-200/90 border border-amber-300/90 text-amber-950 font-mono font-black text-xs sm:text-sm transition-all shadow-2xs hover:shadow-xs hover:scale-105 active:scale-95 cursor-pointer ml-1"
+              className="group flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-amber-100/90 hover:bg-amber-200/90 border border-amber-300/90 text-amber-950 font-mono font-black text-xs sm:text-sm transition-all shadow-2xs hover:scale-105 active:scale-95 cursor-pointer shrink-0"
               title={`Daily Streak: ${streakData.currentStreak} Day${streakData.currentStreak > 1 ? 's' : ''} — Click to view Heatmap`}
             >
               <Flame className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-600 fill-amber-500 shrink-0 transition-transform group-hover:scale-110" />
@@ -95,63 +93,63 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
           </span>
         </div>
 
-        {/* Right: Actions (Clean & Decluttered for Mobile) */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Daily Shuffle Button (Always available, compact on mobile) */}
+        {/* Right: Actions (Clean & Fully Responsive on all screen sizes) */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+          {/* Daily Shuffle Button */}
           <button
             onClick={() => {
               if (shuffleDailyQuote) shuffleDailyQuote();
               else if (randomizeAllDailyContent) randomizeAllDailyContent();
             }}
             title="Shuffle quote and reflection"
-            className="flex items-center justify-center p-2 sm:px-3 sm:py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/70 text-amber-900 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className="flex items-center justify-center p-1.5 sm:px-3 sm:py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 border border-amber-200/70 text-amber-900 text-xs font-semibold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
             <Shuffle className="w-3.5 h-3.5 text-amber-700" />
             <span className="hidden sm:inline ml-1.5">Shuffle</span>
           </button>
-
-          {/* Journal Vault Trigger (Visible on tablet & desktop, accessible via drawer/cards on mobile) */}
-          {onOpenVault && (
-            <button
-              onClick={onOpenVault}
-              title="Journal Vault & Archive"
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 text-stone-700 text-xs font-semibold transition-all cursor-pointer"
-            >
-              <BookOpen className="w-3.5 h-3.5 text-amber-800" />
-              <span>Vault</span>
-            </button>
-          )}
 
           {/* Android App Direct Download Link (Auto-starts APK download) */}
           <a
             href="https://github.com/Harixomxsingh/manifest/releases/download/v1.1.2-android/manifest-v1.1.2.apk"
             download="manifest-v1.1.2.apk"
             title="Direct Download Android App (.apk)"
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-300/80 text-emerald-950 text-xs font-bold transition-all shadow-2xs hover:scale-[1.02] active:scale-[0.98]"
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 active:bg-emerald-200 border border-emerald-300/90 text-emerald-950 text-[11px] sm:text-xs font-bold transition-all shadow-2xs hover:scale-[1.02] active:scale-[0.98]"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-700" />
+            <Download className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
             <span className="hidden sm:inline">Android APK</span>
-            <span className="inline sm:hidden">APK</span>
+            <span className="inline sm:hidden font-mono font-extrabold">APK</span>
           </a>
+
+          {/* Journal Vault Trigger (Visible on tablet & desktop) */}
+          {onOpenVault && (
+            <button
+              onClick={onOpenVault}
+              title="Journal Vault & Archive"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-stone-100 hover:bg-stone-200/80 border border-stone-200/80 text-stone-700 text-xs font-semibold transition-all cursor-pointer"
+            >
+              <BookOpen className="w-3.5 h-3.5 text-amber-800" />
+              <span>Vault</span>
+            </button>
+          )}
 
           {/* PWA Install Button (Desktop/Tablet) */}
           {isInstallable && (
             <button
               onClick={handleInstallPWA}
               title="Install Manifest as App"
-              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-800 text-white text-xs font-bold hover:bg-amber-900 shadow-xs transition-all"
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-800 text-white text-xs font-bold hover:bg-amber-900 shadow-xs transition-all"
             >
               <Download className="w-3.5 h-3.5" />
               <span>Install App</span>
             </button>
           )}
 
-          {/* Audio toggle button if available (Visible on tablet/desktop) */}
+          {/* Audio toggle button (Visible on tablet/desktop) */}
           {toggleAudioReadout && (
             <button
               onClick={toggleAudioReadout}
               title={isAudioPlaying ? 'Mute' : 'Audio Dispatch'}
-              className={`hidden sm:flex p-2 rounded-full border transition-all ${
+              className={`hidden md:flex p-2 rounded-full border transition-all ${
                 isAudioPlaying
                   ? 'bg-amber-900 text-white border-amber-900 shadow-xs'
                   : 'bg-stone-50 border-stone-200 text-stone-600 hover:text-stone-900 hover:border-amber-300'
@@ -172,17 +170,17 @@ export default function Header({ onOpenVault, onOpenStreak, onOpenAbout }) {
               else if (setIsAboutOpen) setIsAboutOpen(true);
             }}
             title="About Manifest • Purpose, Philosophy & Transformative Benefits"
-            className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/10 to-yellow-500/10 hover:from-amber-500/20 hover:to-yellow-500/20 border border-amber-300/80 text-amber-950 text-xs font-bold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+            className="flex items-center gap-1 px-2 sm:px-3 py-1.5 rounded-full bg-gradient-to-r from-amber-500/10 to-yellow-500/10 hover:from-amber-500/20 hover:to-yellow-500/20 border border-amber-300/80 text-amber-950 text-[11px] sm:text-xs font-bold transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-600 shrink-0" />
             <span className="hidden sm:inline">About</span>
           </button>
 
-          {/* Settings Trigger (Always clean and accessible) */}
+          {/* Settings Trigger */}
           <button
             onClick={() => setIsSettingsOpen?.(true)}
             title="Settings"
-            className="p-2 rounded-full bg-amber-800 hover:bg-amber-900 text-white shadow-xs transition-transform active:scale-95 cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-full bg-amber-800 hover:bg-amber-900 text-white shadow-xs transition-transform active:scale-95 cursor-pointer"
           >
             <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </button>

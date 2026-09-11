@@ -93,7 +93,7 @@ export default function PhaseWelcome({ onAdvance, onOpenAbout }) {
         <a
           href="https://github.com/Harixomxsingh/manifest/releases/download/v1.1.2-android/manifest-v1.1.2.apk"
           download="manifest-v1.1.2.apk"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer mt-2"
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-emerald-700 hover:bg-emerald-800 active:bg-emerald-900 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all active:scale-98 cursor-pointer mt-2"
         >
           <span>📱 Download Android App (.apk)</span>
         </a>
